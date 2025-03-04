@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Copy, Mic, Square, Circle, StickyNote, RotateCw } from 'lucide-react';
+import AudioWave from './audio-wave';
 
 export default function AudioTranscriber() {
   const [isRecording, setIsRecording] = useState(false);
@@ -10,6 +11,7 @@ export default function AudioTranscriber() {
   const [transcript, setTranscript] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [recordingTime, setRecordingTime] = useState(0);
+  const [stream, setStream] = useState<MediaStream | null>(null);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
@@ -23,8 +25,9 @@ export default function AudioTranscriber() {
       audioChunksRef.current = [];
 
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
+      setStream(stream);
 
+      const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
 
       mediaRecorder.ondataavailable = (event) => {
@@ -61,6 +64,8 @@ export default function AudioTranscriber() {
         clearInterval(timerRef.current);
         timerRef.current = null;
       }
+
+      setStream(null);
     }
   };
 
@@ -111,7 +116,6 @@ export default function AudioTranscriber() {
     };
   }, []);
 
-  // Format the recording time as MM:SS
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
@@ -127,10 +131,12 @@ export default function AudioTranscriber() {
         Speech to text
       </h6>
 
-      {transcript && (
+      {transcript ? (
         <div className='bg-gray-50 max-h-36 overflow-scroll border text-gray-700 rounded-sm p-1 text-xs'>
           <p>{transcript}</p>
         </div>
+      ) : (
+        <AudioWave stream={stream} isRecording={isRecording} />
       )}
 
       <div className='flex justify-between items-center space-x-2 p-1'>
@@ -161,24 +167,23 @@ export default function AudioTranscriber() {
           >
             <Square className='size-3.5' />
           </Button>
-
           <Button
             variant='outline'
             size='xs'
             className='cursor-pointer rounded-sm text-gray-500'
-            //   onClick={}
+            onClick={stopRecording}
             disabled={isRecording || isTranscribing}
           >
-            <Copy className='size-3.5' />
+            <StickyNote className='size-3.5' />
           </Button>
           <Button
             variant='outline'
             size='xs'
             className='cursor-pointer rounded-sm text-gray-500'
-            //   onClick={}
+            onClick={stopRecording}
             disabled={isRecording || isTranscribing}
           >
-            <StickyNote className='size-3.5' />
+            <Copy className='size-3.5' />
           </Button>
         </div>
 
