@@ -12,9 +12,9 @@ export default function Editor() {
   });
 
   return (
-    <div className="max-w-5xl py-12 w-full mx-auto bg-yellow-100">
+    <div className="max-w-5xl py-12 w-full mx-auto">
       <Toolbar editor={editor} />
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor} className="prose" />
     </div>
   );
 }
