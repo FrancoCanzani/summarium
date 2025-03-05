@@ -14,6 +14,8 @@ import { OrderedListToolbar } from '@/components/toolbars/ordered-list';
 import { RedoToolbar } from '@/components/toolbars/redo';
 import { StrikeThroughToolbar } from '@/components/toolbars/strikethrough';
 import { ToolbarProvider } from '@/components/toolbars/toolbar-provider';
+import { TranscribeToolbar } from './toolbars/transcribe';
+
 import AudioTranscriber from './audio-transcriber';
 
 import { useState } from 'react';
@@ -23,27 +25,32 @@ export function Toolbar({ editor }: { editor: Editor }) {
 
   return (
     <ToolbarProvider editor={editor}>
-      <div className='flex items-center justify-start gap-2 max-w-3xl mx-auto'>
-        <RedoToolbar />
-        <Separator orientation='vertical' className='h-7' />
-        <BoldToolbar />
-        <ItalicToolbar />
-        <StrikeThroughToolbar />
-        <BulletListToolbar />
-        <OrderedListToolbar />
-        <CodeToolbar />
-        <CodeBlockToolbar />
-        <HorizontalRuleToolbar />
-        <BlockquoteToolbar />
-        <HardBreakToolbar />
-        <button onClick={() => setShowTranscriber(!showTranscriber)}>
-          Transcriber
-        </button>
-        <AudioTranscriber
-          editor={editor}
-          showTranscriber={showTranscriber}
-          setShowTranscriber={setShowTranscriber}
-        />
+      <div className='flex mt-[1.25em] items-center justify-between gap-2 w-full overflow-x-scroll'>
+        <div className='flex items-center justify-start space-x-2'>
+          <RedoToolbar />
+          <Separator orientation='vertical' className='h-7' />
+          <BoldToolbar />
+          <ItalicToolbar />
+          <StrikeThroughToolbar />
+          <BulletListToolbar />
+          <OrderedListToolbar />
+          <CodeToolbar />
+          <CodeBlockToolbar />
+          <HorizontalRuleToolbar />
+          <BlockquoteToolbar />
+          <HardBreakToolbar />
+        </div>
+        <div>
+          <TranscribeToolbar
+            onClick={() => setShowTranscriber(!showTranscriber)}
+            showTranscriber={showTranscriber}
+          />
+          <AudioTranscriber
+            editor={editor}
+            showTranscriber={showTranscriber}
+            setShowTranscriber={setShowTranscriber}
+          />
+        </div>
       </div>
     </ToolbarProvider>
   );

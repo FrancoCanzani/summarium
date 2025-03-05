@@ -146,8 +146,8 @@ export default function AudioTranscriber({
   return (
     <div
       className={cn(
-        'space-y-2 w-80 z-50 absolute bottom-2 translate-y-96 transition-all opacity-0 duration-300 right-2 bg-background border rounded-md p-2',
-        showTranscriber && 'translate-y-0 opacity-100'
+        'space-y-2 w-80 z-50 absolute bottom-2 translate-y-96 hidden transition-all opacity-0 duration-300 right-2 bg-background border rounded-md p-2',
+        showTranscriber && 'translate-y-0 block opacity-100'
       )}
     >
       <h6 className='font-medium capitalize text-sm text-gray-600'>
@@ -201,7 +201,7 @@ export default function AudioTranscriber({
             variant='outline'
             size='xs'
             className='cursor-pointer rounded-sm text-gray-500'
-            onClick={stopRecording}
+            onClick={() => editor.commands.insertContent(`\n${transcript}`)}
             disabled={isRecording || isTranscribing}
           >
             <StickyNote className='size-3.5' />
