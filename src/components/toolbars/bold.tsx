@@ -1,14 +1,14 @@
-import { BoldIcon } from "lucide-react";
-import React from "react";
+import { BoldIcon } from 'lucide-react';
+import React from 'react';
 
-import { Button, type ButtonProps } from "@/components/ui/button";
+import { Button, type ButtonProps } from '@/components/ui/button';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
-import { useToolbar } from "@/components/toolbars/toolbar-provider";
+} from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
+import { useToolbar } from '@/components/toolbars/toolbar-provider';
 
 const BoldToolbar = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, onClick, children, ...props }, ref) => {
@@ -16,11 +16,12 @@ const BoldToolbar = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Tooltip>
         <TooltipTrigger asChild>
-          <button
+          <Button
+            variant='ghost'
+            size='icon'
             className={cn(
-              "hover:underline hover:underline-offset-4",
-              editor?.isActive("bold") &&
-                "underline underline-offset-4 font-medium",
+              'h-8 w-8',
+              editor?.isActive('bold') && 'bg-accent',
               className
             )}
             onClick={(e) => {
@@ -31,18 +32,18 @@ const BoldToolbar = React.forwardRef<HTMLButtonElement, ButtonProps>(
             ref={ref}
             {...props}
           >
-            Bold
-          </button>
+            {children || <BoldIcon className='h-4 w-4' />}
+          </Button>
         </TooltipTrigger>
         <TooltipContent>
           <span>Bold</span>
-          <span className="ml-1 text-xs text-gray-11">(cmd + b)</span>
+          <span className='ml-1 text-xs text-gray-11'>(cmd + b)</span>
         </TooltipContent>
       </Tooltip>
     );
   }
 );
 
-BoldToolbar.displayName = "BoldToolbar";
+BoldToolbar.displayName = 'BoldToolbar';
 
 export { BoldToolbar };

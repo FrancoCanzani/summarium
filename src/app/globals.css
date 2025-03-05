@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @plugin "tailwindcss-animate";
 @plugin "@tailwindcss/typography";
@@ -129,7 +129,6 @@
 }
 
 .ProseMirror {
-  @apply px-4 pt-2;
   outline: none !important;
 }
 

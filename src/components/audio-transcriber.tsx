@@ -1,11 +1,29 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, Dispatch, SetStateAction } from 'react';
 import { Button } from '@/components/ui/button';
-import { Copy, Mic, Square, Circle, StickyNote, RotateCw } from 'lucide-react';
+import {
+  Copy,
+  Mic,
+  Square,
+  Circle,
+  StickyNote,
+  RotateCw,
+  X,
+} from 'lucide-react';
 import AudioWave from './audio-wave';
+import { Editor } from '@tiptap/core';
+import { cn } from '@/lib/utils';
 
-export default function AudioTranscriber() {
+export default function AudioTranscriber({
+  editor,
+  showTranscriber,
+  setShowTranscriber,
+}: {
+  editor: Editor;
+  showTranscriber: boolean;
+  setShowTranscriber: Dispatch<SetStateAction<boolean>>;
+}) {
   const [isRecording, setIsRecording] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [transcript, setTranscript] = useState<string>('');
@@ -126,11 +144,23 @@ export default function AudioTranscriber() {
   };
 
   return (
-    <div className='space-y-2 w-80 absolute bottom-2 right-2 bg-gray-50/20 border rounded-md p-2'>
+    <div
+      className={cn(
+        'space-y-2 w-80 z-50 absolute bottom-2 translate-y-96 transition-all opacity-0 duration-300 right-2 bg-background border rounded-md p-2',
+        showTranscriber && 'translate-y-0 opacity-100'
+      )}
+    >
       <h6 className='font-medium capitalize text-sm text-gray-600'>
         Speech to text
       </h6>
-
+      <Button
+        variant={'outline'}
+        size={'xs'}
+        onClick={() => setShowTranscriber(false)}
+        className='absolute -top-1.5 -right-1.5 rounded-full size-4'
+      >
+        <X className='size-3 text-gray-600' />
+      </Button>
       {transcript ? (
         <div className='bg-gray-50 max-h-36 overflow-scroll border text-gray-700 rounded-sm p-1 text-xs'>
           <p>{transcript}</p>

@@ -1,32 +1,31 @@
-import { Editor } from "@tiptap/react";
-import { Separator } from "@/components/ui/separator";
-import { BlockquoteToolbar } from "@/components/toolbars/blockquote";
-import { BoldToolbar } from "@/components/toolbars/bold";
-import { BulletListToolbar } from "@/components/toolbars/bullet-list";
-import { CodeToolbar } from "@/components/toolbars/code";
-import { CodeBlockToolbar } from "@/components/toolbars/code-block";
-import { HardBreakToolbar } from "@/components/toolbars/hard-break";
-import { HorizontalRuleToolbar } from "@/components/toolbars/horizontal-rule";
-import { ItalicToolbar } from "@/components/toolbars/italic";
-import { OrderedListToolbar } from "@/components/toolbars/ordered-list";
-import { RedoToolbar } from "@/components/toolbars/redo";
-import { StrikeThroughToolbar } from "@/components/toolbars/strikethrough";
-import { ToolbarProvider } from "@/components/toolbars/toolbar-provider";
+'use client';
 
-interface ToolbarProps {
-  editor: Editor | null;
-}
+import { Editor } from '@tiptap/react';
+import { Separator } from '@/components/ui/separator';
+import { BlockquoteToolbar } from '@/components/toolbars/blockquote';
+import { BoldToolbar } from '@/components/toolbars/bold';
+import { BulletListToolbar } from '@/components/toolbars/bullet-list';
+import { CodeToolbar } from '@/components/toolbars/code';
+import { CodeBlockToolbar } from '@/components/toolbars/code-block';
+import { HardBreakToolbar } from '@/components/toolbars/hard-break';
+import { HorizontalRuleToolbar } from '@/components/toolbars/horizontal-rule';
+import { ItalicToolbar } from '@/components/toolbars/italic';
+import { OrderedListToolbar } from '@/components/toolbars/ordered-list';
+import { RedoToolbar } from '@/components/toolbars/redo';
+import { StrikeThroughToolbar } from '@/components/toolbars/strikethrough';
+import { ToolbarProvider } from '@/components/toolbars/toolbar-provider';
+import AudioTranscriber from './audio-transcriber';
 
-export function Toolbar({ editor }: ToolbarProps) {
-  if (!editor) {
-    return null;
-  }
+import { useState } from 'react';
+
+export function Toolbar({ editor }: { editor: Editor }) {
+  const [showTranscriber, setShowTranscriber] = useState(false);
 
   return (
     <ToolbarProvider editor={editor}>
-      <div className="flex items-center justify-start gap-2 max-w-3xl mx-auto">
+      <div className='flex items-center justify-start gap-2 max-w-3xl mx-auto'>
         <RedoToolbar />
-        <Separator orientation="vertical" className="h-7" />
+        <Separator orientation='vertical' className='h-7' />
         <BoldToolbar />
         <ItalicToolbar />
         <StrikeThroughToolbar />
@@ -37,6 +36,14 @@ export function Toolbar({ editor }: ToolbarProps) {
         <HorizontalRuleToolbar />
         <BlockquoteToolbar />
         <HardBreakToolbar />
+        <button onClick={() => setShowTranscriber(!showTranscriber)}>
+          Transcriber
+        </button>
+        <AudioTranscriber
+          editor={editor}
+          showTranscriber={showTranscriber}
+          setShowTranscriber={setShowTranscriber}
+        />
       </div>
     </ToolbarProvider>
   );
