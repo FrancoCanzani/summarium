@@ -8,12 +8,17 @@ import { SidebarTrigger } from './ui/sidebar';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { updateNote } from '@/lib/api/notes';
+import { toast } from 'sonner';
 
 export default function Editor() {
   const isMobile = useIsMobile();
+  const queryClient = useQueryClient()
+
   const [title, setTitle] = useState(''); 
   const [content, setContent] = useState(''); 
+  const [saved, setIsSaved] = useState(false); 
 
   const editor = useEditor({
     extensions: extensions,
@@ -24,9 +29,19 @@ export default function Editor() {
     immediatelyRender: false,
   });
 
+  const noteMutation = useMutation({
+    mutationFn: updateNote,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notes'] })
+      setIsSaved(true)
+    },
+    onError: () => toast.error("There was an error saving your note"),    
+  })
+
   const handleDebouncedTitleChange = useDebouncedCallback(
     (value) => {
       setTitle(value);
+      noteMutation.mutate({id: 1; title: value; content: content})
     },
     1000
   );
@@ -34,7 +49,7 @@ export default function Editor() {
   const handleDebouncedContentChange = useDebouncedCallback(
     (value) => {
       setContent(value);
-      console.log(content);
+      noteMutation.mutate({id: 1; title: title; content: value})
     },
     1000
   );
