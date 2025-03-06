@@ -1,26 +1,27 @@
-"use client";
+'use client';
 
-import { Editor } from "@tiptap/react";
-import { Separator } from "@/components/ui/separator";
-import { BlockquoteToolbar } from "@/components/toolbars/blockquote";
-import { BoldToolbar } from "@/components/toolbars/bold";
-import { BulletListToolbar } from "@/components/toolbars/bullet-list";
-import { CodeToolbar } from "@/components/toolbars/code";
-import { CodeBlockToolbar } from "@/components/toolbars/code-block";
-import { HardBreakToolbar } from "@/components/toolbars/hard-break";
-import { HorizontalRuleToolbar } from "@/components/toolbars/horizontal-rule";
-import { ItalicToolbar } from "@/components/toolbars/italic";
-import { OrderedListToolbar } from "@/components/toolbars/ordered-list";
-import { RedoToolbar } from "@/components/toolbars/redo";
-import { UndoToolbar } from "./toolbars/undo";
-import { UnderlineToolbar } from "./toolbars/underline";
-import { HighlightToolbar } from "./toolbars/highlight";
-import { StrikeThroughToolbar } from "@/components/toolbars/strikethrough";
-import { ToolbarProvider } from "@/components/toolbars/toolbar-provider";
-import { TranscribeToolbar } from "./toolbars/transcribe";
-import { Dispatch, SetStateAction } from "react";
+import { Editor } from '@tiptap/react';
+import { Separator } from '@/components/ui/separator';
+import { BlockquoteToolbar } from '@/components/toolbars/blockquote';
+import { BoldToolbar } from '@/components/toolbars/bold';
+import { BulletListToolbar } from '@/components/toolbars/bullet-list';
+import { CodeToolbar } from '@/components/toolbars/code';
+import { CodeBlockToolbar } from '@/components/toolbars/code-block';
+import { HardBreakToolbar } from '@/components/toolbars/hard-break';
+import { HorizontalRuleToolbar } from '@/components/toolbars/horizontal-rule';
+import { ItalicToolbar } from '@/components/toolbars/italic';
+import { OrderedListToolbar } from '@/components/toolbars/ordered-list';
+import { RedoToolbar } from '@/components/toolbars/redo';
+import { UndoToolbar } from './toolbars/undo';
+import { UnderlineToolbar } from './toolbars/underline';
+import { HighlightToolbar } from './toolbars/highlight';
+import { StrikeThroughToolbar } from '@/components/toolbars/strikethrough';
+import { ToolbarProvider } from '@/components/toolbars/toolbar-provider';
+import { TranscribeToolbar } from './toolbars/transcribe';
+import { Dispatch, SetStateAction } from 'react';
 
-import { AssistantToolbar } from "./toolbars/assistant";
+import { AssistantToolbar } from './toolbars/assistant';
+import AiAssistantSheet from './ai-assistant-sheet';
 
 export function Toolbar({
   editor,
@@ -37,11 +38,11 @@ export function Toolbar({
 }) {
   return (
     <ToolbarProvider editor={editor}>
-      <div className="flex mt-[1.25em] items-center justify-between gap-2 w-full overflow-x-auto">
-        <div className="md:flex hidden items-center justify-start space-x-2">
+      <div className='flex items-center justify-between gap-2 w-full overflow-x-auto'>
+        <div className='sm:flex hidden items-center justify-start space-x-1.5'>
           <UndoToolbar />
           <RedoToolbar />
-          <Separator orientation="vertical" className="h-7" />
+          <Separator orientation='vertical' className='h-7' />
           <BoldToolbar />
           <ItalicToolbar />
           <StrikeThroughToolbar />
@@ -55,7 +56,7 @@ export function Toolbar({
           <BlockquoteToolbar />
           <HardBreakToolbar />
         </div>
-        <div className="flex items-center justify-start space-x-2">
+        <div className='flex items-center justify-start space-x-2'>
           <TranscribeToolbar
             onClick={() => setShowTranscriber(!showTranscriber)}
             showTranscriber={showTranscriber}
@@ -64,6 +65,7 @@ export function Toolbar({
             showAssistant={showAssistant}
             onClick={() => setShowAssistant(!showAssistant)}
           />
+          <AiAssistantSheet editor={editor} />
         </div>
       </div>
     </ToolbarProvider>
