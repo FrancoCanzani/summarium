@@ -22,10 +22,7 @@ export function AssistantToolbar({
         <Button
           variant='ghost'
           size='icon'
-          className={cn(
-            'h-8 w-8 hidden md:block',
-            showAssistant && 'bg-accent'
-          )}
+          className={cn('h-8 w-8 hidden md:flex', showAssistant && 'bg-accent')}
           onClick={(e) => {
             onClick?.(e);
           }}

@@ -81,7 +81,7 @@ export default function AiAssistantSheet({ editor }: { editor: Editor }) {
             <Button
               variant='ghost'
               size='icon'
-              className={cn('h-8 w-8 block md:hidden')}
+              className={cn('h-8 w-8 flex md:hidden')}
             >
               <BotMessageSquare className='size-4' />
             </Button>
