@@ -28,7 +28,7 @@ export function Toolbar({ editor }: { editor: Editor }) {
 
   return (
     <ToolbarProvider editor={editor}>
-      <div className='flex mt-[1.25em] thin-scrollbar items-center justify-between gap-2 w-full overflow-x-scroll'>
+      <div className='flex mt-[1.25em] items-center justify-between gap-2 w-full overflow-x-auto'>
         <div className='flex items-center justify-start space-x-2'>
           <UndoToolbar />
           <RedoToolbar />
