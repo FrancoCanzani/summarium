@@ -16,14 +16,19 @@ import { SidebarTrigger } from './ui/sidebar';
 import AudioTranscriber from './audio-transcriber';
 import { useAuth } from '@/lib/hooks/use-auth';
 import { redirect } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { Note } from '@/lib/types';
 
-export default function Editor() {
+export default function Editor({ initialNote }: { initialNote: Note }) {
   const queryClient = useQueryClient();
   const isMobile = useIsMobile();
   const { loading, user } = useAuth();
+  const { id } = useParams();
 
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  if (!id) redirect('/');
+
+  const [title, setTitle] = useState(initialNote.title);
+  const [content, setContent] = useState(initialNote.content);
   const [isSaved, setIsSaved] = useState(false);
   const [showAssistant, setShowAssistant] = useState(false);
   const [showTranscriber, setShowTranscriber] = useState(false);
@@ -43,6 +48,7 @@ export default function Editor() {
     if (!user) return;
 
     upsertNoteMutation.mutate({
+      id: id?.toString(),
       user_id: user?.id,
       title: value,
       content: content,
@@ -59,6 +65,7 @@ export default function Editor() {
     if (!user) return;
 
     upsertNoteMutation.mutate({
+      id: id?.toString(),
       user_id: user?.id,
       title: title,
       content: value,

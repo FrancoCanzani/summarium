@@ -1,5 +1,8 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
+'use client';
 
+import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { useAuth } from '@/lib/hooks/use-auth';
 import {
   Sidebar,
   SidebarContent,
@@ -9,38 +12,52 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from '@/components/ui/sidebar';
+import { fetchNotes } from '@/lib/api/notes';
+import Link from 'next/link';
 
-// Menu items.
 const items = [
   {
-    title: "Home",
-    url: "#",
+    title: 'Home',
+    url: '#',
     icon: Home,
   },
   {
-    title: "Inbox",
-    url: "#",
+    title: 'Inbox',
+    url: '#',
     icon: Inbox,
   },
   {
-    title: "Calendar",
-    url: "#",
+    title: 'Calendar',
+    url: '#',
     icon: Calendar,
   },
   {
-    title: "Search",
-    url: "#",
+    title: 'Search',
+    url: '#',
     icon: Search,
   },
   {
-    title: "Settings",
-    url: "#",
+    title: 'Settings',
+    url: '#',
     icon: Settings,
   },
-]
+];
 
 export function AppSidebar() {
+  const { user } = useAuth();
+
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['notes'],
+    queryFn: async () => {
+      if (!user) return;
+      const notes = await fetchNotes(user.id);
+      return notes;
+    },
+  });
+
+  console.log(data);
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -61,7 +78,23 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel className='flex items-center justify-between w-full'>
+            <span>Notes</span>
+            <Link href={`/notes/${crypto.randomUUID()}`}>New</Link>
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {data &&
+                data.map((item) => (
+                  <Link href={item.id} key={item.id}>
+                    {item.id}
+                  </Link>
+                ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }
