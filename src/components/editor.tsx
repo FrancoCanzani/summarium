@@ -18,7 +18,7 @@ export default function Editor() {
 
   const [title, setTitle] = useState(''); 
   const [content, setContent] = useState(''); 
-  const [saved, setIsSaved] = useState(false); 
+  const [isSaved, setIsSaved] = useState(false); 
 
   const editor = useEditor({
     extensions: extensions,
@@ -41,7 +41,7 @@ export default function Editor() {
   const handleDebouncedTitleChange = useDebouncedCallback(
     (value) => {
       setTitle(value);
-      noteMutation.mutate({id: 1; title: value; content: content})
+     // noteMutation.mutate({id: 1; title: value; content: content})
     },
     1000
   );
@@ -49,7 +49,7 @@ export default function Editor() {
   const handleDebouncedContentChange = useDebouncedCallback(
     (value) => {
       setContent(value);
-      noteMutation.mutate({id: 1; title: title; content: value})
+      // noteMutation.mutate({id: 1; title: title; content: value})
     },
     1000
   );
@@ -76,7 +76,7 @@ export default function Editor() {
           className='prose my-0 px-3 min-w-full h-full overflow-y-auto'
         />
       </div>
-      <EditorFooter editor={editor} />
+      <EditorFooter editor={editor} isSaved={isSaved}/>
     </div>
   );
 }
