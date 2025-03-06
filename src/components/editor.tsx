@@ -10,10 +10,13 @@ import { updateNote } from "@/lib/api/notes";
 import { toast } from "sonner";
 import { RightSidebar } from "./right-sidebar";
 import AiAssistant from "./ai-assistant";
-import EditorHeader from "./editor-header";
+import { Toolbar } from "./toolbar";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { SidebarTrigger } from "./ui/sidebar";
 
 export default function Editor() {
   const queryClient = useQueryClient();
+  const isMobile = useIsMobile();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -53,17 +56,20 @@ export default function Editor() {
   return (
     <div className="flex h-svh w-full">
       <div className="flex h-svh flex-1 flex-col mx-auto max-w-4xl">
-        <EditorHeader
-          editor={editor}
-          setShowAssistant={setShowAssistant}
-          showAssistant={showAssistant}
-        />
         <input
-          className="border-none outline-none text-xl px-3 w-full"
+          className="border-none outline-none text-xl py-2.5 h-12 px-3 w-full"
           placeholder="Title"
           value={title}
           onChange={(e) => handleDebouncedTitleChange(e.target.value)}
         />
+        <div className="flex items-center justify-start space-x-2 px-3">
+          {isMobile && <SidebarTrigger />}
+          <Toolbar
+            editor={editor}
+            setShowAssistant={setShowAssistant}
+            showAssistant={showAssistant}
+          />
+        </div>
         <div className="flex flex-1 overflow-hidden">
           <EditorContent
             editor={editor}

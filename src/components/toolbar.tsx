@@ -39,7 +39,7 @@ export function Toolbar({
   return (
     <ToolbarProvider editor={editor}>
       <div className="flex mt-[1.25em] items-center justify-between gap-2 w-full overflow-x-auto">
-        <div className="flex items-center justify-start space-x-2">
+        <div className="md:flex hidden items-center justify-start space-x-2">
           <UndoToolbar />
           <RedoToolbar />
           <Separator orientation="vertical" className="h-7" />
@@ -56,7 +56,7 @@ export function Toolbar({
           <BlockquoteToolbar />
           <HardBreakToolbar />
         </div>
-        <div>
+        <div className="flex items-center justify-start space-x-2">
           <TranscribeToolbar
             onClick={() => setShowTranscriber(!showTranscriber)}
             showTranscriber={showTranscriber}

@@ -63,10 +63,9 @@ export default function AiAssistant({ editor }: { editor: Editor }) {
 
   return (
     <div className="mx-auto flex h-full w-full flex-col pb-2 text-sm">
-      <div className="flex w-full items-center justify-between space-x-2 border-b bg-background px-2 py-1.5">
+      <div className="flex h-12 w-full items-center justify-between space-x-2 border-b bg-background px-2 py-2.5">
         <h3 className="font-medium">AI Assistant</h3>
         <div className="flex items-center justify-start space-x-2">
-          <Separator orientation="vertical" className="h-6" />
           <Button
             variant="ghost"
             size="sm"

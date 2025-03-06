@@ -15,16 +15,5 @@ export default function EditorHeader({
 }) {
   const isMobile = useIsMobile();
 
-  return (
-    <header className="py-5 px-3 overflow-hidden">
-      <div className="flex items-center justify-start space-x-2">
-        {isMobile && <SidebarTrigger />}
-        <Toolbar
-          editor={editor}
-          setShowAssistant={setShowAssistant}
-          showAssistant={showAssistant}
-        />
-      </div>
-    </header>
-  );
+  return <header className="py-5 px-3 overflow-hidden"></header>;
 }
