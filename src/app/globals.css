@@ -119,6 +119,8 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -174,3 +176,46 @@ h3.tiptap-heading + h2.tiptap-heading {
   margin: 1.5rem 0;
   padding-left: 1rem;
 }
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
+}
+
+.thin-scrollbar {
+  scrollbar-width: thin; /* Firefox */
+}
+
+.thin-scrollbar::-webkit-scrollbar {
+  width: 6px; /* WebKit */
+}
+
+.thin-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Light background */
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background: #888; /* Gray thumb */
+  border-radius: 3px; /* Slightly rounded corners */
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Darker gray on hover */
+}
+
+.thin-scrollbar {
+  scrollbar-color: #888 #f1f1f1; /* Firefox thumb track */
+}
+
+/* Example for dark background */
+.thin-scrollbar.dark-bg::-webkit-scrollbar-track {
+    background-color: #333;
+}
+.thin-scrollbar.dark-bg {
+    scrollbar-color: #888 #333;
+}
+

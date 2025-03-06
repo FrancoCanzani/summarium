@@ -1,5 +1,7 @@
 import StarterKit from '@tiptap/starter-kit';
 import CharacterCount from '@tiptap/extension-character-count';
+import Highlight from "@tiptap/extension-highlight";
+import Underline from "@tiptap/extension-underline";
 
 export const extensions = [
   StarterKit.configure({
@@ -36,4 +38,6 @@ export const extensions = [
     },
   }),
   CharacterCount,
+  Highlight,
+  Underline
 ];

@@ -12,6 +12,9 @@ import { HorizontalRuleToolbar } from '@/components/toolbars/horizontal-rule';
 import { ItalicToolbar } from '@/components/toolbars/italic';
 import { OrderedListToolbar } from '@/components/toolbars/ordered-list';
 import { RedoToolbar } from '@/components/toolbars/redo';
+import { UndoToolbar } from './toolbars/undo';
+import { UnderlineToolbar } from './toolbars/underline';
+import { HighlightToolbar } from './toolbars/highlight';
 import { StrikeThroughToolbar } from '@/components/toolbars/strikethrough';
 import { ToolbarProvider } from '@/components/toolbars/toolbar-provider';
 import { TranscribeToolbar } from './toolbars/transcribe';
@@ -25,13 +28,16 @@ export function Toolbar({ editor }: { editor: Editor }) {
 
   return (
     <ToolbarProvider editor={editor}>
-      <div className='flex mt-[1.25em] items-center justify-between gap-2 w-full overflow-x-scroll'>
+      <div className='flex mt-[1.25em] thin-scrollbar items-center justify-between gap-2 w-full overflow-x-scroll'>
         <div className='flex items-center justify-start space-x-2'>
+          <UndoToolbar />
           <RedoToolbar />
           <Separator orientation='vertical' className='h-7' />
           <BoldToolbar />
           <ItalicToolbar />
           <StrikeThroughToolbar />
+          <UnderlineToolbar />
+          <HighlightToolbar />
           <BulletListToolbar />
           <OrderedListToolbar />
           <CodeToolbar />
