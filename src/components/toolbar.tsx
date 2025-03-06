@@ -20,22 +20,21 @@ import { ToolbarProvider } from "@/components/toolbars/toolbar-provider";
 import { TranscribeToolbar } from "./toolbars/transcribe";
 import { Dispatch, SetStateAction } from "react";
 
-import AudioTranscriber from "./audio-transcriber";
-
-import { useState } from "react";
 import { AssistantToolbar } from "./toolbars/assistant";
 
 export function Toolbar({
   editor,
   showAssistant,
   setShowAssistant,
+  showTranscriber,
+  setShowTranscriber,
 }: {
   editor: Editor;
   showAssistant: boolean;
   setShowAssistant: Dispatch<SetStateAction<boolean>>;
+  showTranscriber: boolean;
+  setShowTranscriber: Dispatch<SetStateAction<boolean>>;
 }) {
-  const [showTranscriber, setShowTranscriber] = useState(false);
-
   return (
     <ToolbarProvider editor={editor}>
       <div className="flex mt-[1.25em] items-center justify-between gap-2 w-full overflow-x-auto">
@@ -60,11 +59,6 @@ export function Toolbar({
           <TranscribeToolbar
             onClick={() => setShowTranscriber(!showTranscriber)}
             showTranscriber={showTranscriber}
-          />
-          <AudioTranscriber
-            editor={editor}
-            showTranscriber={showTranscriber}
-            setShowTranscriber={setShowTranscriber}
           />
           <AssistantToolbar
             showAssistant={showAssistant}

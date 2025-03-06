@@ -13,6 +13,7 @@ import AiAssistant from "./ai-assistant";
 import { Toolbar } from "./toolbar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { SidebarTrigger } from "./ui/sidebar";
+import AudioTranscriber from "./audio-transcriber";
 
 export default function Editor() {
   const queryClient = useQueryClient();
@@ -22,6 +23,7 @@ export default function Editor() {
   const [content, setContent] = useState("");
   const [isSaved, setIsSaved] = useState(false);
   const [showAssistant, setShowAssistant] = useState(false);
+  const [showTranscriber, setShowTranscriber] = useState(false);
 
   const editor = useEditor({
     extensions: extensions,
@@ -55,7 +57,7 @@ export default function Editor() {
 
   return (
     <div className="flex h-svh w-full">
-      <div className="flex h-svh flex-1 flex-col mx-auto max-w-4xl">
+      <div className="flex relative h-svh flex-1 flex-col mx-auto max-w-4xl">
         <input
           className="border-none outline-none text-xl py-2.5 h-12 px-3 w-full"
           placeholder="Title"
@@ -68,14 +70,22 @@ export default function Editor() {
             editor={editor}
             setShowAssistant={setShowAssistant}
             showAssistant={showAssistant}
+            setShowTranscriber={setShowTranscriber}
+            showTranscriber={showTranscriber}
           />
         </div>
-        <div className="flex flex-1 overflow-hidden">
+        <div className="flex flex-1 overflow-hidden relative">
           <EditorContent
             editor={editor}
             className="prose my-0 px-3 min-w-full h-full overflow-y-auto"
           />
+          <AudioTranscriber
+            editor={editor}
+            setShowTranscriber={setShowTranscriber}
+            showTranscriber={showTranscriber}
+          />
         </div>
+
         <EditorFooter editor={editor} isSaved={isSaved} />
       </div>
 
