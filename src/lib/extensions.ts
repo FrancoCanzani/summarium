@@ -1,7 +1,8 @@
 import StarterKit from '@tiptap/starter-kit';
 import CharacterCount from '@tiptap/extension-character-count';
-import Highlight from "@tiptap/extension-highlight";
-import Underline from "@tiptap/extension-underline";
+import Highlight from '@tiptap/extension-highlight';
+import Underline from '@tiptap/extension-underline';
+import Placeholder from '@tiptap/extension-placeholder';
 
 export const extensions = [
   StarterKit.configure({
@@ -39,5 +40,8 @@ export const extensions = [
   }),
   CharacterCount,
   Highlight,
-  Underline
+  Underline,
+  Placeholder.configure({
+    placeholder: 'Write something …',
+  }),
 ];

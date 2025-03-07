@@ -15,6 +15,9 @@ import {
 } from '@/components/ui/sidebar';
 import { fetchNotes } from '@/lib/api/notes';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { cn } from '@/lib/utils';
+import { formatDistanceToNow } from 'date-fns';
 
 const items = [
   {
@@ -46,17 +49,13 @@ const items = [
 
 export function AppSidebar() {
   const { user } = useAuth();
+  const { id } = useParams();
 
-  const { isPending, isError, data, error } = useQuery({
-    queryKey: ['notes'],
-    queryFn: async () => {
-      if (!user) return;
-      const notes = await fetchNotes(user.id);
-      return notes;
-    },
+  const { data: notes } = useQuery({
+    queryKey: ['notes', user?.id],
+    queryFn: () => fetchNotes(user!.id),
+    enabled: !!user,
   });
-
-  console.log(data);
 
   return (
     <Sidebar>
@@ -79,16 +78,39 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel className='flex items-center justify-between w-full'>
-            <span>Notes</span>
-            <Link href={`/notes/${crypto.randomUUID()}`}>New</Link>
-          </SidebarGroupLabel>
+          <div className='flex items-center justify-between w-full'>
+            <SidebarGroupLabel>Notes</SidebarGroupLabel>
+            <Link
+              href={`/notes/${crypto.randomUUID()}`}
+              className='hover:underline text-xs'
+            >
+              New
+            </Link>
+          </div>
           <SidebarGroupContent>
             <SidebarMenu>
-              {data &&
-                data.map((item) => (
-                  <Link href={item.id} key={item.id}>
-                    {item.id}
+              {notes &&
+                notes.map((item) => (
+                  <Link
+                    href={`/notes/${item.id}`}
+                    key={item.id}
+                    className={cn(
+                      'flex w-full flex-col items-center gap-1.5 overflow-hidden rounded-md p-1.5 justify-between text-xs hover:bg-sidebar-accent',
+                      id === item.id
+                        ? 'bg-sidebar-accent font-medium'
+                        : 'bg-sidebar'
+                    )}
+                  >
+                    <span className='truncate w-full text-start'>
+                      {item.title ?? 'Untitled'}
+                    </span>
+                    {item.updated_at && (
+                      <span className='text-xs text-end w-full text-gray-400'>
+                        {formatDistanceToNow(new Date(item.updated_at), {
+                          addSuffix: true,
+                        })}
+                      </span>
+                    )}
                   </Link>
                 ))}
             </SidebarMenu>

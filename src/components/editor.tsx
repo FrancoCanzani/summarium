@@ -93,7 +93,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
     <div className='flex h-svh w-full'>
       <div className='flex relative h-svh flex-1 flex-col mx-auto max-w-4xl'>
         <input
-          className='border-none outline-none text-xl py-2.5 h-12 px-3 w-full'
+          className='border-none outline-none py-2.5 h-12 px-3 w-full'
           placeholder='Title'
           value={title}
           onChange={(e) => handleTitleChange(e.target.value)}
