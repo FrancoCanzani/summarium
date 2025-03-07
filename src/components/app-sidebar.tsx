@@ -10,8 +10,6 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { fetchNotes } from '@/lib/api/notes';
 import Link from 'next/link';
@@ -60,24 +58,8 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
+        <h2 className='p-2 font-medium text-xl h-12 border-b'>Summarium</h2>
+        <SidebarGroup className='py-0'>
           <div className='flex items-center justify-between w-full'>
             <SidebarGroupLabel>Notes</SidebarGroupLabel>
             <Link
