@@ -18,6 +18,7 @@ import { useAuth } from '@/lib/hooks/use-auth';
 import { redirect } from 'next/navigation';
 import { useParams } from 'next/navigation';
 import { Note } from '@/lib/types';
+import EditorBubbleMenu from './editor-bubble-menu';
 
 export default function Editor({ initialNote }: { initialNote: Note }) {
   const queryClient = useQueryClient();
@@ -91,27 +92,31 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
 
   return (
     <div className='flex h-svh w-full'>
-      <div className='flex relative h-svh flex-1 flex-col mx-auto max-w-4xl'>
-        <input
-          className='border-none outline-none py-2.5 h-12 px-3 w-full'
-          placeholder='Title'
-          value={title}
-          onChange={(e) => handleTitleChange(e.target.value)}
-        />
-        <div className='flex items-center justify-start space-x-2 px-3'>
-          {isMobile && <SidebarTrigger />}
-          <Toolbar
-            editor={editor}
-            setShowAssistant={setShowAssistant}
-            showAssistant={showAssistant}
-            setShowTranscriber={setShowTranscriber}
-            showTranscriber={showTranscriber}
-          />
+      <div className='flex relative h-svh flex-1 flex-col mx-auto'>
+        <div className='w-full p-3 h-12 border-b-background transition-colors md:border-b-border duration-300 border-b hover:border-b-border'>
+          <div className='flex items-center justify-start space-x-2 max-w-4xl mx-auto h-full'>
+            {isMobile && <SidebarTrigger />}
+            <Toolbar
+              editor={editor}
+              setShowAssistant={setShowAssistant}
+              showAssistant={showAssistant}
+              setShowTranscriber={setShowTranscriber}
+              showTranscriber={showTranscriber}
+            />
+          </div>
         </div>
-        <div className='flex flex-1 overflow-hidden relative'>
+
+        <div className='flex flex-1 flex-col p-3 space-y-4 overflow-hidden relative max-w-4xl mx-auto w-full'>
+          <input
+            className='border-none font-medium outline-none '
+            placeholder='Title'
+            value={title}
+            onChange={(e) => handleTitleChange(e.target.value)}
+          />
+          <EditorBubbleMenu editor={editor} />
           <EditorContent
             editor={editor}
-            className='py-2.5 my-0 px-3 min-w-full h-full overflow-y-auto'
+            className='my-0 min-w-full text-start h-full overflow-y-auto'
           />
           <AudioTranscriber
             editor={editor}

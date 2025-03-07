@@ -42,6 +42,6 @@ export const extensions = [
   Highlight,
   Underline,
   Placeholder.configure({
-    placeholder: 'Write something …',
+    placeholder: 'Write something…',
   }),
 ];
