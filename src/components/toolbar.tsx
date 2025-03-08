@@ -14,7 +14,7 @@ import { UndoToolbar } from './toolbars/undo';
 import { ToolbarProvider } from '@/components/toolbars/toolbar-provider';
 import { TranscribeToolbar } from './toolbars/transcribe';
 import { Dispatch, SetStateAction } from 'react';
-
+import { SpeechToolbar } from './toolbars/speech';
 import { AssistantToolbar } from './toolbars/assistant';
 import AiAssistantSheet from './ai-assistant-sheet';
 
@@ -24,12 +24,16 @@ export function Toolbar({
   setShowAssistant,
   showTranscriber,
   setShowTranscriber,
+  showSpeech,
+  setShowSpeech,
 }: {
   editor: Editor;
   showAssistant: boolean;
   setShowAssistant: Dispatch<SetStateAction<boolean>>;
   showTranscriber: boolean;
   setShowTranscriber: Dispatch<SetStateAction<boolean>>;
+  showSpeech: boolean;
+  setShowSpeech: Dispatch<SetStateAction<boolean>>;
 }) {
   return (
     <ToolbarProvider editor={editor}>
@@ -50,6 +54,10 @@ export function Toolbar({
           <TranscribeToolbar
             onClick={() => setShowTranscriber(!showTranscriber)}
             showTranscriber={showTranscriber}
+          />
+          <SpeechToolbar
+            showSpeech={showSpeech}
+            onClick={() => setShowSpeech(!showSpeech)}
           />
           <AssistantToolbar
             showAssistant={showAssistant}

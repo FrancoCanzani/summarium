@@ -19,6 +19,7 @@ import { redirect } from 'next/navigation';
 import { useParams } from 'next/navigation';
 import { Note } from '@/lib/types';
 import EditorBubbleMenu from './editor-bubble-menu';
+import AudioPlayer from './audio-player';
 
 export default function Editor({ initialNote }: { initialNote: Note }) {
   const queryClient = useQueryClient();
@@ -33,6 +34,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   const [isSaved, setIsSaved] = useState(false);
   const [showAssistant, setShowAssistant] = useState(false);
   const [showTranscriber, setShowTranscriber] = useState(false);
+  const [showSpeech, setShowSpeech] = useState(false);
 
   if (!user && !loading) redirect('/login');
 
@@ -102,6 +104,8 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
               showAssistant={showAssistant}
               setShowTranscriber={setShowTranscriber}
               showTranscriber={showTranscriber}
+              setShowSpeech={setShowSpeech}
+              showSpeech={showSpeech}
             />
           </div>
         </div>
@@ -117,6 +121,11 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
           <EditorContent
             editor={editor}
             className='my-0 min-w-full text-start h-full overflow-y-auto'
+          />
+          <AudioPlayer
+            text={editor.getText()}
+            showSpeech={showSpeech}
+            setShowSpeech={setShowSpeech}
           />
           <AudioTranscriber
             editor={editor}
