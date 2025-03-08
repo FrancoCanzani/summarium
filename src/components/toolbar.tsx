@@ -52,12 +52,16 @@ export function Toolbar({
         </div>
         <div className='flex items-center justify-start space-x-2'>
           <TranscribeToolbar
-            onClick={() => setShowTranscriber(!showTranscriber)}
+            onClick={() => {
+              setShowTranscriber(!showTranscriber);
+            }}
             showTranscriber={showTranscriber}
           />
           <SpeechToolbar
             showSpeech={showSpeech}
-            onClick={() => setShowSpeech(!showSpeech)}
+            onClick={() => {
+              setShowSpeech(!showSpeech);
+            }}
           />
           <AssistantToolbar
             showAssistant={showAssistant}

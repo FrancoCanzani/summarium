@@ -1,33 +1,23 @@
 'use client';
 
-import { useState, useRef, useEffect, Dispatch, SetStateAction } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  Copy,
-  Mic,
-  Square,
-  Circle,
-  StickyNote,
-  RotateCw,
-  X,
-} from 'lucide-react';
+import { Copy, Mic, Square, Circle, StickyNote, RotateCw } from 'lucide-react';
 import AudioWave from './audio-wave';
 import { Editor } from '@tiptap/core';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 export default function AudioTranscriber({
   editor,
   showTranscriber,
-  setShowTranscriber,
 }: {
   editor: Editor;
   showTranscriber: boolean;
-  setShowTranscriber: Dispatch<SetStateAction<boolean>>;
 }) {
   const [isRecording, setIsRecording] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [transcript, setTranscript] = useState<string>('');
-  const [error, setError] = useState<string | null>(null);
   const [recordingTime, setRecordingTime] = useState(0);
   const [stream, setStream] = useState<MediaStream | null>(null);
 
@@ -37,7 +27,6 @@ export default function AudioTranscriber({
 
   const startRecording = async () => {
     try {
-      setError(null);
       setTranscript('');
       setRecordingTime(0);
       audioChunksRef.current = [];
@@ -62,9 +51,8 @@ export default function AudioTranscriber({
       timerRef.current = setInterval(() => {
         setRecordingTime((prev) => prev + 1);
       }, 1000);
-    } catch (err) {
-      console.error('Error starting recording:', err);
-      setError(
+    } catch {
+      toast.error(
         'Could not access microphone. Please ensure you have granted permission.'
       );
     }
@@ -116,11 +104,8 @@ export default function AudioTranscriber({
           setTranscript((prev) => prev + new TextDecoder().decode(value));
         }
       }
-    } catch (err) {
-      console.error('Error processing recording:', err);
-      setError(
-        err instanceof Error ? err.message : 'Failed to process recording'
-      );
+    } catch {
+      toast.error('Error processing recording. Please try again.');
     } finally {
       setIsTranscribing(false);
     }
@@ -146,21 +131,13 @@ export default function AudioTranscriber({
   return (
     <div
       className={cn(
-        'space-y-2 w-80 z-50 absolute bottom-0 right-2 hidden transition-all opacity-0 duration-300 bg-background border rounded-md p-2',
+        'space-y-2 w-80 z-50 hidden transition-all opacity-0 duration-300 bg-background border rounded-md p-2',
         showTranscriber && 'block opacity-100'
       )}
     >
       <h6 className='font-medium capitalize text-sm text-gray-600'>
         Speech to text
       </h6>
-      <Button
-        variant={'outline'}
-        size={'xs'}
-        onClick={() => setShowTranscriber(false)}
-        className='absolute -top-1.5 -right-1.5 rounded-full size-4'
-      >
-        <X className='size-3 text-gray-600' />
-      </Button>
       {transcript ? (
         <div className='bg-gray-50 max-h-36 overflow-scroll border text-gray-700 rounded-sm p-1 text-xs'>
           <p>{transcript}</p>

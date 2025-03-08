@@ -2,11 +2,9 @@
 
 import type React from 'react';
 import { useState, useRef, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
 import {
   Play,
   Pause,
-  X,
   RefreshCw,
   Ear,
   ChevronLeft,
@@ -21,11 +19,9 @@ import { deleteAudio } from '@/lib/api/audio';
 export default function AudioPlayer({
   text,
   showSpeech,
-  setShowSpeech,
 }: {
   text: string;
   showSpeech: boolean;
-  setShowSpeech: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [audioUrls, setAudioUrls] = useState<string[] | null>(null);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
@@ -204,21 +200,13 @@ export default function AudioPlayer({
   return (
     <div
       className={cn(
-        'space-y-2 w-[22rem] z-50 absolute bottom-2 right-2 hidden transition-all opacity-0 duration-300 bg-background border rounded-md p-2',
+        'space-y-2 w-80 z-50 hidden transition-all opacity-0 duration-300 bg-background border rounded-md p-2',
         showSpeech && 'block opacity-100'
       )}
     >
       <h6 className='font-medium capitalize text-sm text-gray-600'>
         Text to Speech
       </h6>
-      <Button
-        variant={'outline'}
-        size={'xs'}
-        onClick={() => setShowSpeech(false)}
-        className='absolute -top-1.5 -right-1.5 rounded-full size-4'
-      >
-        <X className='size-3 text-gray-600' />
-      </Button>
       <div className='flex items-center justify-start'>
         {audioUrls && currentAudioUrl && audioUrls.length > 0 && (
           <audio
@@ -260,8 +248,8 @@ export default function AudioPlayer({
               )}
             </ButtonWithTooltip>
           </div>
-          <div className='flex justify-end items-center space-x-1.5'>
-            <div className='flex justify-center items-center space-x-2'>
+          <div className='flex justify-end items-center space-x-2'>
+            <div className='flex justify-center items-center space-x-1.5'>
               <ButtonWithTooltip
                 tooltipText='Decrease playback rate'
                 variant='outline'
@@ -286,7 +274,7 @@ export default function AudioPlayer({
                 <ChevronRight className='size-3.5' />
               </ButtonWithTooltip>
             </div>
-            <span className='text-xs font-medium text-gray-500'>
+            <span className='text-sm font-medium text-gray-500'>
               {formatTime(playbackTime)} / {formatTime(totalDuration)}
             </span>
           </div>

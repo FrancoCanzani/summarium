@@ -122,16 +122,13 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
             editor={editor}
             className='my-0 min-w-full text-start h-full overflow-y-auto'
           />
-          <AudioPlayer
-            text={editor.getText()}
-            showSpeech={showSpeech}
-            setShowSpeech={setShowSpeech}
-          />
-          <AudioTranscriber
-            editor={editor}
-            setShowTranscriber={setShowTranscriber}
-            showTranscriber={showTranscriber}
-          />
+          <div className='absolute bottom-0 right-2 flex items-end flex-col justify-center space-y-2'>
+            <AudioPlayer text={editor.getText()} showSpeech={showSpeech} />
+            <AudioTranscriber
+              editor={editor}
+              showTranscriber={showTranscriber}
+            />
+          </div>
         </div>
 
         <EditorFooter editor={editor} isSaved={isSaved} />
