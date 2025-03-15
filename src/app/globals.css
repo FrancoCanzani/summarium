@@ -9,6 +9,11 @@
   --font-mono: var(--font-geist-mono);
 }
 
+.tiptap p.is-editor-empty:first-child::before {
+  @apply pointer-events-none float-left h-0 text-muted-foreground;
+  content: attr(data-placeholder);
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -157,11 +162,6 @@ h2.tiptap-heading + h3.tiptap-heading,
 h3.tiptap-heading + h1.tiptap-heading,
 h3.tiptap-heading + h2.tiptap-heading {
   margin-top: 0;
-}
-
-.tiptap p.is-editor-empty:first-child::before {
-  @apply pointer-events-none float-left h-0 text-accent-foreground;
-  content: attr(data-placeholder);
 }
 
 .tiptap ul,

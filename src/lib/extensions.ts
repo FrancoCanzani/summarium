@@ -42,6 +42,7 @@ export const extensions = [
   Highlight,
   Underline,
   Placeholder.configure({
+    emptyEditorClass: 'is-editor-empty',
     placeholder: 'Write something…',
   }),
 ];
