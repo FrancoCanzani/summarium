@@ -17,6 +17,14 @@ import { Dispatch, SetStateAction } from 'react';
 import { SpeechToolbar } from './toolbars/speech';
 import { AssistantToolbar } from './toolbars/assistant';
 import AiAssistantSheet from './ai-assistant-sheet';
+import { ConfirmActionDialog } from './confirm-action-dialog';
+import ButtonWithTooltip from './ui/button-with-tooltip';
+import { Trash } from 'lucide-react';
+import { deleteNote } from '@/lib/actions';
+import { redirect, useParams } from 'next/navigation';
+import { useAuth } from '@/lib/hooks/use-auth';
+import { toast } from 'sonner';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function Toolbar({
   editor,
@@ -35,6 +43,11 @@ export function Toolbar({
   showSpeech: boolean;
   setShowSpeech: Dispatch<SetStateAction<boolean>>;
 }) {
+  const { id } = useParams();
+  const { user } = useAuth();
+
+  const queryClient = useQueryClient();
+
   return (
     <ToolbarProvider editor={editor}>
       <div className='flex items-center justify-between gap-2 w-full overflow-x-auto'>
@@ -49,6 +62,31 @@ export function Toolbar({
           <HorizontalRuleToolbar />
           <BlockquoteToolbar />
           <HardBreakToolbar />
+        </div>
+        <div>
+          <ConfirmActionDialog
+            title='Delete this note?'
+            description='Are you sure you want to delete this note? This action cannot be undone.'
+            onConfirm={async () => {
+              if (!user) return;
+
+              toast.promise(deleteNote(id as string, user.id), {
+                loading: 'Loading...',
+                success: () => {
+                  return `Note has been deleted`;
+                },
+                error: 'Failed to delete note. Please try again.',
+              });
+
+              queryClient.invalidateQueries({ queryKey: ['notes'] });
+
+              redirect('/notes');
+            }}
+          >
+            <ButtonWithTooltip tooltipText='Delete' variant='ghost' size='icon'>
+              <Trash className='size-4' />
+            </ButtonWithTooltip>
+          </ConfirmActionDialog>
         </div>
         <div className='flex items-center justify-start space-x-2'>
           <TranscribeToolbar

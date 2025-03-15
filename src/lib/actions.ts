@@ -1,6 +1,7 @@
 'use server';
 
 import OpenAI from 'openai';
+import { createClient } from './supabase/server';
 
 const openai = new OpenAI();
 
@@ -24,4 +25,24 @@ export async function transcribeAudioFile(formData: FormData) {
     console.error('Transcription error:', error);
     return { error: 'Failed to transcribe audio' };
   }
+}
+
+export async function deleteNote(
+  id: string,
+  userId: string
+): Promise<{ id: string }> {
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from('notes')
+    .delete()
+    .eq('id', id)
+    .eq('user_id', userId)
+    .select('id');
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return { id: id };
 }
