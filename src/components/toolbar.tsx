@@ -10,6 +10,7 @@ import { HardBreakToolbar } from '@/components/toolbars/hard-break';
 import { HorizontalRuleToolbar } from '@/components/toolbars/horizontal-rule';
 import { OrderedListToolbar } from '@/components/toolbars/ordered-list';
 import { RedoToolbar } from '@/components/toolbars/redo';
+import { SearchAndReplaceToolbar } from './toolbars/search-and-replace';
 import { UndoToolbar } from './toolbars/undo';
 import { ToolbarProvider } from '@/components/toolbars/toolbar-provider';
 import { TranscribeToolbar } from './toolbars/transcribe';
@@ -25,6 +26,7 @@ import { redirect, useParams } from 'next/navigation';
 import { useAuth } from '@/lib/hooks/use-auth';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
+import { LinkToolbar } from './toolbars/link';
 
 export function Toolbar({
   editor,
@@ -62,6 +64,8 @@ export function Toolbar({
           <HorizontalRuleToolbar />
           <BlockquoteToolbar />
           <HardBreakToolbar />
+          <SearchAndReplaceToolbar />
+          <LinkToolbar />
         </div>
         <div>
           <ConfirmActionDialog

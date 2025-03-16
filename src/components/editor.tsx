@@ -1,7 +1,7 @@
 'use client';
 
 import { useEditor, EditorContent } from '@tiptap/react';
-import { extensions } from '@/lib/extensions';
+import { extensions } from '@/lib/extensions/extensions';
 import EditorFooter from './editor-footer';
 import { useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
@@ -95,7 +95,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   return (
     <div className='flex h-svh w-full'>
       <div className='flex relative h-svh flex-1 flex-col mx-auto'>
-        <div className='w-full p-3 h-12 border-b-background transition-colors md:border-b-border duration-300 border-b hover:border-b-border'>
+        <div className='w-full p-3 h-12 sticky top-0 z-10 bg-background border-b-background transition-colors md:border-b-border duration-300 border-b hover:border-b-border'>
           <div className='flex items-center justify-start space-x-2 max-w-4xl mx-auto h-full'>
             {isMobile && <SidebarTrigger />}
             <Toolbar
@@ -110,9 +110,9 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
           </div>
         </div>
 
-        <div className='flex flex-1 flex-col p-3 space-y-4 overflow-hidden relative max-w-4xl mx-auto w-full'>
+        <div className='flex flex-1 flex-col p-3 space-y-4 relative max-w-4xl mx-auto w-full'>
           <input
-            className='border-none font-medium outline-none '
+            className='border-none text-xl font-medium outline-none'
             placeholder='Title'
             value={title}
             onChange={(e) => handleTitleChange(e.target.value)}
@@ -120,7 +120,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
           <EditorBubbleMenu editor={editor} />
           <EditorContent
             editor={editor}
-            className='my-0 min-w-full text-start h-full overflow-y-auto'
+            className='my-0 min-w-full text-start h-full'
           />
           <div className='absolute bottom-0 right-2 flex items-end flex-col justify-center space-y-2'>
             <AudioPlayer text={editor.getText()} showSpeech={showSpeech} />

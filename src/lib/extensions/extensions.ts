@@ -3,6 +3,10 @@ import CharacterCount from '@tiptap/extension-character-count';
 import Highlight from '@tiptap/extension-highlight';
 import Underline from '@tiptap/extension-underline';
 import Placeholder from '@tiptap/extension-placeholder';
+import { InlineSuggestion } from './suggestion-extension';
+import SearchAndReplace from './search-and-replace-extension';
+import Link from '@tiptap/extension-link';
+import { Command } from './slash-command-extension';
 
 export const extensions = [
   StarterKit.configure({
@@ -41,8 +45,30 @@ export const extensions = [
   CharacterCount,
   Highlight,
   Underline,
+  SearchAndReplace,
+  Command,
+  Link.configure({
+    HTMLAttributes: {
+      class: 'text-blue-500 underline cursor-pointer',
+    },
+  }),
   Placeholder.configure({
     emptyEditorClass: 'is-editor-empty',
     placeholder: 'Write something…',
+  }),
+  InlineSuggestion.configure({
+    fetchAutocompletion: async (query) => {
+      const res = await fetch(`/api/suggestion?query=${query}`);
+
+      if (!res.ok) {
+        return;
+      }
+
+      const json = await res.json();
+
+      console.log(json.text);
+
+      return json.text;
+    },
   }),
 ];
