@@ -24,7 +24,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
 
   const [title, setTitle] = useState(initialNote?.title || '');
   const [content, setContent] = useState(initialNote?.content || '');
-  const [isSaved, setIsSaved] = useState(false);
+  const [isSaved, setIsSaved] = useState(true);
   const [showAssistant, setShowAssistant] = useState(false);
   const [showTranscriber, setShowTranscriber] = useState(false);
   const [showSpeech, setShowSpeech] = useState(false);
@@ -49,8 +49,10 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   }, 1000);
 
   const handleTitleChange = (value: string) => {
+    setIsSaved(false);
     setTitle(value);
     handleDebouncedTitleChange(value);
+    setIsSaved(true);
   };
 
   const handleDebouncedContentChange = useDebouncedCallback((value: string) => {
@@ -64,8 +66,10 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   }, 1000);
 
   const handleContentChange = (value: string) => {
+    setIsSaved(false);
     setContent(value);
     handleDebouncedContentChange(value);
+    setIsSaved(true);
   };
 
   const editor = useEditor({
@@ -81,8 +85,8 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   if (!editor) return null;
 
   return (
-    <div className='flex h-svh w-full'>
-      <div className='flex relative h-svh flex-1 flex-col mx-auto'>
+    <div className='flex min-h-svh w-full'>
+      <div className='flex relative min-h-svh flex-1 flex-col mx-auto'>
         <div className='w-full p-3 h-12 sticky top-0 z-10 bg-background border-b-background transition-colors md:border-b-border duration-300 border-b hover:border-b-border'>
           <div className='flex items-center justify-start space-x-2 max-w-4xl mx-auto h-full'>
             {isMobile && <SidebarTrigger />}
@@ -108,7 +112,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
           <EditorBubbleMenu editor={editor} />
           <EditorContent
             editor={editor}
-            className='my-0 min-w-full text-start h-full'
+            className='my-0 min-w-full text-start h-full text-sm md:text-base'
           />
           <div className='absolute bottom-0 right-2 flex items-end flex-col justify-center space-y-2'>
             <AudioPlayer text={editor.getText()} showSpeech={showSpeech} />
