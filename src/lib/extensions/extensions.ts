@@ -6,7 +6,6 @@ import Placeholder from '@tiptap/extension-placeholder';
 import { InlineSuggestion } from './suggestion-extension';
 import SearchAndReplace from './search-and-replace-extension';
 import Link from '@tiptap/extension-link';
-import { Command } from './slash-command-extension';
 
 export const extensions = [
   StarterKit.configure({
@@ -46,7 +45,6 @@ export const extensions = [
   Highlight,
   Underline,
   SearchAndReplace,
-  Command,
   Link.configure({
     HTMLAttributes: {
       class: 'text-blue-500 underline cursor-pointer',

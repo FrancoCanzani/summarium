@@ -14,29 +14,20 @@ import { Toolbar } from './toolbar';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { SidebarTrigger } from './ui/sidebar';
 import AudioTranscriber from './audio-transcriber';
-import { useAuth } from '@/lib/hooks/use-auth';
-import { redirect } from 'next/navigation';
-import { useParams } from 'next/navigation';
-import { Note } from '@/lib/types';
 import EditorBubbleMenu from './editor-bubble-menu';
 import AudioPlayer from './audio-player';
+import { Note } from '@/lib/types';
 
 export default function Editor({ initialNote }: { initialNote: Note }) {
   const queryClient = useQueryClient();
   const isMobile = useIsMobile();
-  const { loading, user } = useAuth();
-  const { id } = useParams();
 
-  if (!id) redirect('/');
-
-  const [title, setTitle] = useState(initialNote.title);
-  const [content, setContent] = useState(initialNote.content);
+  const [title, setTitle] = useState(initialNote?.title || '');
+  const [content, setContent] = useState(initialNote?.content || '');
   const [isSaved, setIsSaved] = useState(false);
   const [showAssistant, setShowAssistant] = useState(false);
   const [showTranscriber, setShowTranscriber] = useState(false);
   const [showSpeech, setShowSpeech] = useState(false);
-
-  if (!user && !loading) redirect('/login');
 
   const upsertNoteMutation = useMutation({
     mutationFn: upsertNote,
@@ -48,11 +39,9 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   });
 
   const handleDebouncedTitleChange = useDebouncedCallback((value: string) => {
-    if (!user) return;
-
     upsertNoteMutation.mutate({
-      id: id?.toString(),
-      user_id: user?.id,
+      id: initialNote.id,
+      user_id: initialNote.user_id,
       title: value,
       content: content,
       updated_at: new Date().toISOString(),
@@ -65,11 +54,9 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   };
 
   const handleDebouncedContentChange = useDebouncedCallback((value: string) => {
-    if (!user) return;
-
     upsertNoteMutation.mutate({
-      id: id?.toString(),
-      user_id: user?.id,
+      id: initialNote.id,
+      user_id: initialNote.user_id,
       title: title,
       content: value,
       updated_at: new Date().toISOString(),
@@ -88,6 +75,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
       handleContentChange(editor.getHTML());
     },
     immediatelyRender: false,
+    shouldRerenderOnTransaction: false,
   });
 
   if (!editor) return null;

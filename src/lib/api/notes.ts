@@ -1,5 +1,6 @@
 import { Note } from '../types';
 import { createClient } from '../supabase/client';
+import { randomUUID } from 'crypto';
 
 const supabase = createClient();
 
@@ -31,10 +32,10 @@ export async function fetchNotes(userId: string): Promise<Note[]> {
   return data as Note[];
 }
 
-export async function fetchNote(
+export async function fetchOrCreateNote(
   id: string,
   userId: string
-): Promise<Note | null> {
+): Promise<Note> {
   const { data, error } = await supabase
     .from('notes')
     .select()
@@ -42,13 +43,23 @@ export async function fetchNote(
     .eq('user_id', userId)
     .single();
 
-  if (!data) {
-    return null;
-  }
-
   if (error) {
     throw new Error(error.message);
   }
 
-  return data as Note;
+  if (data) {
+    return data as Note;
+  }
+
+  const now = new Date().toISOString();
+  const newNote: Note = {
+    id: randomUUID(),
+    user_id: userId,
+    title: '',
+    content: '',
+    created_at: now,
+    updated_at: now,
+  };
+
+  return await upsertNote(newNote);
 }

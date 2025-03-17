@@ -1,6 +1,9 @@
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { getQueryClient } from '@/lib/utils';
+import { fetchNotes } from '@/lib/api/notes';
 import Editor from '@/components/editor';
+import { Note } from '@/lib/types';
 import { createClient } from '@/lib/supabase/server';
-import { fetchNote } from '@/lib/api/notes';
 import { randomUUID } from 'crypto';
 
 export default async function EditorPage({
@@ -9,6 +12,7 @@ export default async function EditorPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const queryClient = getQueryClient();
 
   const supabase = await createClient();
 
@@ -18,13 +22,22 @@ export default async function EditorPage({
 
   if (!user) return;
 
-  let note = await fetchNote(id, user.id);
+  await queryClient.prefetchQuery({
+    queryKey: ['notes'],
+    queryFn: () => fetchNotes(user.id),
+  });
 
-  if (!note) {
-    note = {
+  const dehydratedState = dehydrate(queryClient);
+
+  const notes = queryClient.getQueryData<Note[]>(['notes']);
+
+  let initialNote = notes?.find((n) => n.id === id);
+
+  if (!initialNote) {
+    initialNote = {
       id: randomUUID(),
       user_id: user.id,
-      title: '',
+      title: 'New note',
       content: '',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
@@ -32,8 +45,8 @@ export default async function EditorPage({
   }
 
   return (
-    <div>
-      <Editor initialNote={note} />
-    </div>
+    <HydrationBoundary state={dehydratedState}>
+      <Editor initialNote={initialNote} />
+    </HydrationBoundary>
   );
 }

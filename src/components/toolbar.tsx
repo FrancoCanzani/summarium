@@ -26,7 +26,6 @@ import { redirect, useParams } from 'next/navigation';
 import { useAuth } from '@/lib/hooks/use-auth';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
-import { LinkToolbar } from './toolbars/link';
 
 export function Toolbar({
   editor,
@@ -65,7 +64,6 @@ export function Toolbar({
           <BlockquoteToolbar />
           <HardBreakToolbar />
           <SearchAndReplaceToolbar />
-          <LinkToolbar />
         </div>
         <div>
           <ConfirmActionDialog

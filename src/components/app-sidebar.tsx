@@ -21,9 +21,8 @@ export function AppSidebar() {
   const { id } = useParams();
 
   const { data: notes } = useQuery({
-    queryKey: ['notes', user?.id],
+    queryKey: ['notes'],
     queryFn: () => fetchNotes(user!.id),
-    enabled: !!user,
   });
 
   return (
@@ -42,7 +41,7 @@ export function AppSidebar() {
           </div>
           <SidebarGroupContent>
             <SidebarMenu className='overflow-hidden'>
-              <div className='h-[calc(100vh-11.5rem)] overflow-y-scroll thin-scrollbar w-full pb-1'>
+              <div className='h-[calc(100vh-11.5rem)] overflow-y-scroll thin-scrollbar w-full pb-1 space-y-1'>
                 {notes &&
                   notes.map((item) => (
                     <Link
