@@ -1,20 +1,17 @@
-'use client'
+"use client";
 
-import {
-    QueryClient,
-    QueryClientProvider,
-  } from '@tanstack/react-query'
-  import { SidebarProvider } from "@/components/ui/sidebar"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
-    const queryClient = new QueryClient()
+  const queryClient = new QueryClient();
 
-return(
+  return (
     <QueryClientProvider client={queryClient}>
-    <SidebarProvider>
-        {children}
-    </SidebarProvider>
+      <SidebarProvider>
+        <NuqsAdapter>{children}</NuqsAdapter>
+      </SidebarProvider>
     </QueryClientProvider>
-)
-
+  );
 }
