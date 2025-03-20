@@ -4,10 +4,10 @@ import { useAuth } from "@/lib/hooks/use-auth";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
+  SidebarHeader,
 } from "@/components/ui/sidebar";
 import { fetchNotes } from "@/lib/api/notes";
 import Link from "next/link";
@@ -26,64 +26,60 @@ export function AppSidebar() {
 
   return (
     <Sidebar className="flex flex-col h-screen">
-      <div className="h-12 flex items-center">
-        <h2 className="p-2 font-medium text-2xl">Summarium</h2>
-      </div>
+      <SidebarHeader>
+        <h2 className="p-2 font-medium text-2xl flex items-center">
+          Summarium
+        </h2>
 
-      <div className="h-12 border-y font-medium text-xl flex w-full">
         <Link
           href={`/notes/${crypto.randomUUID()}`}
-          className="w-1/2 p-2 text-center h-full border-r hover:bg-accent"
+          className="hover:bg-accent p-2"
         >
           New Note
         </Link>
         <SearchModal notes={notes} />
-      </div>
+      </SidebarHeader>
 
-      <div className="flex-1 overflow-hidden">
-        <div className="h-full overflow-y-auto divide-y divide-dashed thin-scrollbar">
-          {notes &&
-            notes.map((item) => (
-              <Link
-                href={`/notes/${item.id}`}
-                key={item.id}
-                className={cn(
-                  "flex w-full flex-col items-center gap-1.5 overflow-hidden p-1.5 px-2 justify-between text-xs hover:bg-sidebar-accent",
-                  id === item.id
-                    ? "bg-sidebar-accent font-medium"
-                    : "bg-sidebar",
-                )}
-              >
-                <span className="truncate w-full text-start">
-                  {item.title ?? "Untitled"}
-                </span>
-                {item.updated_at && (
-                  <span className="text-xs text-end w-full text-gray-400">
-                    {formatDistanceToNow(new Date(item.updated_at), {
-                      addSuffix: true,
-                    })}
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupContent className="thin-scrollbar">
+            {notes &&
+              notes.map((item) => (
+                <Link
+                  href={`/notes/${item.id}`}
+                  key={item.id}
+                  className={cn(
+                    "flex w-full flex-col items-center gap-1.5 overflow-hidden p-1.5 px-2 justify-between text-xs hover:bg-sidebar-accent",
+                    id === item.id
+                      ? "bg-sidebar-accent font-medium"
+                      : "bg-sidebar",
+                  )}
+                >
+                  <span className="truncate w-full text-start">
+                    {item.title ?? "Untitled"}
                   </span>
-                )}
-              </Link>
-            ))}
-        </div>
-      </div>
+                  {item.updated_at && (
+                    <span className="text-xs text-end w-full text-gray-400">
+                      {formatDistanceToNow(new Date(item.updated_at), {
+                        addSuffix: true,
+                      })}
+                    </span>
+                  )}
+                </Link>
+              ))}
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
 
-      {/* Fixed docs link - Box 3 */}
-      <Link
-        href={"/docs"}
-        className="h-12 p-2 hover:bg-accent font-medium text-xl border-y flex items-center"
-      >
-        Docs
-      </Link>
+      <SidebarFooter>
+        <Link href={"/docs"} className="p-2 hover:bg-accent font-medium">
+          Docs
+        </Link>
 
-      {/* Fixed settings link - Box 4 */}
-      <Link
-        href={"/settings"}
-        className="h-12 p-2 hover:bg-accent font-medium text-xl border-b flex items-center"
-      >
-        Settings
-      </Link>
+        <Link href={"/settings"} className="p-2 hover:bg-accent font-medium">
+          Settings
+        </Link>
+      </SidebarFooter>
     </Sidebar>
   );
 }
