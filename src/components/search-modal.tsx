@@ -46,7 +46,7 @@ export default function SearchModal({ notes }: { notes: Note[] }) {
         }
       }}
     >
-      <DialogTrigger className="p-2 hover:bg-accent font-medium text-xl h-12 border-b">
+      <DialogTrigger className="w-1/2 p-2 text-center hover:bg-accent h-full">
         Search
       </DialogTrigger>
       <DialogContent className="rounded-sm">
