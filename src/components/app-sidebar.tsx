@@ -26,8 +26,8 @@ export function AppSidebar() {
 
   return (
     <Sidebar className="flex flex-col h-screen">
-      <SidebarHeader>
-        <h2 className="p-2 font-medium text-2xl flex items-center">
+      <SidebarHeader className="gap-0">
+        <h2 className="p-2 font-medium text-xl text-zed flex items-center">
           Summarium
         </h2>
 
@@ -40,7 +40,7 @@ export function AppSidebar() {
         <SearchModal notes={notes} />
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent className="border-y border-dashed">
         <SidebarGroup>
           <SidebarGroupContent className="thin-scrollbar">
             {notes &&
@@ -49,9 +49,9 @@ export function AppSidebar() {
                   href={`/notes/${item.id}`}
                   key={item.id}
                   className={cn(
-                    "flex w-full flex-col items-center gap-1.5 overflow-hidden p-1.5 px-2 justify-between text-xs hover:bg-sidebar-accent",
+                    "flex w-full flex-col items-center gap-1.5 overflow-hidden py-1.5 px-2 justify-between text-xs hover:bg-zed-light",
                     id === item.id
-                      ? "bg-sidebar-accent font-medium"
+                      ? "bg-zed-light font-medium border-l-2 border-l-zed"
                       : "bg-sidebar",
                   )}
                 >
@@ -71,7 +71,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter>
+      <SidebarFooter className="gap-0">
         <Link href={"/docs"} className="p-2 hover:bg-accent font-medium">
           Docs
         </Link>

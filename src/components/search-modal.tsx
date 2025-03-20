@@ -1,6 +1,5 @@
 "use client";
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Fuse from "fuse.js";
 import { FuseResult } from "fuse.js";
 import {
@@ -15,38 +14,53 @@ import { Note } from "@/lib/types";
 import Link from "next/link";
 import { useQueryState } from "nuqs";
 
-export default function SearchModal({ notes }: { notes: Note[] }) {
+export default function SearchModal({ notes }: { notes?: Note[] }) {
   const [searchQuery, setSearchQuery] = useQueryState("q");
   const [searchResults, setSearchResults] = useState<FuseResult<Note>[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const fuse = new Fuse(notes, {
-    keys: ["title", "content"],
-    includeScore: true,
-    includeMatches: true,
-    threshold: 0.4,
-    ignoreLocation: true,
-  });
+  const fuse = useMemo(() => {
+    if (notes?.length) {
+      return new Fuse(notes, {
+        keys: ["title", "content"],
+        includeScore: true,
+        includeMatches: true,
+        threshold: 0.4,
+        ignoreLocation: true,
+      });
+    }
+    return null;
+  }, [notes]);
 
   useEffect(() => {
-    if (searchQuery) {
+    if (searchQuery && fuse) {
       const results = fuse.search(searchQuery);
-      console.log(results);
       setSearchResults(results);
     } else {
       setSearchResults([]);
     }
-  }, [searchQuery]);
+  }, [searchQuery, fuse]);
+
+  const handleLinkClick = () => {
+    setIsOpen(false);
+    setSearchQuery("");
+  };
 
   return (
     <Dialog
+      open={isOpen}
       onOpenChange={(open) => {
+        setIsOpen(open);
         if (!open) {
           setSearchQuery("");
           setSearchResults([]);
         }
       }}
     >
-      <DialogTrigger className="p-2 hover:bg-accent text-start">
+      <DialogTrigger
+        className="hover:bg-accent text-start p-2"
+        onClick={() => setIsOpen(true)}
+      >
         Search
       </DialogTrigger>
       <DialogContent className="rounded-sm">
@@ -61,17 +75,19 @@ export default function SearchModal({ notes }: { notes: Note[] }) {
           onChange={(e) => setSearchQuery(e.target.value)}
           autoFocus
         />
-
         <div className="max-h-[60vh] overflow-y-auto text-sm">
           {searchResults && searchResults.length > 0 ? (
             <div className="space-y-2 flex flex-col">
               {searchResults.map((result) => (
                 <Link
                   key={result.item.id}
-                  href={`notes/${result.item.id}`}
+                  href={`/notes/${result.item.id}`}
+                  onClick={() => handleLinkClick()}
                   className="p-2 rounded-sm hover:bg-muted cursor-pointer"
                 >
-                  <h3 className="font-medium">{result.item.title}</h3>
+                  <h3 className="font-medium">
+                    {result.item.title || "Untitled"}
+                  </h3>
                   <div className="flex items-center justify-between mt-1">
                     {result.item.created_at && (
                       <span className="text-xs text-muted-foreground">

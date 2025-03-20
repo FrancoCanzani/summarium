@@ -21,9 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
+      {/* <head>
         <script src="https://unpkg.com/react-scan/dist/auto.global.js" />
-      </head>
+      </head> */}
       <body
         className={`${geistMono.variable} font-[family-name:var(--font-geist-mono)] antialiased`}
       >
