@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { cn } from '@/lib/utils';
-import { Speech } from 'lucide-react';
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
+import { Speech } from "lucide-react";
 
 export function TranscribeToolbar({
   onClick,
@@ -20,19 +20,19 @@ export function TranscribeToolbar({
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          variant='ghost'
-          size='icon'
-          className={cn('h-8 w-8', showTranscriber && 'bg-accent')}
+          variant="ghost"
+          size="icon"
+          className={cn("size-6", showTranscriber && "bg-accent")}
           onClick={(e) => {
             onClick?.(e);
           }}
         >
-          <Speech className='size-4' />
+          <Speech className="size-4" />
         </Button>
       </TooltipTrigger>
       <TooltipContent>
         <span>Transcribe</span>
-        <span className='ml-1 text-xs text-gray-11'>(cmd + t)</span>
+        <span className="ml-1 text-xs text-gray-11">(cmd + t)</span>
       </TooltipContent>
     </Tooltip>
   );

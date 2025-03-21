@@ -27,7 +27,6 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   const [isSaved, setIsSaved] = useState(true);
   const [showAssistant, setShowAssistant] = useState(false);
   const [showTranscriber, setShowTranscriber] = useState(false);
-  const [showSpeech, setShowSpeech] = useState(false);
 
   const upsertNoteMutation = useMutation({
     mutationFn: upsertNote,
@@ -87,7 +86,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   return (
     <div className="flex min-h-svh w-full">
       <div className="flex relative min-h-svh flex-1 flex-col mx-auto">
-        <div className="w-full p-2 sticky top-0 z-10 bg-background border-b-background h-12 transition-colors md:border-b-border duration-300 border-b hover:border-b-border">
+        <div className="w-full p-1.5 sticky top-0 z-10 bg-background border-b-background transition-colors md:border-b-border duration-300 border-b hover:border-b-border">
           <div className="flex items-center justify-start space-x-2 max-w-4xl mx-auto h-full">
             {isMobile && <SidebarTrigger />}
             <Toolbar
@@ -96,8 +95,6 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
               showAssistant={showAssistant}
               setShowTranscriber={setShowTranscriber}
               showTranscriber={showTranscriber}
-              setShowSpeech={setShowSpeech}
-              showSpeech={showSpeech}
             />
           </div>
         </div>
@@ -115,7 +112,6 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
             className="my-0 min-w-full flex-1 text-start h-full text-sm md:text-base"
           />
           <div className="absolute bottom-0 right-2 flex items-end flex-col justify-center space-y-2">
-            <AudioPlayer text={editor.getText()} showSpeech={showSpeech} />
             <AudioTranscriber
               editor={editor}
               showTranscriber={showTranscriber}

@@ -1,14 +1,14 @@
-import { CornerUpLeft } from 'lucide-react';
-import React from 'react';
+import { CornerUpLeft } from "lucide-react";
+import React from "react";
 
-import { Button, type ButtonProps } from '@/components/ui/button';
+import { Button, type ButtonProps } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { cn } from '@/lib/utils';
-import { useToolbar } from '@/components/toolbars/toolbar-provider';
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
+import { useToolbar } from "@/components/toolbars/toolbar-provider";
 
 const UndoToolbar = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, onClick, children, ...props }, ref) => {
@@ -18,9 +18,9 @@ const UndoToolbar = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            variant='ghost'
-            size='icon'
-            className={cn('h-8 w-8', className)}
+            variant="ghost"
+            size="icon"
+            className={cn("size-6", className)}
             onClick={(e) => {
               editor?.chain().focus().undo().run();
               onClick?.(e);
@@ -29,7 +29,7 @@ const UndoToolbar = React.forwardRef<HTMLButtonElement, ButtonProps>(
             ref={ref}
             {...props}
           >
-            {children || <CornerUpLeft className='h-4 w-4' />}
+            {children || <CornerUpLeft className="h-4 w-4" />}
           </Button>
         </TooltipTrigger>
         <TooltipContent>
@@ -37,9 +37,9 @@ const UndoToolbar = React.forwardRef<HTMLButtonElement, ButtonProps>(
         </TooltipContent>
       </Tooltip>
     );
-  }
+  },
 );
 
-UndoToolbar.displayName = 'UndoToolbar';
+UndoToolbar.displayName = "UndoToolbar";
 
 export { UndoToolbar };

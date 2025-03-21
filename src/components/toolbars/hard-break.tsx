@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { WrapText } from 'lucide-react';
-import React from 'react';
+import { WrapText } from "lucide-react";
+import React from "react";
 
-import { Button, type ButtonProps } from '@/components/ui/button';
+import { Button, type ButtonProps } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { cn } from '@/lib/utils';
-import { useToolbar } from '@/components/toolbars/toolbar-provider';
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
+import { useToolbar } from "@/components/toolbars/toolbar-provider";
 
 const HardBreakToolbar = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, onClick, children, ...props }, ref) => {
@@ -19,9 +19,9 @@ const HardBreakToolbar = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            variant='ghost'
-            size='icon'
-            className={cn('h-8 w-8 hidden md:flex', className)}
+            variant="ghost"
+            size="icon"
+            className={cn("size-6 hidden md:flex", className)}
             onClick={(e) => {
               editor?.chain().focus().setHardBreak().run();
               onClick?.(e);
@@ -29,7 +29,7 @@ const HardBreakToolbar = React.forwardRef<HTMLButtonElement, ButtonProps>(
             ref={ref}
             {...props}
           >
-            {children || <WrapText className='h-4 w-4' />}
+            {children || <WrapText className="h-4 w-4" />}
           </Button>
         </TooltipTrigger>
         <TooltipContent>
@@ -37,9 +37,9 @@ const HardBreakToolbar = React.forwardRef<HTMLButtonElement, ButtonProps>(
         </TooltipContent>
       </Tooltip>
     );
-  }
+  },
 );
 
-HardBreakToolbar.displayName = 'HardBreakToolbar';
+HardBreakToolbar.displayName = "HardBreakToolbar";
 
 export { HardBreakToolbar };

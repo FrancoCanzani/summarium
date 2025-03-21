@@ -27,7 +27,7 @@ export const HighlightToolbar = React.forwardRef<
           variant="ghost"
           size="icon"
           className={cn(
-            "h-8 w-8",
+            "size-6",
             editor.isActive("highlight") && "bg-accent",
             className,
           )}
