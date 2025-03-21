@@ -86,7 +86,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   return (
     <div className="flex min-h-svh w-full">
       <div className="flex relative min-h-svh flex-1 flex-col mx-auto">
-        <div className="w-full p-1.5 sticky top-0 z-10 bg-background border-b-background transition-colors md:border-b-border duration-300 border-b hover:border-b-border">
+        <div className="w-full p-1 sticky top-0 z-10 bg-sidebar border-b-background transition-colors md:border-b-border duration-300 border-b hover:border-b-border">
           <div className="flex items-center justify-start space-x-2 max-w-4xl mx-auto h-full">
             {isMobile && <SidebarTrigger />}
             <Toolbar
