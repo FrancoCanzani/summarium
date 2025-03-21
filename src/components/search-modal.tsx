@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect, useMemo } from "react";
 import Fuse from "fuse.js";
 import { FuseResult } from "fuse.js";
