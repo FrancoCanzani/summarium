@@ -1,8 +1,7 @@
 "use client";
 
-import { CornerUpRight } from "lucide-react";
-import React from "react";
-
+import { Redo2 } from "lucide-react";
+import { forwardRef } from "react";
 import { Button, type ButtonProps } from "@/components/ui/button";
 import {
   Tooltip,
@@ -12,7 +11,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useToolbar } from "@/components/toolbars/toolbar-provider";
 
-const RedoToolbar = React.forwardRef<HTMLButtonElement, ButtonProps>(
+const RedoToolbar = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, onClick, children, ...props }, ref) => {
     const { editor } = useToolbar();
 
@@ -31,7 +30,7 @@ const RedoToolbar = React.forwardRef<HTMLButtonElement, ButtonProps>(
             ref={ref}
             {...props}
           >
-            {children || <CornerUpRight className="h-4 w-4" />}
+            {children || <Redo2 className="h-4 w-4" />}
           </Button>
         </TooltipTrigger>
         <TooltipContent>

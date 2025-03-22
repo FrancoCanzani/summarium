@@ -18,13 +18,22 @@ import { Dispatch, SetStateAction } from "react";
 import { AssistantToolbar } from "./toolbars/assistant";
 import AiAssistantSheet from "./ai-assistant-sheet";
 import { ConfirmActionDialog } from "./confirm-action-dialog";
-import ButtonWithTooltip from "./ui/button-with-tooltip";
-import { Trash } from "lucide-react";
+import { Trash, SquarePlus } from "lucide-react";
 import { deleteNote } from "@/lib/actions";
 import { redirect, useParams } from "next/navigation";
 import { useAuth } from "@/lib/hooks/use-auth";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import ButtonWithTooltip from "./ui/button-with-tooltip";
 
 export function Toolbar({
   editor,
@@ -46,21 +55,37 @@ export function Toolbar({
 
   return (
     <ToolbarProvider editor={editor}>
-      <div className="flex items-center justify-between gap-2 w-full overflow-x-auto">
-        <div className="flex items-center justify-start space-x-1.5">
+      <div className="flex items-center justify-between gap-2 w-full min-h-full overflow-x-auto">
+        <div className="flex items-center justify-start space-x-1.5 min-h-full">
           <UndoToolbar />
           <RedoToolbar />
-          <Separator orientation="vertical" className="h-7" />
-          <BulletListToolbar />
-          <OrderedListToolbar />
-          <CodeToolbar />
-          <CodeBlockToolbar />
-          <HorizontalRuleToolbar />
-          <BlockquoteToolbar />
-          <HardBreakToolbar />
-          <SearchAndReplaceToolbar />
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <ButtonWithTooltip
+                tooltipText="Blocks"
+                variant="ghost"
+                size={"icon"}
+                className="size-6"
+              >
+                <SquarePlus className="size-4" />
+              </ButtonWithTooltip>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56 flex items-start justify-start flex-col">
+              <BulletListToolbar
+                children={"Bullet list"}
+                className="w-full text-start"
+              />
+              <OrderedListToolbar />
+              <CodeToolbar />
+              <CodeBlockToolbar />
+              <HorizontalRuleToolbar />
+              <BlockquoteToolbar />
+              <HardBreakToolbar />
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-        <div>
+        <div className="flex items-center justify-start space-x-1.5">
           <ConfirmActionDialog
             title="Delete this note?"
             description="Are you sure you want to delete this note? This action cannot be undone."
@@ -89,8 +114,7 @@ export function Toolbar({
               <Trash className="size-4" />
             </ButtonWithTooltip>
           </ConfirmActionDialog>
-        </div>
-        <div className="flex items-center justify-start space-x-2">
+          <SearchAndReplaceToolbar />
           <TranscribeToolbar
             onClick={() => {
               setShowTranscriber(!showTranscriber);

@@ -8,7 +8,7 @@ import { randomUUID } from "crypto";
 import { Metadata, ResolvingMetadata } from "next/types";
 
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
@@ -16,7 +16,7 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const id = params.id;
+  const { id } = await params;
 
   const queryClient = getQueryClient();
   const supabase = await createClient();
