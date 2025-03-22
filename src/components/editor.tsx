@@ -1,22 +1,21 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
-import { extensions } from "@/lib/extensions/extensions";
-import EditorFooter from "./editor-footer";
-import { useState } from "react";
-import { useDebouncedCallback } from "use-debounce";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { upsertNote } from "@/lib/api/notes";
-import { toast } from "sonner";
-import { RightSidebar } from "./right-sidebar";
-import AiAssistant from "./ai-assistant";
-import { Toolbar } from "./toolbar";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { SidebarTrigger } from "./ui/sidebar";
+import { upsertNote } from "@/lib/api/notes";
+import { extensions } from "@/lib/extensions/extensions";
+import { Note } from "@/lib/types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { EditorContent, useEditor } from "@tiptap/react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { useDebouncedCallback } from "use-debounce";
+import AiAssistant from "./ai-assistant";
 import AudioTranscriber from "./audio-transcriber";
 import EditorBubbleMenu from "./editor-bubble-menu";
-import AudioPlayer from "./audio-player";
-import { Note } from "@/lib/types";
+import EditorFooter from "./editor-footer";
+import { RightSidebar } from "./right-sidebar";
+import { Toolbar } from "./toolbar";
+import { SidebarTrigger } from "./ui/sidebar";
 
 export default function Editor({ initialNote }: { initialNote: Note }) {
   const queryClient = useQueryClient();
@@ -40,7 +39,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   const handleDebouncedTitleChange = useDebouncedCallback((value: string) => {
     upsertNoteMutation.mutate({
       id: initialNote.id,
-      user_id: initialNote.user_id,
+      user_id: initialNote.id,
       title: value,
       content: content,
       updated_at: new Date().toISOString(),
@@ -57,7 +56,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   const handleDebouncedContentChange = useDebouncedCallback((value: string) => {
     upsertNoteMutation.mutate({
       id: initialNote.id,
-      user_id: initialNote.user_id,
+      user_id: initialNote.id,
       title: title,
       content: value,
       updated_at: new Date().toISOString(),
@@ -86,9 +85,14 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   return (
     <div className="flex min-h-svh w-full">
       <div className="flex relative min-h-svh flex-1 flex-col mx-auto">
-        <div className="w-full p-1 sticky top-0 z-10 bg-sidebar border-b-background transition-colors md:border-b-border duration-300 border-b hover:border-b-border">
-          <div className="flex items-center justify-start space-x-2 max-w-4xl mx-auto h-full">
-            {isMobile && <SidebarTrigger />}
+        <div className="sticky top-0 z-10 bg-sidebar w-full border-b flex flex-col">
+          <div className="w-full border-b p-1  flex flex-col space-y-1 items-start justify-start">
+            <div className="flex items-center justify-start space-x-2 max-w-4xl mx-auto h-full">
+              {isMobile && <SidebarTrigger />} <h2>{title}</h2>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-start space-x-2 max-w-4xl mx-auto h-full p-1 w-full">
             <Toolbar
               editor={editor}
               setShowAssistant={setShowAssistant}

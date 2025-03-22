@@ -1,7 +1,6 @@
 "use client";
 
 import { Editor } from "@tiptap/react";
-import { Separator } from "@/components/ui/separator";
 import { BlockquoteToolbar } from "@/components/toolbars/blockquote";
 import { BulletListToolbar } from "@/components/toolbars/bullet-list";
 import { CodeToolbar } from "@/components/toolbars/code";
@@ -12,13 +11,28 @@ import { OrderedListToolbar } from "@/components/toolbars/ordered-list";
 import { RedoToolbar } from "@/components/toolbars/redo";
 import { SearchAndReplaceToolbar } from "./toolbars/search-and-replace";
 import { UndoToolbar } from "./toolbars/undo";
-import { ToolbarProvider } from "@/components/toolbars/toolbar-provider";
 import { TranscribeToolbar } from "./toolbars/transcribe";
+import { BoldToolbar } from "@/components/toolbars/bold";
+import { ItalicToolbar } from "@/components/toolbars/italic";
+import { UnderlineToolbar } from "./toolbars/underline";
+import { HighlightToolbar } from "./toolbars/highlight";
+import { StrikeThroughToolbar } from "@/components/toolbars/strikethrough";
+import { ToolbarProvider } from "./toolbars/toolbar-provider";
+import { LinkToolbar } from "./toolbars/link";
 import { Dispatch, SetStateAction } from "react";
 import { AssistantToolbar } from "./toolbars/assistant";
 import AiAssistantSheet from "./ai-assistant-sheet";
 import { ConfirmActionDialog } from "./confirm-action-dialog";
-import { Trash, SquarePlus } from "lucide-react";
+import {
+  Trash,
+  SquarePlus,
+  Code2,
+  Code,
+  SeparatorHorizontal,
+  TextQuote,
+  WrapText,
+  SquareCheck,
+} from "lucide-react";
 import { deleteNote } from "@/lib/actions";
 import { redirect, useParams } from "next/navigation";
 import { useAuth } from "@/lib/hooks/use-auth";
@@ -27,13 +41,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import ButtonWithTooltip from "./ui/button-with-tooltip";
+import { List, ListOrdered } from "lucide-react";
+import { TaskListToolbar } from "./toolbars/task-list";
 
 export function Toolbar({
   editor,
@@ -56,14 +68,14 @@ export function Toolbar({
   return (
     <ToolbarProvider editor={editor}>
       <div className="flex items-center justify-between gap-2 w-full min-h-full overflow-x-auto">
-        <div className="flex items-center justify-start space-x-1.5 min-h-full">
+        <div className="flex items-center justify-start space-x-2 min-h-full">
           <UndoToolbar />
           <RedoToolbar />
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <ButtonWithTooltip
-                tooltipText="Blocks"
+                tooltipText="Insert block"
                 variant="ghost"
                 size={"icon"}
                 className="size-6"
@@ -71,19 +83,40 @@ export function Toolbar({
                 <SquarePlus className="size-4" />
               </ButtonWithTooltip>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 flex items-start justify-start flex-col">
-              <BulletListToolbar
-                children={"Bullet list"}
-                className="w-full text-start"
-              />
-              <OrderedListToolbar />
-              <CodeToolbar />
-              <CodeBlockToolbar />
-              <HorizontalRuleToolbar />
-              <BlockquoteToolbar />
-              <HardBreakToolbar />
+            <DropdownMenuContent className="w-56 flex items-start justify-start flex-col text-start space-y-2">
+              <TaskListToolbar className="w-full flex items-center justify-start space-x-2 p-1">
+                <SquareCheck className="size-4" /> <span>Task list</span>
+              </TaskListToolbar>
+              <BulletListToolbar className="w-full flex items-center justify-start space-x-2 p-1">
+                <List className="size-4" /> <span>Bullet list</span>
+              </BulletListToolbar>
+              <OrderedListToolbar className="w-full flex items-center justify-start space-x-2 p-1">
+                <ListOrdered className="size-4" /> <span>Ordered list</span>
+              </OrderedListToolbar>
+              <CodeToolbar className="w-full flex items-center justify-start space-x-2 p-1">
+                <Code2 className="size-4" /> <span>Code</span>
+              </CodeToolbar>
+              <CodeBlockToolbar className="w-full flex items-center justify-start space-x-2 p-1">
+                <Code className="size-4" /> <span>Code block</span>
+              </CodeBlockToolbar>
+              <HorizontalRuleToolbar className="w-full flex items-center justify-start space-x-2 p-1">
+                <SeparatorHorizontal className="size-4" />
+                <span>Separator</span>
+              </HorizontalRuleToolbar>
+              <BlockquoteToolbar className="w-full flex items-center justify-start space-x-2 p-1">
+                <TextQuote className="size-4" /> <span>Blockquote</span>
+              </BlockquoteToolbar>
+              <HardBreakToolbar className="w-full flex items-center justify-start space-x-2 p-1">
+                <WrapText className="size-4" /> <span>Hard break</span>
+              </HardBreakToolbar>
             </DropdownMenuContent>
           </DropdownMenu>
+          <BoldToolbar />
+          <ItalicToolbar />
+          <StrikeThroughToolbar />
+          <UnderlineToolbar />
+          <HighlightToolbar />
+          <LinkToolbar />
         </div>
         <div className="flex items-center justify-start space-x-1.5">
           <ConfirmActionDialog
