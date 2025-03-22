@@ -16,8 +16,13 @@ import EditorFooter from "./editor-footer";
 import { RightSidebar } from "./right-sidebar";
 import { Toolbar } from "./toolbar";
 import { SidebarTrigger } from "./ui/sidebar";
+import { useAuth } from "@/lib/hooks/use-auth";
 
 export default function Editor({ initialNote }: { initialNote: Note }) {
+  const { user, loading } = useAuth();
+
+  if (!user && !loading) return;
+
   const queryClient = useQueryClient();
   const isMobile = useIsMobile();
 
@@ -39,7 +44,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   const handleDebouncedTitleChange = useDebouncedCallback((value: string) => {
     upsertNoteMutation.mutate({
       id: initialNote.id,
-      user_id: initialNote.id,
+      user_id: user!.id,
       title: value,
       content: content,
       updated_at: new Date().toISOString(),
@@ -56,7 +61,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   const handleDebouncedContentChange = useDebouncedCallback((value: string) => {
     upsertNoteMutation.mutate({
       id: initialNote.id,
-      user_id: initialNote.id,
+      user_id: user!.id,
       title: title,
       content: value,
       updated_at: new Date().toISOString(),
@@ -86,8 +91,8 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
     <div className="flex min-h-svh w-full">
       <div className="flex relative min-h-svh flex-1 flex-col mx-auto">
         <div className="sticky top-0 z-10 bg-sidebar w-full border-b flex flex-col">
-          <div className="w-full border-b p-1  flex flex-col space-y-1 items-start justify-start">
-            <div className="flex items-center justify-start space-x-2 max-w-4xl mx-auto h-full">
+          <div className="w-full border-b p-1 flex flex-col space-y-1 items-start justify-start">
+            <div className="flex items-center justify-start space-x-2 max-w-4xl h-full">
               {isMobile && <SidebarTrigger />} <h2>{title}</h2>
             </div>
           </div>
@@ -113,7 +118,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
           <EditorBubbleMenu editor={editor} />
           <EditorContent
             editor={editor}
-            className="my-0 min-w-full flex-1 text-start h-full text-sm md:text-base"
+            className="my-0 min-w-full prose prose-sm md:prose-base flex-1 text-start h-full"
           />
           <div className="absolute bottom-0 right-2 flex items-end flex-col justify-center space-y-2">
             <AudioTranscriber

@@ -8,6 +8,7 @@ import SearchAndReplace from "./search-and-replace-extension";
 import Link from "@tiptap/extension-link";
 import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
+import TextAlign from "@tiptap/extension-text-align";
 
 export const extensions = [
   StarterKit.configure({
@@ -49,6 +50,9 @@ export const extensions = [
   }),
   CharacterCount,
   Highlight,
+  TextAlign.configure({
+    types: ["heading", "paragraph"],
+  }),
   Underline,
   SearchAndReplace,
   Link.configure({

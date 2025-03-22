@@ -46,6 +46,8 @@ import {
 import ButtonWithTooltip from "./ui/button-with-tooltip";
 import { List, ListOrdered } from "lucide-react";
 import { TaskListToolbar } from "./toolbars/task-list";
+import { AlignmentToolbar } from "./toolbars/alignment";
+import { ClearFormattingToolbar } from "./toolbars/clear-formatting";
 
 export function Toolbar({
   editor,
@@ -69,9 +71,10 @@ export function Toolbar({
     <ToolbarProvider editor={editor}>
       <div className="flex items-center justify-between gap-2 w-full min-h-full overflow-x-auto">
         <div className="flex items-center justify-start space-x-2 min-h-full">
-          <UndoToolbar />
-          <RedoToolbar />
-
+          <div className="flex items-center justify-start space-x-2 border-r pr-1">
+            <UndoToolbar />
+            <RedoToolbar />
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <ButtonWithTooltip
@@ -111,12 +114,16 @@ export function Toolbar({
               </HardBreakToolbar>
             </DropdownMenuContent>
           </DropdownMenu>
-          <BoldToolbar />
-          <ItalicToolbar />
-          <StrikeThroughToolbar />
-          <UnderlineToolbar />
-          <HighlightToolbar />
-          <LinkToolbar />
+          <div className="flex items-center justify-start space-x-2 border-l pl-1">
+            <BoldToolbar />
+            <ItalicToolbar />
+            <StrikeThroughToolbar />
+            <UnderlineToolbar />
+            <HighlightToolbar />
+            <LinkToolbar />
+            <ClearFormattingToolbar />
+            <AlignmentToolbar />
+          </div>
         </div>
         <div className="flex items-center justify-start space-x-1.5">
           <ConfirmActionDialog
