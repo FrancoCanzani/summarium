@@ -6,7 +6,7 @@ import { extensions } from "@/lib/extensions/extensions";
 import { Note } from "@/lib/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { EditorContent, useEditor } from "@tiptap/react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 import AiAssistant from "./ai-assistant";
@@ -14,9 +14,9 @@ import AudioTranscriber from "./audio-transcriber";
 import EditorBubbleMenu from "./editor-bubble-menu";
 import EditorFooter from "./editor-footer";
 import { RightSidebar } from "./right-sidebar";
-import { Toolbar } from "./toolbar";
-import { SidebarTrigger } from "./ui/sidebar";
+
 import { useAuth } from "@/lib/hooks/use-auth";
+import EditorHeader from "./editor-header";
 
 export default function Editor({ initialNote }: { initialNote: Note }) {
   const { user, loading } = useAuth();
@@ -24,7 +24,6 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   if (!user && !loading) return;
 
   const queryClient = useQueryClient();
-  const isMobile = useIsMobile();
 
   const [title, setTitle] = useState(initialNote?.title || "");
   const [content, setContent] = useState(initialNote?.content || "");
@@ -90,23 +89,14 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   return (
     <div className="flex min-h-svh w-full">
       <div className="flex relative min-h-svh flex-1 flex-col mx-auto">
-        <div className="sticky top-0 z-10 bg-sidebar w-full border-b flex flex-col">
-          <div className="w-full border-b p-1 flex flex-col space-y-1 items-start justify-start">
-            <div className="flex items-center justify-start space-x-2 max-w-4xl h-full">
-              {isMobile && <SidebarTrigger />} <h2>{title}</h2>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-start space-x-2 max-w-4xl mx-auto h-full p-1 w-full">
-            <Toolbar
-              editor={editor}
-              setShowAssistant={setShowAssistant}
-              showAssistant={showAssistant}
-              setShowTranscriber={setShowTranscriber}
-              showTranscriber={showTranscriber}
-            />
-          </div>
-        </div>
+        <EditorHeader
+          title={title}
+          editor={editor}
+          showAssistant={showAssistant}
+          setShowAssistant={setShowAssistant}
+          showTranscriber={showTranscriber}
+          setShowTranscriber={setShowTranscriber}
+        />
 
         <div className="flex flex-1 flex-col p-3 relative space-y-4 max-w-4xl mx-auto w-full">
           <input
@@ -118,7 +108,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
           <EditorBubbleMenu editor={editor} />
           <EditorContent
             editor={editor}
-            className="my-0 min-w-full prose prose-p:my-0 prose-sm md:prose-base flex-1 text-start h-full"
+            className="my-0 min-w-full prose prose-p:my-0 prose-xs md:prose-sm flex-1 text-start h-full"
           />
           <div className="absolute bottom-0 right-2 flex items-end flex-col justify-center space-y-2">
             <AudioTranscriber

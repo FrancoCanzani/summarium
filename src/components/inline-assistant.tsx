@@ -52,6 +52,7 @@ export default function InlineAssistantView({ editor }: { editor: Editor }) {
           disabled={isLoading}
           variant={"ghost"}
           size={"icon"}
+          type="button"
         >
           <X className="size-3" />
         </Button>
@@ -95,6 +96,7 @@ export default function InlineAssistantView({ editor }: { editor: Editor }) {
               disabled={isLoading}
               variant={"ghost"}
               size={"icon"}
+              type="submit"
               className="border border-gray-100"
             >
               {isLoading ? (
