@@ -18,6 +18,7 @@ import { UnderlineToolbar } from "./toolbars/underline";
 import { HighlightToolbar } from "./toolbars/highlight";
 import { StrikeThroughToolbar } from "@/components/toolbars/strikethrough";
 import { ToolbarProvider } from "./toolbars/toolbar-provider";
+import { InlineAssistantToolbar } from "./toolbars/inline-assistant";
 import { LinkToolbar } from "./toolbars/link";
 import { Dispatch, SetStateAction } from "react";
 import { AssistantToolbar } from "./toolbars/assistant";
@@ -86,30 +87,30 @@ export function Toolbar({
                 <SquarePlus className="size-4" />
               </ButtonWithTooltip>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 flex items-start justify-start flex-col text-start space-y-2">
-              <TaskListToolbar className="w-full flex items-center justify-start space-x-2 p-1">
+            <DropdownMenuContent className="w-48 flex items-start justify-start flex-col text-start space-y-2">
+              <TaskListToolbar className="w-full flex items-center justify-start space-x-2 px-1.5 py-2 rounded-sm">
                 <SquareCheck className="size-4" /> <span>Task list</span>
               </TaskListToolbar>
-              <BulletListToolbar className="w-full flex items-center justify-start space-x-2 p-1">
+              <BulletListToolbar className="w-full flex items-center justify-start space-x-2 px-1.5 py-2 rounded-sm">
                 <List className="size-4" /> <span>Bullet list</span>
               </BulletListToolbar>
-              <OrderedListToolbar className="w-full flex items-center justify-start space-x-2 p-1">
+              <OrderedListToolbar className="w-full flex items-center justify-start space-x-2 px-1.5 py-2 rounded-sm">
                 <ListOrdered className="size-4" /> <span>Ordered list</span>
               </OrderedListToolbar>
-              <CodeToolbar className="w-full flex items-center justify-start space-x-2 p-1">
+              <CodeToolbar className="w-full flex items-center justify-start space-x-2 px-1.5 py-2 rounded-sm">
                 <Code2 className="size-4" /> <span>Code</span>
               </CodeToolbar>
-              <CodeBlockToolbar className="w-full flex items-center justify-start space-x-2 p-1">
+              <CodeBlockToolbar className="w-full flex items-center justify-start space-x-2 px-1.5 py-2 rounded-sm">
                 <Code className="size-4" /> <span>Code block</span>
               </CodeBlockToolbar>
-              <HorizontalRuleToolbar className="w-full flex items-center justify-start space-x-2 p-1">
+              <HorizontalRuleToolbar className="w-full flex items-center justify-start space-x-2 px-1.5 py-2 rounded-sm">
                 <SeparatorHorizontal className="size-4" />
                 <span>Separator</span>
               </HorizontalRuleToolbar>
-              <BlockquoteToolbar className="w-full flex items-center justify-start space-x-2 p-1">
+              <BlockquoteToolbar className="w-full flex items-center justify-start space-x-2 px-1.5 py-2 rounded-sm">
                 <TextQuote className="size-4" /> <span>Blockquote</span>
               </BlockquoteToolbar>
-              <HardBreakToolbar className="w-full flex items-center justify-start space-x-2 p-1">
+              <HardBreakToolbar className="w-full flex items-center justify-start space-x-2 px-1.5 py-2 rounded-sm">
                 <WrapText className="size-4" /> <span>Hard break</span>
               </HardBreakToolbar>
             </DropdownMenuContent>
@@ -155,6 +156,7 @@ export function Toolbar({
             </ButtonWithTooltip>
           </ConfirmActionDialog>
           <SearchAndReplaceToolbar />
+          <InlineAssistantToolbar />
           <TranscribeToolbar
             onClick={() => {
               setShowTranscriber(!showTranscriber);

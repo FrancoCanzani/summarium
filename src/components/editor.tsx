@@ -108,7 +108,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col p-3 space-y-4 relative max-w-4xl mx-auto w-full">
+        <div className="flex flex-1 flex-col p-3 relative space-y-4 max-w-4xl mx-auto w-full">
           <input
             className="border-none text-xl font-medium outline-none"
             placeholder="Title"
@@ -118,7 +118,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
           <EditorBubbleMenu editor={editor} />
           <EditorContent
             editor={editor}
-            className="my-0 min-w-full prose prose-sm md:prose-base flex-1 text-start h-full"
+            className="my-0 min-w-full prose prose-p:my-0 prose-sm md:prose-base flex-1 text-start h-full"
           />
           <div className="absolute bottom-0 right-2 flex items-end flex-col justify-center space-y-2">
             <AudioTranscriber

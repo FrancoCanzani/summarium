@@ -9,6 +9,8 @@ import Link from "@tiptap/extension-link";
 import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
 import TextAlign from "@tiptap/extension-text-align";
+import { Markdown } from "tiptap-markdown";
+import { InlineAssistant } from "./inline-assistant";
 
 export const extensions = [
   StarterKit.configure({
@@ -44,10 +46,9 @@ export const extensions = [
       },
     },
   }),
+  InlineAssistant,
   TaskList,
-  TaskItem.configure({
-    nested: true,
-  }),
+  TaskItem,
   CharacterCount,
   Highlight,
   TextAlign.configure({
@@ -60,6 +61,7 @@ export const extensions = [
       class: "text-blue-500 underline cursor-pointer",
     },
   }),
+  Markdown,
   Placeholder.configure({
     emptyEditorClass: "is-editor-empty",
     placeholder: "Write something…",
