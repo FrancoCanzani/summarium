@@ -1,23 +1,22 @@
 import { useIsMobile } from "@/hooks/use-mobile";
-import { SidebarTrigger } from "./ui/sidebar";
-import { Toolbar } from "./toolbar";
-import { Editor } from "@tiptap/core";
-import { Dispatch, SetStateAction } from "react";
-import { ToolbarProvider } from "./toolbars/toolbar-provider";
-import { ConfirmActionDialog } from "./confirm-action-dialog";
-import { SearchAndReplaceToolbar } from "./toolbars/search-and-replace";
-import { TranscribeToolbar } from "./toolbars/transcribe";
-import { InlineAssistantToolbar } from "./toolbars/inline-assistant";
-import { AssistantToolbar } from "./toolbars/assistant";
-import AiAssistantSheet from "./ai-assistant-sheet";
-import { Trash } from "lucide-react";
-import { toast } from "sonner";
-import { useAuth } from "@/lib/hooks/use-auth";
-import ButtonWithTooltip from "./ui/button-with-tooltip";
-import { redirect } from "next/navigation";
 import { deleteNote } from "@/lib/actions";
+import { useAuth } from "@/lib/hooks/use-auth";
 import { useQueryClient } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+import { Editor } from "@tiptap/core";
+import { Trash } from "lucide-react";
+import { redirect, useParams } from "next/navigation";
+import { Dispatch, SetStateAction } from "react";
+import { toast } from "sonner";
+import AiAssistantSheet from "./ai-assistant-sheet";
+import { ConfirmActionDialog } from "./confirm-action-dialog";
+import { Toolbar } from "./toolbar";
+import { AssistantToolbar } from "./toolbars/assistant";
+import { InlineAssistantToolbar } from "./toolbars/inline-assistant";
+import { SearchAndReplaceToolbar } from "./toolbars/search-and-replace";
+import { ToolbarProvider } from "./toolbars/toolbar-provider";
+import { TranscribeToolbar } from "./toolbars/transcribe";
+import ButtonWithTooltip from "./ui/button-with-tooltip";
+import { SidebarTrigger } from "./ui/sidebar";
 
 export default function EditorHeader({
   title,
@@ -43,7 +42,7 @@ export default function EditorHeader({
     <ToolbarProvider editor={editor}>
       <header className="sticky top-0 z-10 bg-sidebar w-full border-b flex flex-col">
         <div className="w-full border-b p-1 flex flex-col space-y-1 items-start justify-start">
-          <div className="flex items-center justify-between w-full space-x-2 max-w-4xl h-full">
+          <div className="flex items-center justify-between w-full space-x-1.5 h-full">
             <div className="flex items-center justify-start space-x-1.5">
               {isMobile && <SidebarTrigger />} <h2>{title}</h2>
             </div>

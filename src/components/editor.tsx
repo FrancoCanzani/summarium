@@ -1,12 +1,11 @@
 "use client";
 
-import { useIsMobile } from "@/hooks/use-mobile";
 import { upsertNote } from "@/lib/api/notes";
 import { extensions } from "@/lib/extensions/extensions";
 import { Note } from "@/lib/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { EditorContent, useEditor } from "@tiptap/react";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 import AiAssistant from "./ai-assistant";
