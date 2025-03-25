@@ -2,6 +2,7 @@
 
 import { upsertNote } from "@/lib/api/notes";
 import { extensions } from "@/lib/extensions/extensions";
+import { useAuth } from "@/lib/hooks/use-auth";
 import { Note } from "@/lib/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { EditorContent, useEditor } from "@tiptap/react";
@@ -12,10 +13,8 @@ import AiAssistant from "./ai-assistant";
 import AudioTranscriber from "./audio-transcriber";
 import EditorBubbleMenu from "./editor-bubble-menu";
 import EditorFooter from "./editor-footer";
-import { RightSidebar } from "./right-sidebar";
-
-import { useAuth } from "@/lib/hooks/use-auth";
 import EditorHeader from "./editor-header";
+import { RightSidebar } from "./right-sidebar";
 
 export default function Editor({ initialNote }: { initialNote: Note }) {
   const { user, loading } = useAuth();
