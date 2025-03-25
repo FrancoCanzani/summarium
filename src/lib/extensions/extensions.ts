@@ -49,8 +49,8 @@ export const extensions = [
   InlineAssistant,
   TaskList,
   TaskItem.configure({
-      nested: true,
-    }),
+    nested: true,
+  }),
   CharacterCount,
   Highlight,
   TextAlign.configure({

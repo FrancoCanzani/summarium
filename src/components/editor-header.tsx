@@ -9,6 +9,7 @@ import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
 import AiAssistantSheet from "./ai-assistant-sheet";
 import { ConfirmActionDialog } from "./confirm-action-dialog";
+import EditorVersionControl from "./editor-version-control";
 import { Toolbar } from "./toolbar";
 import { AssistantToolbar } from "./toolbars/assistant";
 import { InlineAssistantToolbar } from "./toolbars/inline-assistant";
@@ -38,6 +39,8 @@ export default function EditorHeader({
   const queryClient = useQueryClient();
   const { id } = useParams();
 
+  console.log(editor.getText());
+
   return (
     <ToolbarProvider editor={editor}>
       <header className="sticky top-0 z-10 bg-sidebar w-full border-b flex flex-col">
@@ -56,12 +59,12 @@ export default function EditorHeader({
                   toast.promise(deleteNote(id as string, user.id), {
                     loading: "Loading...",
                     success: () => {
+                      queryClient.invalidateQueries({ queryKey: ["notes"] });
+
                       return `Note has been deleted`;
                     },
                     error: "Failed to delete note. Please try again.",
                   });
-
-                  queryClient.invalidateQueries({ queryKey: ["notes"] });
 
                   redirect("/notes");
                 }}
@@ -75,6 +78,7 @@ export default function EditorHeader({
                   <Trash className="size-4" />
                 </ButtonWithTooltip>
               </ConfirmActionDialog>
+              <EditorVersionControl />
               <SearchAndReplaceToolbar />
               <InlineAssistantToolbar />
               <TranscribeToolbar

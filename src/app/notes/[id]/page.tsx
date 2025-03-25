@@ -1,9 +1,9 @@
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { getQueryClient } from "@/lib/utils";
-import { fetchNotes } from "@/lib/api/notes";
 import Editor from "@/components/editor";
-import { Note } from "@/lib/types";
+import { fetchNotes } from "@/lib/api/notes";
 import { createClient } from "@/lib/supabase/server";
+import { Note } from "@/lib/types";
+import { getQueryClient } from "@/lib/utils";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { randomUUID } from "crypto";
 import { Metadata, ResolvingMetadata } from "next/types";
 

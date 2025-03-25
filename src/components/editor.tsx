@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/hooks/use-auth";
 import { Note } from "@/lib/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { EditorContent, useEditor } from "@tiptap/react";
+import localForage from "localforage";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
@@ -44,6 +45,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
       user_id: user!.id,
       title: value,
       content: content,
+      sanitized_content: editor?.getText(),
       updated_at: new Date().toISOString(),
     });
   }, 1000);
@@ -55,15 +57,32 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
     setIsSaved(true);
   };
 
-  const handleDebouncedContentChange = useDebouncedCallback((value: string) => {
-    upsertNoteMutation.mutate({
-      id: initialNote.id,
-      user_id: user!.id,
-      title: title,
-      content: value,
-      updated_at: new Date().toISOString(),
-    });
-  }, 1000);
+  const handleDebouncedContentChange = useDebouncedCallback(
+    async (value: string) => {
+      upsertNoteMutation.mutate({
+        id: initialNote.id,
+        user_id: user!.id,
+        title: title,
+        content: value,
+        sanitized_content: editor?.getText(),
+        updated_at: new Date().toISOString(),
+      });
+      localForage.config({
+        name: "summarium_notes_db",
+        driver: localForage.INDEXEDDB,
+        storeName: "note_versions",
+      });
+      localForage.setItem(`${initialNote.id}+${new Date().toISOString()}`, {
+        id: initialNote.id,
+        user_id: user!.id,
+        title: title,
+        content: value,
+        sanitized_content: editor?.getText(),
+        updated_at: new Date().toISOString(),
+      });
+    },
+    1000,
+  );
 
   const handleContentChange = (value: string) => {
     setIsSaved(false);
