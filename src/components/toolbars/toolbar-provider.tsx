@@ -1,15 +1,7 @@
-"use client";
-
 import { Editor } from "@tiptap/react";
 import React from "react";
 
-export interface ToolbarContextProps {
-  editor: Editor;
-}
-
-export const ToolbarContext = React.createContext<ToolbarContextProps | null>(
-  null,
-);
+export const ToolbarContext = React.createContext<Editor | null>(null);
 
 interface ToolbarProviderProps {
   editor: Editor;
@@ -18,9 +10,7 @@ interface ToolbarProviderProps {
 
 export const ToolbarProvider = ({ editor, children }: ToolbarProviderProps) => {
   return (
-    <ToolbarContext.Provider value={{ editor }}>
-      {children}
-    </ToolbarContext.Provider>
+    <ToolbarContext.Provider value={editor}>{children}</ToolbarContext.Provider>
   );
 };
 

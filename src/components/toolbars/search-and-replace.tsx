@@ -22,7 +22,7 @@ import { useToolbar } from "@/components/toolbars/toolbar-provider";
 import { useSearchParams } from "next/navigation";
 
 export function SearchAndReplaceToolbar() {
-  const { editor } = useToolbar();
+  const editor = useToolbar();
 
   const [open, setOpen] = useState(false);
   const [replacing, setReplacing] = useState(false);

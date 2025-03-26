@@ -12,10 +12,11 @@ import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 import AiAssistant from "./ai-assistant";
 import AudioTranscriber from "./audio-transcriber";
-import EditorBubbleMenu from "./editor-bubble-menu";
 import EditorFooter from "./editor-footer";
 import EditorHeader from "./editor-header";
 import { RightSidebar } from "./right-sidebar";
+import { ToolbarProvider } from "./toolbars/toolbar-provider";
+import FloatingToolbar from "./editor-floating-toolbar";
 
 export default function Editor({ initialNote }: { initialNote: Note }) {
   const { user, loading } = useAuth();
@@ -104,43 +105,45 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   if (!editor) return null;
 
   return (
-    <div className="flex min-h-svh w-full">
-      <div className="flex relative min-h-svh flex-1 flex-col mx-auto">
-        <EditorHeader
-          title={title}
-          editor={editor}
-          showAssistant={showAssistant}
-          setShowAssistant={setShowAssistant}
-          showTranscriber={showTranscriber}
-          setShowTranscriber={setShowTranscriber}
-        />
-
-        <div className="flex flex-1 flex-col p-3 relative space-y-4 max-w-4xl mx-auto w-full">
-          <input
-            className="border-none text-xl font-medium outline-none"
-            placeholder="Title"
-            value={title}
-            onChange={(e) => handleTitleChange(e.target.value)}
-          />
-          <EditorBubbleMenu editor={editor} />
-          <EditorContent
+    <ToolbarProvider editor={editor}>
+      <div className="flex min-h-svh w-full">
+        <div className="flex relative min-h-svh flex-1 flex-col mx-auto">
+          <EditorHeader
+            title={title}
             editor={editor}
-            className="my-0 min-w-full prose prose-p:my-0 prose-xs md:prose-sm flex-1 text-start h-full"
+            showAssistant={showAssistant}
+            setShowAssistant={setShowAssistant}
+            showTranscriber={showTranscriber}
+            setShowTranscriber={setShowTranscriber}
           />
-          <div className="absolute bottom-0 right-2 flex items-end flex-col justify-center space-y-2">
-            <AudioTranscriber
-              editor={editor}
-              showTranscriber={showTranscriber}
+
+          <div className="flex flex-1 flex-col p-3 relative space-y-4 max-w-4xl mx-auto w-full">
+            <input
+              className="border-none text-xl font-medium outline-none"
+              placeholder="Title"
+              value={title}
+              onChange={(e) => handleTitleChange(e.target.value)}
             />
+            <EditorContent
+              editor={editor}
+              className="my-0 mb-14 min-w-full prose text-black prose-p:my-0 prose-xs md:prose-sm flex-1 text-start h-full"
+            />
+            <div className="absolute bottom-0 right-2 flex items-end flex-col justify-center space-y-2">
+              <AudioTranscriber
+                editor={editor}
+                showTranscriber={showTranscriber}
+              />
+            </div>
           </div>
+          <FloatingToolbar />
+
+          <EditorFooter editor={editor} isSaved={isSaved} />
         </div>
 
-        <EditorFooter editor={editor} isSaved={isSaved} />
+        <RightSidebar open={showAssistant} onOpenChange={setShowAssistant}>
+          <AiAssistant editor={editor} />
+        </RightSidebar>
       </div>
-
-      <RightSidebar open={showAssistant} onOpenChange={setShowAssistant}>
-        <AiAssistant editor={editor} />
-      </RightSidebar>
-    </div>
+    </ToolbarProvider>
   );
 }

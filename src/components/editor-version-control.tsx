@@ -16,13 +16,13 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { diffLines } from "diff";
 import localForage from "localforage";
 import { ChevronLeft, ChevronRight, Clock } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useQueryState } from "nuqs";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useToolbar } from "./toolbars/toolbar-provider";
 import { Button } from "./ui/button";
 import ButtonWithTooltip from "./ui/button-with-tooltip";
 import { Separator } from "./ui/separator";
+import { Editor } from "@tiptap/core";
 
 localForage.config({
   name: "summarium_notes_db",
@@ -30,11 +30,9 @@ localForage.config({
   storeName: "note_versions",
 });
 
-export default function EditorVersionControl() {
+export default function EditorVersionControl({ editor }: { editor: Editor }) {
   const { id } = useParams();
-  const router = useRouter();
   const isMobile = useIsMobile();
-  const { editor } = useToolbar();
   const [versions, setVersions] = useState<Note[]>([]);
   const [version, setVersion] = useQueryState("V");
   const [isSheetOpen, setIsSheetOpen] = useState(false);
