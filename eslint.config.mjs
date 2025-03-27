@@ -1,5 +1,6 @@
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+
 import { FlatCompat } from "@eslint/eslintrc";
 import eslintPluginImport from 'eslint-plugin-import'; // Import the plugin
 import eslintPluginReact from 'eslint-plugin-react'; // Import the plugin
@@ -19,23 +20,6 @@ const eslintConfig = [
       "react": eslintPluginReact, // Use the imported plugin instance
     },
     rules: {
-      // Import order rule
-      "import/order": [
-        "error",
-        {
-          groups: [
-            "builtin",
-            "external",
-            "internal",
-            "parent",
-            "sibling",
-            "index",
-          ],
-          "newlines-between": "always",
-          alphabetize: { order: "asc", caseInsensitive: true },
-        },
-      ],
-
       // General JavaScript rules
       "no-console": ["warn", { allow: ["warn", "error"] }], // Warn for console.log, allow console.warn and console.error
       "prefer-const": "error", // Enforce const for variables that are never reassigned
