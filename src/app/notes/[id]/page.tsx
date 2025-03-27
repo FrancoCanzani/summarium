@@ -6,7 +6,6 @@ import { getQueryClient } from "@/lib/utils";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { randomUUID } from "crypto";
 import type { Metadata } from 'next'
-import { Suspense } from "react";
 
 type Props = {
   params: Promise<{ id: string }>
@@ -80,9 +79,7 @@ export default async function EditorPage({
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <Suspense>
         <Editor initialNote={initialNote} />
-      </Suspense>
     </HydrationBoundary>
   );
 }
