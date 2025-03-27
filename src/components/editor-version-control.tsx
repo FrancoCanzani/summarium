@@ -7,7 +7,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { Note } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { formatDistanceToNowStrict } from "date-fns";

@@ -20,7 +20,7 @@ export function useAuth() {
     }
 
     getUser();
-  }, []);
+  }, [supabase.auth]);
 
   return {
     user,

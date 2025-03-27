@@ -28,7 +28,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useToolbar } from "./toolbars/toolbar-provider";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/lib/hooks/use-mobile";
 
 export default function FloatingToolbar() {
   const editor = useToolbar();
