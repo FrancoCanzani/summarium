@@ -1,5 +1,3 @@
-"use client";
-
 import { useCompletion } from "@ai-sdk/react";
 import { Editor, NodeViewWrapper } from "@tiptap/react";
 import { Button } from "./ui/button";
@@ -8,7 +6,7 @@ import { toast } from "sonner";
 import { useRef, useEffect } from "react";
 
 export default function InlineAssistantView({ editor }: { editor: Editor }) {
-  const inputRef = useRef<any>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (inputRef.current) {

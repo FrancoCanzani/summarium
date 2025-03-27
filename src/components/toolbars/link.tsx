@@ -18,7 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 
 export const LinkToolbar = React.forwardRef<HTMLButtonElement>((props, ref) => {
-  const { editor } = useToolbar();
+  const editor = useToolbar();
   const [url, setUrl] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
 

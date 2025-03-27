@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Copy, Mic, Square, Circle, StickyNote, RotateCw } from "lucide-react";
@@ -9,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 export default function AudioTranscriber({
+  editor,
   showTranscriber,
 }: {
   editor: Editor;

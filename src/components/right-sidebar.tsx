@@ -6,12 +6,11 @@ import React from 'react';
 type SidebarProps = {
   children: React.ReactNode;
   open: boolean;
-  onOpenChange?: (open: boolean) => void;
 };
 
 const SIDEBAR_WIDTH = '20rem';
 
-export function RightSidebar({ children, open, onOpenChange }: SidebarProps) {
+export function RightSidebar({ children, open }: SidebarProps) {
   return (
     <div
       className={cn(

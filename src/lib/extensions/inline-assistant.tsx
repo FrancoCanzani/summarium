@@ -1,8 +1,9 @@
 import { mergeAttributes, Node } from "@tiptap/core";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 import InlineAssistantView from "@/components/inline-assistant";
+
 export interface InlineAssistantOptions {
-  HTMLAttributes: Record<string, any>;
+  HTMLAttributes: Record<string, string>;
 }
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
@@ -48,7 +49,7 @@ export const InlineAssistant = Node.create<InlineAssistantOptions>({
     return {
       insertInlineAssistant:
         () =>
-        ({ commands, state, dispatch }) => {
+        ({ commands }) => {
           // First remove all existing inline assistants
           commands.removeAllInlineAssistants();
 

@@ -21,7 +21,6 @@ import FloatingToolbar from "./editor-floating-toolbar";
 export default function Editor({ initialNote }: { initialNote: Note }) {
   const { user, loading } = useAuth();
 
-  if (!user && !loading) return;
 
   const queryClient = useQueryClient();
 
@@ -102,6 +101,8 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
     shouldRerenderOnTransaction: false,
   });
 
+  if (!user && !loading) return;
+
   if (!editor) return null;
 
   return (
@@ -140,7 +141,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
           <EditorFooter editor={editor} isSaved={isSaved} />
         </div>
 
-        <RightSidebar open={showAssistant} onOpenChange={setShowAssistant}>
+        <RightSidebar open={showAssistant}>
           <AiAssistant editor={editor} />
         </RightSidebar>
       </div>

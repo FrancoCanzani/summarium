@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, Search, Repeat, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Search, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,6 @@ import {
 import { cn } from "@/lib/utils";
 import type { SearchAndReplaceStorage } from "@/lib/extensions/search-and-replace-extension";
 import { useToolbar } from "@/components/toolbars/toolbar-provider";
-import { useSearchParams } from "next/navigation";
 
 export function SearchAndReplaceToolbar() {
   const editor = useToolbar();
@@ -29,10 +28,6 @@ export function SearchAndReplaceToolbar() {
   const [searchText, setSearchText] = useState("");
   const [replaceText, setReplaceText] = useState("");
   const [checked, setChecked] = useState(false);
-
-  const searchParams = useSearchParams();
-
-  const editorMode = searchParams.get("editorMode");
 
   const results = editor?.storage?.searchAndReplace
     .results as SearchAndReplaceStorage["results"];
@@ -128,18 +123,6 @@ export function SearchAndReplaceToolbar() {
               <ArrowRight className="h-4 w-4" />
             </Button>
             <Separator orientation="vertical" className="h-7 mx-0.5" />
-            {editorMode != "read" && (
-              <Button
-                onClick={() => {
-                  setReplacing(true);
-                }}
-                size="icon"
-                className="size-7"
-                variant="ghost"
-              >
-                <Repeat className="h-4 w-4" />
-              </Button>
-            )}
             <Button
               onClick={() => {
                 setOpen(false);

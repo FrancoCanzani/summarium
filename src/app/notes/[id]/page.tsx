@@ -5,16 +5,15 @@ import { Note } from "@/lib/types";
 import { getQueryClient } from "@/lib/utils";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { randomUUID } from "crypto";
-import { Metadata, ResolvingMetadata } from "next/types";
+import type { Metadata } from 'next'
+import { Suspense } from "react";
 
 type Props = {
-  params: Promise<{ id: string }>;
-  searchParams: { [key: string]: string | string[] | undefined };
-};
+  params: Promise<{ id: string }>
+}
 
 export async function generateMetadata(
   { params }: Props,
-  parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { id } = await params;
 
@@ -81,7 +80,9 @@ export default async function EditorPage({
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <Editor initialNote={initialNote} />
+      <Suspense>
+        <Editor initialNote={initialNote} />
+      </Suspense>
     </HydrationBoundary>
   );
 }

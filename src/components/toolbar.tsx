@@ -32,13 +32,11 @@ import { ClearFormattingToolbar } from "./toolbars/clear-formatting";
 import { HighlightToolbar } from "./toolbars/highlight";
 import { LinkToolbar } from "./toolbars/link";
 import { TaskListToolbar } from "./toolbars/task-list";
-import { useToolbar } from "./toolbars/toolbar-provider";
 import { UnderlineToolbar } from "./toolbars/underline";
 import { UndoToolbar } from "./toolbars/undo";
 import ButtonWithTooltip from "./ui/button-with-tooltip";
 
 export function Toolbar() {
-  const editor = useToolbar();
 
   return (
     <div className="flex items-center justify-between gap-2 w-full min-h-full overflow-x-auto">

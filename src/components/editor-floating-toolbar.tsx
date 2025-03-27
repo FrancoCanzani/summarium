@@ -178,7 +178,8 @@ export default function FloatingToolbar() {
                   editor
                     .chain()
                     .focus()
-                    .toggleHeading({ level: heading.level })
+                    // @ts-expect-error - Type mismatch in slatejs
+                    .toggleHeading({ level: heading.level as HeadingLevel })
                     .run()
                 }
                 className={cn(

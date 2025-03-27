@@ -7,11 +7,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Bot } from "lucide-react";
-import { Editor } from "@tiptap/react";
 import { useToolbar } from "./toolbar-provider";
 
 export const InlineAssistantToolbar = () => {
-  const { editor } = useToolbar();
+  const  editor  = useToolbar();
 
   return (
     <Tooltip>

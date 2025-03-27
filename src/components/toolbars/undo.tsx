@@ -11,7 +11,7 @@ import { forwardRef } from "react";
 
 const UndoToolbar = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, onClick, children, ...props }, ref) => {
-    const { editor } = useToolbar();
+    const editor = useToolbar();
 
     return (
       <Tooltip>

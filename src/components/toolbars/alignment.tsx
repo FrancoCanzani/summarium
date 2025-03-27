@@ -63,8 +63,8 @@ interface AlignmentToolbarProps extends ButtonProps {
 const AlignmentToolbar = React.forwardRef<
   HTMLButtonElement,
   AlignmentToolbarProps
->(({ className, onClick, children, closeOnSelect = true, ...props }, ref) => {
-  const { editor } = useToolbar();
+>(({ className, children, closeOnSelect = true, ...props }, ref) => {
+  const editor = useToolbar();
   const [open, setOpen] = React.useState(false);
 
   if (!editor) {

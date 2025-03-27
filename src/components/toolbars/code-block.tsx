@@ -1,6 +1,6 @@
 "use client";
 
-import { Code, Code2 } from "lucide-react";
+import { Code } from "lucide-react";
 import React from "react";
 
 import { Button, type ButtonProps } from "@/components/ui/button";
@@ -14,7 +14,7 @@ import { useToolbar } from "@/components/toolbars/toolbar-provider";
 
 const CodeBlockToolbar = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, onClick, children, ...props }, ref) => {
-    const { editor } = useToolbar();
+    const editor = useToolbar();
     return (
       <Tooltip>
         <TooltipTrigger asChild>

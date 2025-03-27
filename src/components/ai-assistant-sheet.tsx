@@ -11,7 +11,6 @@ import { cn } from "@/lib/utils";
 import { Editor } from "@tiptap/core";
 import { LoaderCircle, MoreHorizontal, SendHorizonal } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
-import { useParams } from "next/navigation";
 import { useChat } from "@ai-sdk/react";
 import {
   Sheet,
@@ -28,17 +27,12 @@ import {
 } from "@/components/ui/tooltip";
 
 export default function AiAssistantSheet({ editor }: { editor: Editor }) {
-  const { id: noteId } = useParams<{ id: string }>();
 
   const {
     messages,
     input,
     handleInputChange,
     handleSubmit,
-    error,
-    stop,
-    setMessages,
-    setInput,
     status,
   } = useChat({});
 

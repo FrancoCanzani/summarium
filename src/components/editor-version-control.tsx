@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Sheet,
   SheetContent,
@@ -63,7 +61,7 @@ export default function EditorVersionControl({ editor }: { editor: Editor }) {
     } catch (error) {
       console.error("Error fetching versions:", error);
     }
-  }, [id, editor, setVersion]);
+  }, [id, editor, setVersion, version]);
 
   useEffect(() => {
     if (isSheetOpen) {

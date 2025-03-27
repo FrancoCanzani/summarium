@@ -12,7 +12,7 @@ import { useToolbar } from "@/components/toolbars/toolbar-provider";
 
 const ClearFormattingToolbar = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, onClick, children, ...props }, ref) => {
-    const { editor } = useToolbar();
+    const editor = useToolbar();
     return (
       <Tooltip>
         <TooltipTrigger asChild>

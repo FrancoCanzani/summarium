@@ -14,7 +14,7 @@ export const HighlightToolbar = React.forwardRef<
   HTMLButtonElement,
   ButtonProps
 >(({ className, ...props }, ref) => {
-  const { editor } = useToolbar();
+  const editor = useToolbar();
 
   if (!editor) {
     return null;

@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 export default function SettingsPage() {
   const supabase = createClient();
 
-  const { user, email, loading, userId } = useAuth();
+  const { email } = useAuth();
 
   return (
     <div className='p-3 max-w-5xl mx-auto space-y-8'>
