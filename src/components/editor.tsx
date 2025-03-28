@@ -2,9 +2,8 @@
 
 import { upsertNote } from "@/lib/api/notes";
 import { extensions } from "@/lib/extensions/extensions";
-import { useAuth } from "@/lib/hooks/use-auth";
+import { useAuth } from '@/lib/context/auth-context';
 import { Note } from "@/lib/types";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { EditorContent, useEditor } from "@tiptap/react";
 import localForage from "localforage";
 import { useState } from "react";
@@ -17,12 +16,11 @@ import EditorHeader from "./editor-header";
 import { RightSidebar } from "./right-sidebar";
 import { ToolbarProvider } from "./toolbars/toolbar-provider";
 import FloatingToolbar from "./editor-floating-toolbar";
+import { useRouter } from "next/navigation";
 
 export default function Editor({ initialNote }: { initialNote: Note }) {
   const { user, loading } = useAuth();
-
-
-  const queryClient = useQueryClient();
+  const router = useRouter();
 
   const [title, setTitle] = useState(initialNote?.title || "");
   const [content, setContent] = useState(initialNote?.content || "");
@@ -30,17 +28,19 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   const [showAssistant, setShowAssistant] = useState(false);
   const [showTranscriber, setShowTranscriber] = useState(false);
 
-  const upsertNoteMutation = useMutation({
-    mutationFn: upsertNote,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
+  const handleSaveNote = async (noteData: Note) => {
+    try {
+      await upsertNote(noteData);
       setIsSaved(true);
-    },
-    onError: () => toast.error("There was an error saving your note"),
-  });
+      // Refresh the page to get updated data
+      router.refresh();
+    } catch {
+      toast.error("There was an error saving your note");
+    }
+  };
 
   const handleDebouncedTitleChange = useDebouncedCallback((value: string) => {
-    upsertNoteMutation.mutate({
+    handleSaveNote({
       id: initialNote.id,
       user_id: user!.id,
       title: value,
@@ -54,12 +54,11 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
     setIsSaved(false);
     setTitle(value);
     handleDebouncedTitleChange(value);
-    setIsSaved(true);
   };
 
   const handleDebouncedContentChange = useDebouncedCallback(
     async (value: string) => {
-      upsertNoteMutation.mutate({
+      await handleSaveNote({
         id: initialNote.id,
         user_id: user!.id,
         title: title,
@@ -67,6 +66,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
         sanitized_content: editor?.getText(),
         updated_at: new Date().toISOString(),
       });
+
       localForage.config({
         name: "summarium_notes_db",
         driver: localForage.INDEXEDDB,
@@ -88,7 +88,6 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
     setIsSaved(false);
     setContent(value);
     handleDebouncedContentChange(value);
-    setIsSaved(true);
   };
 
   const editor = useEditor({

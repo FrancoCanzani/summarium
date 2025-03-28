@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
 import { Geist_Mono } from "next/font/google";
+import Providers from "@/components/providers";
 
 import "./globals.css";
 
@@ -21,14 +22,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      {/* <head>
-        <script src="https://unpkg.com/react-scan/dist/auto.global.js" />
-      </head> */}
       <body
         className={`${geistMono.variable} font-[family-name:var(--font-geist-mono)] antialiased`}
       >
+        <Providers>
         {children}
         <Toaster />
+        </Providers>
       </body>
     </html>
   );

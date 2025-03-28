@@ -153,7 +153,7 @@ export default function FloatingToolbar() {
 
   return (
     <div
-      className="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-10 bg-zed-light border rounded-md shadow-md"
+      className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10 bg-zed-light border rounded-md shadow-md"
     >
       <div className="flex flex-wrap items-center justify-center p-0.5 gap-0.5">
         <DropdownMenu>

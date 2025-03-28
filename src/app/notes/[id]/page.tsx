@@ -1,22 +1,17 @@
 import Editor from "@/components/editor";
-import { fetchNotes } from "@/lib/api/notes";
+import { fetchNote, preloadNote } from "@/lib/api/notes";
 import { createClient } from "@/lib/supabase/server";
+import type { Metadata } from 'next';
 import { Note } from "@/lib/types";
-import { getQueryClient } from "@/lib/utils";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { randomUUID } from "crypto";
-import type { Metadata } from 'next'
 
 type Props = {
-  params: Promise<{ id: string }>
+  params: { id: string }
 }
 
 export async function generateMetadata(
   { params }: Props,
 ): Promise<Metadata> {
-  const { id } = await params;
-
-  const queryClient = getQueryClient();
+  const { id } = await params
   const supabase = await createClient();
   const {
     data: { user },
@@ -29,13 +24,9 @@ export async function generateMetadata(
     };
   }
 
-  await queryClient.prefetchQuery({
-    queryKey: ["notes"],
-    queryFn: () => fetchNotes(user.id),
-  });
+  preloadNote(user.id, id);
 
-  const notes = queryClient.getQueryData<Note[]>(["notes"]);
-  const note = notes?.find((n) => n.id === id);
+  const note = await fetchNote(user.id, id);
 
   return {
     title: note ? `Editing: ${note.title}` : "New Note",
@@ -46,40 +37,32 @@ export async function generateMetadata(
 export default async function EditorPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
   const { id } = await params;
-  const queryClient = getQueryClient();
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return;
+  if (!user) return null;
 
-  await queryClient.prefetchQuery({
-    queryKey: ["notes"],
-    queryFn: () => fetchNotes(user.id),
-  });
+  const note = await fetchNote(user.id, id);
 
-  const dehydratedState = dehydrate(queryClient);
-  const notes = queryClient.getQueryData<Note[]>(["notes"]);
-  let initialNote = notes?.find((n) => n.id === id);
+  let initialNote: Note;
 
-  if (!initialNote) {
+  if (!note) {
     initialNote = {
-      id: randomUUID(),
+      id,
       user_id: user.id,
       title: "New note",
       content: "",
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
+  } else {
+    initialNote = note;
   }
 
-  return (
-    <HydrationBoundary state={dehydratedState}>
-        <Editor initialNote={initialNote} />
-    </HydrationBoundary>
-  );
+  return <Editor initialNote={initialNote} />;
 }

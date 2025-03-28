@@ -1,6 +1,6 @@
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { deleteNote } from "@/lib/actions";
-import { useAuth } from "@/lib/hooks/use-auth";
+import { useAuth } from '@/lib/context/auth-context';
 import { useQueryClient } from "@tanstack/react-query";
 import { Editor } from "@tiptap/core";
 import { Trash } from "lucide-react";

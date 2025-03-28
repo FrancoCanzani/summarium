@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { Separator } from '@/components/ui/separator';
-import { useAuth } from '@/lib/hooks/use-auth';
+import { useAuth } from '@/lib/context/auth-context';
 import { ConfirmActionDialog } from '@/components/confirm-action-dialog';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
