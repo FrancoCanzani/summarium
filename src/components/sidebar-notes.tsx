@@ -14,7 +14,7 @@ import { useParams } from "next/navigation";
 
 export default function SidebarNotes({notes}:{notes: Note[]}) {
   const {user} = useAuth();
-const {id} = useParams()
+  const {id} = useParams()
 
   return (
     <SidebarGroup>
@@ -30,11 +30,11 @@ const {id} = useParams()
                 }
               }}
               className={cn(
-                                  "flex w-full flex-col items-center gap-1.5 overflow-hidden py-1.5 px-2 justify-between text-xs hover:bg-zed-light",
-                                  id === item.id
-                                    ? "bg-zed-light font-medium border-l-2 border-l-zed"
-                                    : "bg-sidebar",
-                                )}
+                    "flex w-full flex-col items-center gap-1.5 overflow-hidden py-1.5 px-2 justify-between text-xs hover:bg-zed-light",
+                    id === item.id
+                      ? "bg-zed-light font-medium border-l-2 border-l-zed"
+                      : "bg-sidebar",
+                  )}
                 >
               <span className="truncate w-full text-start">
                 {item.title ?? "Untitled"}
