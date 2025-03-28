@@ -5,13 +5,13 @@ import type { Metadata } from 'next';
 import { Note } from "@/lib/types";
 
 type Props = {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
 export async function generateMetadata(
   { params }: Props,
 ): Promise<Metadata> {
-  const { id } = await params
+  const { id } = await params;
   const supabase = await createClient();
   const {
     data: { user },
@@ -37,7 +37,7 @@ export async function generateMetadata(
 export default async function EditorPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
   const supabase = await createClient();
