@@ -2,7 +2,7 @@
 
 import { upsertNote } from "@/lib/api/notes";
 import { extensions } from "@/lib/extensions/extensions";
-import { useAuth } from '@/lib/context/auth-context';
+import { useAuth } from "@/lib/context/auth-context";
 import { Note } from "@/lib/types";
 import { EditorContent, useEditor } from "@tiptap/react";
 import localForage from "localforage";
@@ -107,7 +107,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   return (
     <ToolbarProvider editor={editor}>
       <div className="flex min-h-svh w-full">
-        <div className="flex relative min-h-svh flex-1 flex-col mx-auto">
+        <div className="relative mx-auto flex min-h-svh flex-1 flex-col">
           <EditorHeader
             title={title}
             editor={editor}
@@ -117,7 +117,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
             setShowTranscriber={setShowTranscriber}
           />
 
-          <div className="flex flex-1 flex-col p-3 relative space-y-4 max-w-4xl mx-auto w-full">
+          <div className="relative mx-auto flex w-full max-w-4xl flex-1 flex-col space-y-4 p-3">
             <input
               className="border-none text-xl font-medium outline-none"
               placeholder="Title"
@@ -126,9 +126,9 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
             />
             <EditorContent
               editor={editor}
-              className="my-0 mb-14 min-w-full prose text-black prose-p:my-0 prose-xs md:prose-sm flex-1 text-start h-full"
+              className="prose prose-p:my-0 prose-xs md:prose-sm my-0 mb-14 h-full min-w-full flex-1 text-start text-black"
             />
-            <div className="absolute bottom-0 right-2 flex items-end flex-col justify-center space-y-2">
+            <div className="absolute bottom-0 right-2 flex flex-col items-end justify-center space-y-2">
               <AudioTranscriber
                 editor={editor}
                 showTranscriber={showTranscriber}

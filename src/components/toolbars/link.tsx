@@ -63,7 +63,7 @@ export const LinkToolbar = React.forwardRef<HTMLButtonElement>((props, ref) => {
               </Button>
             </PopoverTrigger>
           </TooltipTrigger>
-          <PopoverContent className="w-80 bg-background">
+          <PopoverContent className="bg-background w-80">
             <div className="flex flex-col space-y-2.5">
               <Label htmlFor="url">URL</Label>
               <Input

@@ -11,16 +11,14 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <SidebarProvider>
-        {/* useSearchParams() should be wrapped in a suspense boundary */}
-        <NuqsAdapter>
-          <Suspense>
-            {children}
-          </Suspense>
-        </NuqsAdapter>
-      </SidebarProvider>
-    </AuthProvider>
+      <AuthProvider>
+        <SidebarProvider>
+          {/* useSearchParams() should be wrapped in a suspense boundary */}
+          <NuqsAdapter>
+            <Suspense>{children}</Suspense>
+          </NuqsAdapter>
+        </SidebarProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

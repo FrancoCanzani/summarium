@@ -26,8 +26,8 @@ export default function RootLayout({
         className={`${geistMono.variable} font-[family-name:var(--font-geist-mono)] antialiased`}
       >
         <Providers>
-        {children}
-        <Toaster />
+          {children}
+          <Toaster />
         </Providers>
       </body>
     </html>

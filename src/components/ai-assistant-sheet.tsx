@@ -27,14 +27,9 @@ import {
 } from "@/components/ui/tooltip";
 
 export default function AiAssistantSheet({ editor }: { editor: Editor }) {
-
-  const {
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit,
-    status,
-  } = useChat({});
+  const { messages, input, handleInputChange, handleSubmit, status } = useChat(
+    {},
+  );
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -75,7 +70,7 @@ export default function AiAssistantSheet({ editor }: { editor: Editor }) {
             <Button
               variant="ghost"
               size="icon"
-              className={cn("size-6 flex md:hidden")}
+              className={cn("flex size-6 md:hidden")}
             >
               <BotMessageSquare className="size-4" />
             </Button>
@@ -83,12 +78,12 @@ export default function AiAssistantSheet({ editor }: { editor: Editor }) {
         </TooltipTrigger>
         <TooltipContent>
           <span>Assistant</span>
-          <span className="ml-1 text-xs text-gray-11">(cmd + a)</span>
+          <span className="text-gray-11 ml-1 text-xs">(cmd + a)</span>
         </TooltipContent>
       </Tooltip>
 
-      <SheetContent side="bottom" className="w-full h-[80%]">
-        <SheetHeader className="flex flex-row h-12 w-full items-center justify-between space-x-2 border-b bg-background px-2 py-2.5 pr-10">
+      <SheetContent side="bottom" className="h-[80%] w-full">
+        <SheetHeader className="bg-background flex h-12 w-full flex-row items-center justify-between space-x-2 border-b px-2 py-2.5 pr-10">
           <SheetTitle className="font-medium">AI Assistant</SheetTitle>
           <Button
             variant="ghost"
@@ -176,7 +171,7 @@ export default function AiAssistantSheet({ editor }: { editor: Editor }) {
                 </div>
               ) : (
                 <div className="flex h-full flex-col items-center justify-center">
-                  <p className="text-balance text-center text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-balance text-center text-sm">
                     No AI-generated content yet. Enter a prompt below.
                   </p>
                 </div>

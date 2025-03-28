@@ -37,10 +37,9 @@ import { UndoToolbar } from "./toolbars/undo";
 import ButtonWithTooltip from "./ui/button-with-tooltip";
 
 export function Toolbar() {
-
   return (
-    <div className="flex items-center justify-between gap-2 w-full min-h-full overflow-x-auto">
-      <div className="flex items-center justify-start space-x-2 min-h-full">
+    <div className="flex min-h-full w-full items-center justify-between gap-2 overflow-x-auto">
+      <div className="flex min-h-full items-center justify-start space-x-2">
         <div className="flex items-center justify-start space-x-2 border-r pr-1">
           <UndoToolbar />
           <RedoToolbar />
@@ -56,30 +55,30 @@ export function Toolbar() {
               <SquarePlus className="size-4" />
             </ButtonWithTooltip>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-48 flex items-start justify-start flex-col text-start space-y-1">
-            <TaskListToolbar className="w-full flex items-center justify-start space-x-1.5 px-1.5 py-2.5 rounded-sm h-8">
+          <DropdownMenuContent className="flex w-48 flex-col items-start justify-start space-y-1 text-start">
+            <TaskListToolbar className="flex h-8 w-full items-center justify-start space-x-1.5 rounded-sm px-1.5 py-2.5">
               <SquareCheck className="size-4" /> <span>Task list</span>
             </TaskListToolbar>
-            <BulletListToolbar className="w-full flex items-center justify-start space-x-1.5 px-1.5 py-2.5 rounded-sm h-8">
+            <BulletListToolbar className="flex h-8 w-full items-center justify-start space-x-1.5 rounded-sm px-1.5 py-2.5">
               <List className="size-4" /> <span>Bullet list</span>
             </BulletListToolbar>
-            <OrderedListToolbar className="w-full flex items-center justify-start space-x-1.5 px-1.5 py-2.5 rounded-sm h-8">
+            <OrderedListToolbar className="flex h-8 w-full items-center justify-start space-x-1.5 rounded-sm px-1.5 py-2.5">
               <ListOrdered className="size-4" /> <span>Ordered list</span>
             </OrderedListToolbar>
-            <CodeToolbar className="w-full flex items-center justify-start space-x-1.5 px-1.5 py-2.5 rounded-sm h-8">
+            <CodeToolbar className="flex h-8 w-full items-center justify-start space-x-1.5 rounded-sm px-1.5 py-2.5">
               <Code2 className="size-4" /> <span>Code</span>
             </CodeToolbar>
-            <CodeBlockToolbar className="w-full flex items-center justify-start space-x-1.5 px-1.5 py-2.5 rounded-sm h-8">
+            <CodeBlockToolbar className="flex h-8 w-full items-center justify-start space-x-1.5 rounded-sm px-1.5 py-2.5">
               <Code className="size-4" /> <span>Code block</span>
             </CodeBlockToolbar>
-            <HorizontalRuleToolbar className="w-full flex items-center justify-start space-x-1.5 px-1.5 py-2.5 rounded-sm h-8">
+            <HorizontalRuleToolbar className="flex h-8 w-full items-center justify-start space-x-1.5 rounded-sm px-1.5 py-2.5">
               <SeparatorHorizontal className="size-4" />
               <span>Separator</span>
             </HorizontalRuleToolbar>
-            <BlockquoteToolbar className="w-full flex items-center justify-start space-x-1.5 px-1.5 py-2.5 rounded-sm h-8">
+            <BlockquoteToolbar className="flex h-8 w-full items-center justify-start space-x-1.5 rounded-sm px-1.5 py-2.5">
               <TextQuote className="size-4" /> <span>Blockquote</span>
             </BlockquoteToolbar>
-            <HardBreakToolbar className="w-full flex items-center justify-start space-x-1.5 px-1.5 py-2.5 rounded-sm h-8">
+            <HardBreakToolbar className="flex h-8 w-full items-center justify-start space-x-1.5 rounded-sm px-1.5 py-2.5">
               <WrapText className="size-4" /> <span>Hard break</span>
             </HardBreakToolbar>
           </DropdownMenuContent>

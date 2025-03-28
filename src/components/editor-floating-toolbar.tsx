@@ -152,10 +152,8 @@ export default function FloatingToolbar() {
   ];
 
   return (
-    <div
-      className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10 bg-zed-light border rounded-md shadow-md"
-    >
-      <div className="flex flex-wrap items-center justify-center p-0.5 gap-0.5">
+    <div className="bg-zed-light absolute bottom-10 left-1/2 z-10 -translate-x-1/2 transform rounded-md border shadow-md">
+      <div className="flex flex-wrap items-center justify-center gap-0.5 p-0.5">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -210,10 +208,7 @@ export default function FloatingToolbar() {
             onClick={item.action}
             variant="ghost"
             size="sm"
-            className={cn(
-              "size-8",
-              item.isActive() && "bg-accent",
-            )}
+            className={cn("size-8", item.isActive() && "bg-accent")}
             title={item.title}
           >
             {item.icon}
@@ -227,8 +222,7 @@ export default function FloatingToolbar() {
               size="sm"
               className={cn(
                 "size-8",
-                editor.isActive("highlight") &&
-                  "bg-accent",
+                editor.isActive("highlight") && "bg-accent",
               )}
               title="Highlight"
             >
@@ -249,7 +243,7 @@ export default function FloatingToolbar() {
                         .run()
                     }
                     className={cn(
-                      "w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center",
+                      "flex h-8 w-8 items-center justify-center rounded-full border border-neutral-200",
                       editor.isActive("highlight", { color: item.color }) &&
                         "ring-2 ring-neutral-400",
                     )}
@@ -260,7 +254,7 @@ export default function FloatingToolbar() {
                   <button
                     key={index}
                     onClick={item.action}
-                    className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center"
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-neutral-200"
                     title={item.label}
                   >
                     <span className="text-xs">✕</span>

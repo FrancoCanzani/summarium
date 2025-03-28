@@ -1,11 +1,11 @@
-import * as React from 'react';
+import * as React from "react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { Button, ButtonProps } from '@/components/ui/button';
+} from "@/components/ui/tooltip";
+import { Button, ButtonProps } from "@/components/ui/button";
 
 interface ButtonWithTooltipProps extends ButtonProps {
   tooltipText: string;

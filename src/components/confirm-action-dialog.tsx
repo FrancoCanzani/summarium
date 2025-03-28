@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   AlertDialog,
@@ -10,8 +10,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-import { ReactNode } from 'react';
+} from "@/components/ui/alert-dialog";
+import { ReactNode } from "react";
 
 interface ConfirmDialogProps {
   title: string;

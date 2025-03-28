@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 interface AudioWaveProps {
   stream: MediaStream | null;
@@ -49,7 +49,7 @@ export default function AudioWave({ stream, isRecording }: AudioWaveProps) {
 
     if (!canvas || !analyser || !dataArray) return;
 
-    const canvasCtx = canvas.getContext('2d');
+    const canvasCtx = canvas.getContext("2d");
     if (!canvasCtx) return;
 
     const draw = () => {
@@ -57,11 +57,11 @@ export default function AudioWave({ stream, isRecording }: AudioWaveProps) {
 
       analyser.getByteTimeDomainData(dataArray);
 
-      canvasCtx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      canvasCtx.fillStyle = "rgba(255, 255, 255, 0.8)";
       canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
 
       canvasCtx.lineWidth = 2;
-      canvasCtx.strokeStyle = '#4A90E2';
+      canvasCtx.strokeStyle = "#4A90E2";
 
       canvasCtx.beginPath();
 
@@ -103,7 +103,7 @@ export default function AudioWave({ stream, isRecording }: AudioWaveProps) {
   return (
     <canvas
       ref={canvasRef}
-      className='w-full h-8 bg-gray-100 rounded-md'
+      className="h-8 w-full rounded-md bg-gray-100"
     ></canvas>
   );
 }

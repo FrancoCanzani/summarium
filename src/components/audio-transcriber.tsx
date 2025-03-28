@@ -129,23 +129,23 @@ export default function AudioTranscriber({
   return (
     <div
       className={cn(
-        "space-y-2 w-80 z-50 hidden transition-all opacity-0 duration-300 bg-background border rounded-md p-2",
+        "bg-background z-50 hidden w-80 space-y-2 rounded-md border p-2 opacity-0 transition-all duration-300",
         showTranscriber && "block opacity-100",
       )}
     >
-      <h6 className="font-medium capitalize text-sm text-gray-600">
+      <h6 className="text-sm font-medium capitalize text-gray-600">
         Speech to text
       </h6>
       {transcript ? (
-        <div className="bg-gray-50 max-h-36 overflow-scroll border text-gray-700 rounded-sm p-1 text-xs">
+        <div className="max-h-36 overflow-scroll rounded-sm border bg-gray-50 p-1 text-xs text-gray-700">
           <p>{transcript}</p>
         </div>
       ) : (
         <AudioWave stream={stream} isRecording={isRecording} />
       )}
 
-      <div className="flex justify-between items-center space-x-2 p-1">
-        <div className="flex justify-start items-center space-x-2">
+      <div className="flex items-center justify-between space-x-2 p-1">
+        <div className="flex items-center justify-start space-x-2">
           <Button
             variant="outline"
             size="xs"
@@ -192,13 +192,13 @@ export default function AudioTranscriber({
           </Button>
         </div>
 
-        <div className="flex justify-end items-center space-x-2">
-          <span className="text-sm animate-in font-medium text-gray-500">
+        <div className="flex items-center justify-end space-x-2">
+          <span className="animate-in text-sm font-medium text-gray-500">
             {formatTime(recordingTime)}
           </span>
 
           {isTranscribing && (
-            <RotateCw className="cursor-pointer animate-spin size-3.5 rounded-sm text-gray-500" />
+            <RotateCw className="size-3.5 animate-spin cursor-pointer rounded-sm text-gray-500" />
           )}
         </div>
       </div>

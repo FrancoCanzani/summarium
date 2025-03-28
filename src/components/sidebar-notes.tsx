@@ -1,20 +1,23 @@
-"use client"
+"use client";
 
-import {
-  SidebarGroup,
-  SidebarGroupContent,
-} from "@/components/ui/sidebar";
+import { SidebarGroup, SidebarGroupContent } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
-import {  preloadNote } from "@/lib/api/notes";
+import { preloadNote } from "@/lib/api/notes";
 import { useAuth } from "@/lib/context/auth-context";
 import { Note } from "@/lib/types";
 import { useParams } from "next/navigation";
+import { use } from "react";
 
-export default function SidebarNotes({notes}:{notes: Note[]}) {
-  const {user} = useAuth();
-  const {id} = useParams()
+export default function SidebarNotes({
+  notesPromise,
+}: {
+  notesPromise: Promise<Note[]>;
+}) {
+  const { user } = useAuth();
+  const { id } = useParams();
+  const notes = use(notesPromise);
 
   return (
     <SidebarGroup>
@@ -30,17 +33,17 @@ export default function SidebarNotes({notes}:{notes: Note[]}) {
                 }
               }}
               className={cn(
-                    "flex w-full flex-col items-center gap-1.5 overflow-hidden py-1.5 px-2 justify-between text-xs hover:bg-zed-light",
-                    id === item.id
-                      ? "bg-zed-light font-medium border-l-2 border-l-zed"
-                      : "bg-sidebar",
-                  )}
-                >
-              <span className="truncate w-full text-start">
+                "hover:bg-zed-light flex w-full flex-col items-center justify-between gap-1.5 overflow-hidden px-2 py-1.5 text-xs",
+                id === item.id
+                  ? "bg-zed-light border-l-zed border-l-2 font-medium"
+                  : "bg-sidebar",
+              )}
+            >
+              <span className="w-full truncate text-start">
                 {item.title ?? "Untitled"}
               </span>
               {item.updated_at && (
-                <span className="text-xs text-end w-full text-gray-400">
+                <span className="w-full text-end text-xs text-gray-400">
                   {formatDistanceToNow(new Date(item.updated_at), {
                     addSuffix: true,
                   })}

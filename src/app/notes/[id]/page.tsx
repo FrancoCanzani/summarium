@@ -1,16 +1,14 @@
 import Editor from "@/components/editor";
-import { fetchNote, preloadNote } from "@/lib/api/notes";
 import { createClient } from "@/lib/supabase/server";
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
 import { Note } from "@/lib/types";
+import { getNote } from "@/lib/api/notes";
 
 type Props = {
-  params: Promise<{ id: string }>
-}
+  params: Promise<{ id: string }>;
+};
 
-export async function generateMetadata(
-  { params }: Props,
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const supabase = await createClient();
   const {
@@ -24,9 +22,7 @@ export async function generateMetadata(
     };
   }
 
-  preloadNote(user.id, id);
-
-  const note = await fetchNote(user.id, id);
+  const note = await getNote(user.id, id);
 
   return {
     title: note ? `Editing: ${note.title}` : "New Note",
@@ -47,7 +43,7 @@ export default async function EditorPage({
 
   if (!user) return null;
 
-  const note = await fetchNote(user.id, id);
+  const note = await getNote(user.id, id);
 
   let initialNote: Note;
 

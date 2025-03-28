@@ -1,8 +1,8 @@
-import { Extension } from '@tiptap/core';
-import { Plugin, PluginKey } from '@tiptap/pm/state';
-import { Decoration, DecorationSet } from '@tiptap/pm/view';
+import { Extension } from "@tiptap/core";
+import { Plugin, PluginKey } from "@tiptap/pm/state";
+import { Decoration, DecorationSet } from "@tiptap/pm/view";
 
-declare module '@tiptap/core' {
+declare module "@tiptap/core" {
   interface Commands<ReturnType> {
     inlineSuggestion: {
       /**
@@ -13,7 +13,7 @@ declare module '@tiptap/core' {
   }
 }
 
-export const inlineSuggestionPluginKey = new PluginKey('inlineSuggestion');
+export const inlineSuggestionPluginKey = new PluginKey("inlineSuggestion");
 
 export interface InlineSuggestionOptions {
   /**
@@ -39,13 +39,13 @@ export const InlineSuggestion = Extension.create<
   InlineSuggestionOptions,
   InlineSuggestionStorage
 >({
-  name: 'inlineSuggestion',
+  name: "inlineSuggestion",
 
   addOptions() {
     return {
       fetchAutocompletion: async () => {
         const message =
-          '[@sereneinserenade/tiptap-inline-suggestions] Please add a fetchSuggestion function to fetch suggestions from.';
+          "[@sereneinserenade/tiptap-inline-suggestions] Please add a fetchSuggestion function to fetch suggestions from.";
 
         console.warn(message);
 
@@ -100,7 +100,7 @@ export const InlineSuggestion = Extension.create<
               };
 
               editor.view.dispatch(
-                editor.view.state.tr.setMeta('addToHistory', false)
+                editor.view.state.tr.setMeta("addToHistory", false),
               );
             });
 
@@ -133,7 +133,7 @@ export const InlineSuggestion = Extension.create<
               const { from, to } = storage.nodeDetails;
 
               const decoration = Decoration.node(from, to, {
-                'data-inline-suggestion': storage.currentSuggestion,
+                "data-inline-suggestion": storage.currentSuggestion,
               });
 
               return DecorationSet.create(tr.doc, [decoration]);
@@ -147,7 +147,7 @@ export const InlineSuggestion = Extension.create<
             return this.getState(state);
           },
           handleKeyDown(_, event) {
-            if (event.key === 'Tab') {
+            if (event.key === "Tab") {
               event.preventDefault();
 
               fetchSuggestion();

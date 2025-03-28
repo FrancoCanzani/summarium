@@ -32,7 +32,7 @@ export function TranscribeToolbar({
       </TooltipTrigger>
       <TooltipContent>
         <span>Transcribe</span>
-        <span className="ml-1 text-xs text-gray-11">(cmd + t)</span>
+        <span className="text-gray-11 ml-1 text-xs">(cmd + t)</span>
       </TooltipContent>
     </Tooltip>
   );

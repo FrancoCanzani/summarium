@@ -15,7 +15,7 @@ export default function EditorBubbleMenu({ editor }: { editor: Editor }) {
       <BubbleMenu
         editor={editor}
         tippyOptions={{ duration: 100 }}
-        className="flex items-center rounded-md text-xs border bg-background p-1 space-x-1 shadow-md"
+        className="bg-background flex items-center space-x-1 rounded-md border p-1 text-xs shadow-md"
       >
         <BoldToolbar />
         <ItalicToolbar />

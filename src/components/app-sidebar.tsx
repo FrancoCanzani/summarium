@@ -7,9 +7,11 @@ import {
 import Link from "next/link";
 import SearchModal from "./search-modal";
 import { createClient } from "@/lib/supabase/server";
-import { Note } from "@/lib/types";
 import { fetchNotes } from "@/lib/api/notes";
 import SidebarNotes from "./sidebar-notes";
+import { Suspense } from "react";
+import SidebarNotesSkeleton from "./skeletons/sidebar-notes-skeleton";
+import SidebarSearchSkeleton from "./skeletons/sidebar-search-skeleton";
 
 export async function AppSidebar() {
   const supabase = await createClient();
@@ -17,16 +19,14 @@ export async function AppSidebar() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  let notes: Note[] = [];
+  if (!user) return null;
 
-  if (user) {
-    notes = await fetchNotes(user.id);
-  }
+  const notes = fetchNotes(user.id);
 
   return (
-    <Sidebar className="flex flex-col h-screen">
+    <Sidebar className="flex h-screen flex-col">
       <SidebarHeader className="gap-0">
-        <h2 className="p-2 font-medium text-xl text-zed flex items-center">
+        <h2 className="text-zed flex items-center p-2 text-xl font-medium">
           Summarium
         </h2>
 
@@ -36,19 +36,23 @@ export async function AppSidebar() {
         >
           New Note
         </Link>
-        <SearchModal notes={notes} />
+        <Suspense fallback={<SidebarSearchSkeleton />}>
+          <SearchModal notesPromise={notes} />
+        </Suspense>
       </SidebarHeader>
 
       <SidebarContent className="border-y border-dashed">
-        <SidebarNotes notes={notes} />
+        <Suspense fallback={<SidebarNotesSkeleton />}>
+          <SidebarNotes notesPromise={notes} />
+        </Suspense>
       </SidebarContent>
 
       <SidebarFooter className="gap-0">
-        <Link href={"/docs"} className="p-2 hover:bg-accent font-medium">
+        <Link href={"/docs"} className="hover:bg-accent p-2 font-medium">
           Docs
         </Link>
 
-        <Link href={"/settings"} className="p-2 hover:bg-accent font-medium">
+        <Link href={"/settings"} className="hover:bg-accent p-2 font-medium">
           Settings
         </Link>
       </SidebarFooter>

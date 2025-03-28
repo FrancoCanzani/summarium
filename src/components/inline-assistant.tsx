@@ -44,7 +44,7 @@ export default function InlineAssistantView({ editor }: { editor: Editor }) {
 
   return (
     <NodeViewWrapper>
-      <form className="flex my-2 items-center w-full space-x-1">
+      <form className="my-2 flex w-full items-center space-x-1">
         <Button
           onClick={() => editor.commands.removeAllInlineAssistants()}
           disabled={isLoading}
@@ -62,7 +62,7 @@ export default function InlineAssistantView({ editor }: { editor: Editor }) {
           disabled={isLoading}
           autoFocus
           ref={inputRef}
-          className="w-full border border-gray-100 rounded-sm px-2 py-1"
+          className="w-full rounded-sm border border-gray-100 px-2 py-1"
         />
         <div>
           {completion ? (

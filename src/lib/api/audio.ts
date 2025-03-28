@@ -1,11 +1,11 @@
-'use server';
+"use server";
 
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
 export async function deleteAudio(filename: string) {
   try {
-    const filePath = path.join(process.cwd(), 'public', 'audio', filename);
+    const filePath = path.join(process.cwd(), "public", "audio", filename);
 
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
@@ -15,7 +15,7 @@ export async function deleteAudio(filename: string) {
       return;
     }
   } catch (error) {
-    console.error('Error deleting audio file:', error);
-    throw new Error('Failed to delete audio file from local storage.');
+    console.error("Error deleting audio file:", error);
+    throw new Error("Failed to delete audio file from local storage.");
   }
 }

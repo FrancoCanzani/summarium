@@ -90,13 +90,13 @@ export function SearchAndReplaceToolbar() {
         onEscapeKeyDown={() => {
           setOpen(false);
         }}
-        className="relative flex w-[400px] px-3 py-2.5 bg-background"
+        className="bg-background relative flex w-[400px] px-3 py-2.5"
       >
         {!replacing ? (
-          <div className={cn("relative flex gap-1.5 items-center w-full")}>
+          <div className={cn("relative flex w-full items-center gap-1.5")}>
             <Input
               value={searchText}
-              className="flex-1 h-8 px-1.5 mr-1.5 text-sm"
+              className="mr-1.5 h-8 flex-1 px-1.5 text-sm"
               onChange={(e) => {
                 setSearchText(e.target.value);
               }}
@@ -122,7 +122,7 @@ export function SearchAndReplaceToolbar() {
             >
               <ArrowRight className="h-4 w-4" />
             </Button>
-            <Separator orientation="vertical" className="h-7 mx-0.5" />
+            <Separator orientation="vertical" className="mx-0.5 h-7" />
             <Button
               onClick={() => {
                 setOpen(false);
@@ -158,7 +158,7 @@ export function SearchAndReplaceToolbar() {
 
             <div className="my-2 w-full">
               <div className="mb-3">
-                <Label className="mb-1 text-xs text-gray-11">Search</Label>
+                <Label className="text-gray-11 mb-1 text-xs">Search</Label>
                 <div className="mb-3 flex items-center justify-start gap-x-2 text-sm">
                   <Input
                     value={searchText}
@@ -173,7 +173,7 @@ export function SearchAndReplaceToolbar() {
                 </div>
               </div>
               <div className="mb-2">
-                <Label className="mb-1 text-xs text-gray-11">
+                <Label className="text-gray-11 mb-1 text-xs">
                   Replace with
                 </Label>
                 <Input

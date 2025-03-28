@@ -120,7 +120,7 @@ export default function EditorVersionControl({ editor }: { editor: Editor }) {
         className={cn(
           part.added ? "bg-green-100" : "",
           part.removed ? "bg-red-100 line-through" : "",
-          "px-1 py-0.5 rounded-sm",
+          "rounded-sm px-1 py-0.5",
         )}
         style={{ whiteSpace: "pre-wrap" }} // Preserve line breaks
       >
@@ -144,7 +144,7 @@ export default function EditorVersionControl({ editor }: { editor: Editor }) {
       <SheetContent
         className={cn(
           "flex flex-col rounded-sm text-sm",
-          isMobile ? "w-full h-[90%]" : "w-96 h-full",
+          isMobile ? "h-[90%] w-full" : "h-full w-96",
         )}
         side={isMobile ? "bottom" : "right"}
       >
@@ -167,7 +167,7 @@ export default function EditorVersionControl({ editor }: { editor: Editor }) {
             }
             onClick={handlePreviousVersion}
           >
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft className="h-4 w-4" />
           </Button>
           <Button
             variant="outline"
@@ -181,24 +181,24 @@ export default function EditorVersionControl({ editor }: { editor: Editor }) {
             }
             onClick={handleNextVersion}
           >
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
 
-        <div className="flex-1 overflow-y-auto divide-y divide-dashed">
+        <div className="flex-1 divide-y divide-dashed overflow-y-auto">
           {versions.map((version) => (
             <div
               key={`${version.id}-${version.updated_at}`}
               className={cn(
-                "p-2 cursor-pointer hover:bg-gray-100",
+                "cursor-pointer p-2 hover:bg-gray-100",
                 version.updated_at === selectedVersion?.updated_at &&
                   "bg-gray-100",
               )}
               onClick={() => handleVersionClick(version)}
             >
               <div className="flex items-center justify-between">
-                <h3 className="font-medium text-sm">{version.title}</h3>
-                <div className="text-xs text-gray-500 flex items-center justify-end space-x-2">
+                <h3 className="text-sm font-medium">{version.title}</h3>
+                <div className="flex items-center justify-end space-x-2 text-xs text-gray-500">
                   <span>{new Date(version.updated_at).toLocaleString()}</span>
                   <span>&middot;</span>
                   <span>
@@ -215,10 +215,10 @@ export default function EditorVersionControl({ editor }: { editor: Editor }) {
         <Separator />
 
         <div className="flex-1 overflow-y-auto p-2">
-          <p className="font-semibold mb-2">Changes:</p>
+          <p className="mb-2 font-semibold">Changes:</p>
           {renderDiff()}
           {!selectedVersion && (
-            <p className="text-gray-500 italic">
+            <p className="italic text-gray-500">
               Select a version to see the changes.
             </p>
           )}

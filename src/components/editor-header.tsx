@@ -1,6 +1,6 @@
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { deleteNote } from "@/lib/actions";
-import { useAuth } from '@/lib/context/auth-context';
+import { useAuth } from "@/lib/context/auth-context";
 import { useQueryClient } from "@tanstack/react-query";
 import { Editor } from "@tiptap/core";
 import { Trash } from "lucide-react";
@@ -10,7 +10,6 @@ import { toast } from "sonner";
 import AiAssistantSheet from "./ai-assistant-sheet";
 import { ConfirmActionDialog } from "./confirm-action-dialog";
 import EditorVersionControl from "./editor-version-control";
-import { AssistantToolbar } from "./toolbars/assistant";
 import { InlineAssistantToolbar } from "./toolbars/inline-assistant";
 import { SearchAndReplaceToolbar } from "./toolbars/search-and-replace";
 import { TranscribeToolbar } from "./toolbars/transcribe";
@@ -38,9 +37,9 @@ export default function EditorHeader({
   const { id } = useParams();
 
   return (
-    <header className="sticky top-0 z-10 bg-sidebar w-full border-b flex flex-col">
-      <div className="w-full p-1 flex flex-col space-y-1 items-start justify-start">
-        <div className="flex items-center justify-between w-full space-x-1.5 h-full">
+    <header className="bg-sidebar sticky top-0 z-10 flex w-full flex-col border-b">
+      <div className="flex w-full flex-col items-start justify-start space-y-1 p-1">
+        <div className="flex h-full w-full items-center justify-between space-x-1.5">
           <div className="flex items-center justify-start space-x-1.5">
             {isMobile && <SidebarTrigger />} <h2>{title}</h2>
           </div>
@@ -82,10 +81,10 @@ export default function EditorHeader({
               }}
               showTranscriber={showTranscriber}
             />
-            <AssistantToolbar
+            {/* <AssistantToolbar
               showAssistant={showAssistant}
               onClick={() => setShowAssistant(!showAssistant)}
-            />
+            /> */}
             <AiAssistantSheet editor={editor} />
           </div>
         </div>
