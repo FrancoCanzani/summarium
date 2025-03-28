@@ -1,12 +1,10 @@
 "use client";
 
-import { upsertNote } from "@/lib/api/notes";
 import { extensions } from "@/lib/extensions/extensions";
-import { useAuth } from "@/lib/context/auth-context";
 import { Note } from "@/lib/types";
 import { EditorContent, useEditor } from "@tiptap/react";
 import localForage from "localforage";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 import AiAssistant from "./ai-assistant";
@@ -16,33 +14,37 @@ import EditorHeader from "./editor-header";
 import { RightSidebar } from "./right-sidebar";
 import { ToolbarProvider } from "./toolbars/toolbar-provider";
 import FloatingToolbar from "./editor-floating-toolbar";
-import { useRouter } from "next/navigation";
+import { User } from "@supabase/supabase-js";
+import { saveNote } from "@/lib/actions";
 
-export default function Editor({ initialNote }: { initialNote: Note }) {
-  const { user, loading } = useAuth();
-  const router = useRouter();
-
+export default function Editor({ initialNote, user }: { initialNote: Note, user: User }) {
   const [title, setTitle] = useState(initialNote?.title || "");
   const [content, setContent] = useState(initialNote?.content || "");
   const [isSaved, setIsSaved] = useState(true);
   const [showAssistant, setShowAssistant] = useState(false);
   const [showTranscriber, setShowTranscriber] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const handleSaveNote = async (noteData: Note) => {
-    try {
-      await upsertNote(noteData);
-      setIsSaved(true);
-      // Refresh the page to get updated data
-      router.refresh();
-    } catch {
-      toast.error("There was an error saving your note");
-    }
+    startTransition(async () => {
+      try {
+        const result = await saveNote(noteData);
+
+        if (result.success) {
+          setIsSaved(true);
+        } else {
+          toast.error(result.error || "Failed to save note");
+        }
+      } catch {
+        toast.error("There was an error saving your note");
+      }
+    });
   };
 
   const handleDebouncedTitleChange = useDebouncedCallback((value: string) => {
     handleSaveNote({
       id: initialNote.id,
-      user_id: user!.id,
+      user_id: user.id,
       title: value,
       content: content,
       sanitized_content: editor?.getText(),
@@ -60,7 +62,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
     async (value: string) => {
       await handleSaveNote({
         id: initialNote.id,
-        user_id: user!.id,
+        user_id: user.id,
         title: title,
         content: value,
         sanitized_content: editor?.getText(),
@@ -74,7 +76,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
       });
       localForage.setItem(`${initialNote.id}+${new Date().toISOString()}`, {
         id: initialNote.id,
-        user_id: user!.id,
+        user_id: user.id,
         title: title,
         content: value,
         sanitized_content: editor?.getText(),
@@ -99,8 +101,6 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
     immediatelyRender: false,
     shouldRerenderOnTransaction: false,
   });
-
-  if (!user && !loading) return;
 
   if (!editor) return null;
 
@@ -135,9 +135,10 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
               />
             </div>
           </div>
+
           <FloatingToolbar />
 
-          <EditorFooter editor={editor} isSaved={isSaved} />
+          <EditorFooter editor={editor} isSaved={isSaved} isSaving={isPending} />
         </div>
 
         <RightSidebar open={showAssistant}>

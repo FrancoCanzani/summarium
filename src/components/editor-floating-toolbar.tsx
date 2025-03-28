@@ -56,7 +56,7 @@ export default function FloatingToolbar() {
       title: "Underline",
       action: () => editor.chain().focus().toggleUnderline().run(),
       isActive: () => editor.isActive("underline"),
-      priority: "medium",
+      priority: "high",
     },
     {
       icon: <List className="h-4 w-4" />,
@@ -89,7 +89,7 @@ export default function FloatingToolbar() {
         }
       },
       isActive: () => editor.isActive("link"),
-      priority: "medium",
+      priority: "high",
     },
     {
       icon: <AlignLeft className="h-4 w-4" />,
@@ -152,15 +152,15 @@ export default function FloatingToolbar() {
   ];
 
   return (
-    <div className="bg-zed-light absolute bottom-10 left-1/2 z-10 -translate-x-1/2 transform rounded-md border shadow-md">
-      <div className="flex flex-wrap items-center justify-center gap-0.5 p-0.5">
+    <div className="bg-sidebar fixed bottom-10 left-1/2 z-10 -translate-x-1/2 transform rounded-sm border shadow-sm">
+      <div className="flex items-center justify-center gap-1 p-0.5">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
               size="sm"
               className={cn(
-                "size-8",
+                "size-7 rounded-sm",
                 editor.isActive("heading") && "bg-accent",
               )}
               title="Headings"
@@ -177,11 +177,11 @@ export default function FloatingToolbar() {
                     .chain()
                     .focus()
                     // @ts-expect-error - Type mismatch in slatejs
-                    .toggleHeading({ level: heading.level as HeadingLevel })
+                    .toggleHeading({ level: heading.level })
                     .run()
                 }
                 className={cn(
-                  "flex items-center gap-2 text-sm",
+                  "flex items-center rounded-sm gap-2 text-sm",
                   editor.isActive("heading", { level: heading.level }) &&
                     "bg-accent",
                 )}
@@ -193,7 +193,7 @@ export default function FloatingToolbar() {
             <DropdownMenuItem
               onClick={() => editor.chain().focus().setParagraph().run()}
               className={cn(
-                "flex items-center gap-2 text-sm",
+                "flex items-center rounded-sm gap-2 text-sm",
                 editor.isActive("paragraph") && "bg-accent",
               )}
             >
@@ -208,7 +208,7 @@ export default function FloatingToolbar() {
             onClick={item.action}
             variant="ghost"
             size="sm"
-            className={cn("size-8", item.isActive() && "bg-accent")}
+            className={cn("size-7 rounded-sm", item.isActive() && "bg-accent")}
             title={item.title}
           >
             {item.icon}
@@ -221,7 +221,7 @@ export default function FloatingToolbar() {
               variant="ghost"
               size="sm"
               className={cn(
-                "size-8",
+                "size-7 rounded-sm",
                 editor.isActive("highlight") && "bg-accent",
               )}
               title="Highlight"
@@ -243,7 +243,7 @@ export default function FloatingToolbar() {
                         .run()
                     }
                     className={cn(
-                      "flex h-8 w-8 items-center justify-center rounded-full border border-neutral-200",
+                      "flex size-7 items-center justify-center rounded-full border border-neutral-200",
                       editor.isActive("highlight", { color: item.color }) &&
                         "ring-2 ring-neutral-400",
                     )}
@@ -254,7 +254,7 @@ export default function FloatingToolbar() {
                   <button
                     key={index}
                     onClick={item.action}
-                    className="flex h-8 w-8 items-center justify-center rounded-full border border-neutral-200"
+                    className="flex size-7 items-center justify-center rounded-full border border-neutral-200"
                     title={item.label}
                   >
                     <span className="text-xs">✕</span>
@@ -271,7 +271,7 @@ export default function FloatingToolbar() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="size-8"
+                className="size-7 rounded-sm"
                 title="More formatting options"
               >
                 <MoreHorizontal className="h-4 w-4" />
@@ -283,7 +283,7 @@ export default function FloatingToolbar() {
                   key={index}
                   onClick={item.action}
                   className={cn(
-                    "flex items-center gap-2 text-sm",
+                    "flex items-center rounded-sm gap-2 text-sm",
                     item.isActive() && "bg-accent",
                   )}
                 >

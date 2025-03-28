@@ -37,9 +37,8 @@ export default function EditorHeader({
   const { id } = useParams();
 
   return (
-    <header className="bg-sidebar sticky top-0 z-10 flex w-full flex-col border-b">
-      <div className="flex w-full flex-col items-start justify-start space-y-1 p-1">
-        <div className="flex h-full w-full items-center justify-between space-x-1.5">
+    <header className="bg-background sticky top-0 z-10 w-full">
+      <div className="flex w-full items-start justify-between space-y-1 p-1 py-2">
           <div className="flex items-center justify-start space-x-1.5">
             {isMobile && <SidebarTrigger />} <h2>{title}</h2>
           </div>
@@ -88,7 +87,6 @@ export default function EditorHeader({
             <AiAssistantSheet editor={editor} />
           </div>
         </div>
-      </div>
     </header>
   );
 }
