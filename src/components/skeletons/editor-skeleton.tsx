@@ -34,6 +34,14 @@ export default function EditorSkeleton() {
             <Skeleton className="h-3 w-8/12 rounded-none" />
             <Skeleton className="h-3 w-10/12 rounded-none" />
             <Skeleton className="h-3 w-full rounded-none" />
+            <Skeleton className="h-3 w-7/12 rounded-none" />            <Skeleton className="h-3 w-11/12 rounded-none" />
+            <Skeleton className="h-3 w-10/12 rounded-none" />
+            <Skeleton className="h-3 w-full rounded-none" />
+            <Skeleton className="h-3 w-9/12 rounded-none" />
+            <Skeleton className="h-3 w-full rounded-none" />
+            <Skeleton className="h-3 w-8/12 rounded-none" />
+            <Skeleton className="h-3 w-10/12 rounded-none" />
+            <Skeleton className="h-3 w-full rounded-none" />
             <Skeleton className="h-3 w-7/12 rounded-none" />
           </div>
         </div>
