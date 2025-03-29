@@ -2,39 +2,41 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
 
-export default function Login() {
-  const [isLoading, setIsLoading] = useState(false);
+export default function LoginPage() {
+  const [loading, setLoading] = useState(false);
   const supabase = createClient();
 
-  const handleSignIn = async () => {
-    setIsLoading(true);
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/api/auth/callback`, // Important: Full URL
-        },
-      });
+  const handleLoginWithGoogle = async () => {
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/api/auth/callback`,
+      },
+    });
 
-      if (error) {
-        console.error("Google sign-in error:", error);
-        alert(error.message);
-      }
-      // No need to redirect manually; Supabase handles it.
-    } catch (error) {
-      console.error("Unexpected error during Google sign-in:", error);
-      alert("Unexpected error during Google sign-in");
-    } finally {
-      setIsLoading(false);
+    if (error) {
+      console.error("Login error:", error);
+      alert(error.message);
     }
+
+    setLoading(false);
   };
 
   return (
-    <div>
-      <button onClick={handleSignIn} disabled={isLoading}>
-        {isLoading ? "Signing in..." : "Sign in with Google"}
-      </button>
+    <div className="bg-background text-foreground flex min-h-screen w-full flex-col items-center justify-center p-6">
+      <h1 className="mb-6 text-center text-3xl font-semibold">
+        Login to Summarium
+      </h1>
+      <Button
+        onClick={handleLoginWithGoogle}
+        disabled={loading}
+        variant={"default"}
+      >
+        {loading ? "Logging in..." : "Login with Google"}
+      </Button>
     </div>
   );
 }
