@@ -6,7 +6,6 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import SearchModal from "./search-modal";
-import { createClient } from "@/lib/supabase/server";
 import { fetchNotes } from "@/lib/api/notes";
 import SidebarNotes from "./sidebar-notes";
 import { Suspense } from "react";
@@ -14,14 +13,7 @@ import SidebarNotesSkeleton from "./skeletons/sidebar-notes-skeleton";
 import SidebarSearchSkeleton from "./skeletons/sidebar-search-skeleton";
 
 export async function AppSidebar() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) return null;
-
-  const notes = fetchNotes(user.id);
+  const notes = fetchNotes();
 
   return (
     <Sidebar className="flex h-screen flex-col">

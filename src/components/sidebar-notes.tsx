@@ -4,8 +4,6 @@ import { SidebarGroup, SidebarGroupContent } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
-import { preloadNote } from "@/lib/api/notes";
-import { useAuth } from "@/lib/context/auth-context";
 import { Note } from "@/lib/types";
 import { useParams } from "next/navigation";
 import { use } from "react";
@@ -15,7 +13,6 @@ export default function SidebarNotes({
 }: {
   notesPromise: Promise<Note[]>;
 }) {
-  const { user } = useAuth();
   const { id } = useParams();
   const notes = use(notesPromise);
 
@@ -27,11 +24,6 @@ export default function SidebarNotes({
             <Link
               href={`/notes/${item.id}`}
               key={item.id}
-              onMouseEnter={() => {
-                if (user) {
-                  preloadNote(user.id, item.id);
-                }
-              }}
               className={cn(
                 "hover:bg-zed-light flex w-full flex-col items-center justify-between gap-1.5 overflow-hidden px-2 py-1.5 text-xs",
                 id === item.id

@@ -12,15 +12,12 @@ import EditorFooter from "./editor-footer";
 import EditorHeader from "./editor-header";
 import { ToolbarProvider } from "./toolbars/toolbar-provider";
 import FloatingToolbar from "./editor-floating-toolbar";
-import { User } from "@supabase/supabase-js";
 import { saveNote } from "@/lib/actions";
 
 export default function Editor({
   initialNote,
-  user,
 }: {
   initialNote: Note;
-  user: User;
 }) {
   const [title, setTitle] = useState(initialNote?.title || "");
   const [content, setContent] = useState(initialNote?.content || "");
@@ -47,7 +44,6 @@ export default function Editor({
   const handleDebouncedTitleChange = useDebouncedCallback((value: string) => {
     handleSaveNote({
       id: initialNote.id,
-      user_id: user.id,
       title: value,
       content: content,
       sanitized_content: editor?.getText(),
@@ -65,7 +61,6 @@ export default function Editor({
     async (value: string) => {
       await handleSaveNote({
         id: initialNote.id,
-        user_id: user.id,
         title: title,
         content: value,
         sanitized_content: editor?.getText(),
@@ -79,7 +74,6 @@ export default function Editor({
       });
       localForage.setItem(`${initialNote.id}+${new Date().toISOString()}`, {
         id: initialNote.id,
-        user_id: user.id,
         title: title,
         content: value,
         sanitized_content: editor?.getText(),

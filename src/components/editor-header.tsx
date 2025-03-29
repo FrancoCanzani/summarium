@@ -1,6 +1,5 @@
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { deleteNote } from "@/lib/actions";
-import { useAuth } from "@/lib/context/auth-context";
 import { useQueryClient } from "@tanstack/react-query";
 import { Editor } from "@tiptap/core";
 import { Trash } from "lucide-react";
@@ -27,7 +26,6 @@ export default function EditorHeader({
   setShowTranscriber: Dispatch<SetStateAction<boolean>>;
 }) {
   const isMobile = useIsMobile();
-  const { user } = useAuth();
   const queryClient = useQueryClient();
   const { id } = useParams();
 
@@ -42,9 +40,7 @@ export default function EditorHeader({
             title="Delete this note?"
             description="Are you sure you want to delete this note? This action cannot be undone."
             onConfirm={async () => {
-              if (!user) return;
-
-              toast.promise(deleteNote(id as string, user.id), {
+              toast.promise(deleteNote(id as string), {
                 loading: "Loading...",
                 success: () => {
                   queryClient.invalidateQueries({ queryKey: ["notes"] });

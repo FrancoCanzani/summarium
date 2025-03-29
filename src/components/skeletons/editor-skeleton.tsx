@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import { Skeleton } from "@/components/ui/skeleton"
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function EditorSkeleton() {
   return (
     <div className="flex min-h-svh w-full">
       <div className="relative mx-auto flex min-h-svh flex-1 flex-col">
         {/* Header */}
-          <div className="flex w-full items-start justify-between pl-1 pr-2 py-3">
-              <Skeleton className="h-3 w-24 rounded-none" />
-            <div className="flex items-center space-x-1.5 px-2">
-              <Skeleton className="h-4 w-4 rounded-lg" />
-              <Skeleton className="h-4 w-4 rounded-lg" />
-              <Skeleton className="h-4 w-4 rounded-lg" />
-              <Skeleton className="h-4 w-4 rounded-lg" />
-              <Skeleton className="h-4 w-4 rounded-lg" />
-            </div>
+        <div className="flex w-full items-start justify-between py-3 pl-1 pr-2">
+          <Skeleton className="h-3 w-24 rounded-none" />
+          <div className="flex items-center space-x-1.5 px-2">
+            <Skeleton className="h-4 w-4 rounded-lg" />
+            <Skeleton className="h-4 w-4 rounded-lg" />
+            <Skeleton className="h-4 w-4 rounded-lg" />
+            <Skeleton className="h-4 w-4 rounded-lg" />
+            <Skeleton className="h-4 w-4 rounded-lg" />
+          </div>
         </div>
 
         {/* Editor Content Skeleton */}
@@ -40,13 +40,13 @@ export default function EditorSkeleton() {
 
         {/* Footer Skeleton */}
         <div className="flex w-full items-center justify-between space-x-2 p-2">
-            <Skeleton className="h-2 w-16 rounded-none" />
-            <div className="flex items-center space-x-2">
-              <Skeleton className="h-2 w-20 rounded-none" />
-              <Skeleton className="h-2 w-20 rounded-none" />
-            </div>
+          <Skeleton className="h-2 w-16 rounded-none" />
+          <div className="flex items-center space-x-2">
+            <Skeleton className="h-2 w-20 rounded-none" />
+            <Skeleton className="h-2 w-20 rounded-none" />
           </div>
         </div>
+      </div>
     </div>
-  )
+  );
 }

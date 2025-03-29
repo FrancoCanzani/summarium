@@ -1,9 +1,10 @@
-"use server";
+"use server"
 
 import OpenAI from "openai";
 import { createClient } from "./supabase/server";
 import { Note } from "./types";
 import { revalidatePath } from "next/cache";
+import { verifySessionAndGetUserId } from "./api/notes";
 
 const openai = new OpenAI();
 
@@ -28,10 +29,8 @@ export async function transcribeAudioFile(formData: FormData) {
   }
 }
 
-export async function deleteNote(
-  id: string,
-  userId: string,
-): Promise<{ id: string }> {
+export async function deleteNote(id: string): Promise<{ id: string }> {
+  const userId = await verifySessionAndGetUserId();
   const supabase = await createClient();
 
   const { error } = await supabase
@@ -42,34 +41,49 @@ export async function deleteNote(
     .select("id");
 
   if (error) {
+    console.error(`Error deleting note ${id} for user ${userId}:`, error);
     throw new Error(error.message);
   }
 
+  revalidatePath("/notes");
+  revalidatePath(`/notes/${id}`);
+
+  console.log(`Note ${id} deleted successfully by user ${userId}.`);
   return { id: id };
 }
 
 export async function saveNote(
-  note: Note,
+  inputNote: Omit<Note, "user_id"> & { user_id?: string; id: string },
 ): Promise<{ success: boolean; error?: string }> {
-  try {
-    const supabase = await createClient();
+  const userId = await verifySessionAndGetUserId();
+  const supabase = await createClient();
 
+  const noteToSave: Note = {
+    ...inputNote,
+    user_id: userId,
+    updated_at: new Date().toISOString(),
+  };
+
+  try {
     const { error } = await supabase
       .from("notes")
-      .upsert(note, { onConflict: "id" })
+      .upsert(noteToSave, { onConflict: "id" })
       .select()
       .single();
 
     if (error) {
-      console.error("Error saving note:", error);
+      console.error(`Error saving note ${noteToSave.id} for user ${userId}:`, error);
       return { success: false, error: error.message };
     }
 
-    revalidatePath(`/notes/${note.id}`);
+    revalidatePath(`/notes/${noteToSave.id}`);
+    revalidatePath("/notes");
 
+    console.log(`Note ${noteToSave.id} saved successfully by user ${userId}.`);
     return { success: true };
+
   } catch (error) {
-    console.error("Unexpected error saving note:", error);
+    console.error(`Unexpected error saving note ${noteToSave.id} for user ${userId}:`, error);
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error occurred",
