@@ -1,4 +1,5 @@
+import EditorSkeleton from "@/components/skeletons/editor-skeleton";
+
 export default function Loading() {
-  // Or a custom loading skeleton component
-  return <p>Loading...</p>;
+  return <EditorSkeleton/>
 }

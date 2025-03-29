@@ -48,7 +48,9 @@ export async function deleteNote(
   return { id: id };
 }
 
-export async function saveNote(note: Note): Promise<{ success: boolean; error?: string }> {
+export async function saveNote(
+  note: Note,
+): Promise<{ success: boolean; error?: string }> {
   try {
     const supabase = await createClient();
 
@@ -70,7 +72,7 @@ export async function saveNote(note: Note): Promise<{ success: boolean; error?: 
     console.error("Unexpected error saving note:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Unknown error occurred"
+      error: error instanceof Error ? error.message : "Unknown error occurred",
     };
   }
 }

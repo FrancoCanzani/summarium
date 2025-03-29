@@ -4,7 +4,11 @@ import type { Metadata } from "next";
 import { Note } from "@/lib/types";
 import { getNote } from "@/lib/api/notes";
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
   const { id } = await params;
   const supabase = await createClient();
   const {
@@ -56,5 +60,5 @@ export default async function EditorPage({
     initialNote = note;
   }
 
-  return <Editor initialNote={initialNote} user={ user} />;
+  return <Editor initialNote={initialNote} user={user} />;
 }

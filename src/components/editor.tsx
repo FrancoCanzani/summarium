@@ -7,21 +7,24 @@ import localForage from "localforage";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
-import AiAssistant from "./ai-assistant";
 import AudioTranscriber from "./audio-transcriber";
 import EditorFooter from "./editor-footer";
 import EditorHeader from "./editor-header";
-import { RightSidebar } from "./right-sidebar";
 import { ToolbarProvider } from "./toolbars/toolbar-provider";
 import FloatingToolbar from "./editor-floating-toolbar";
 import { User } from "@supabase/supabase-js";
 import { saveNote } from "@/lib/actions";
 
-export default function Editor({ initialNote, user }: { initialNote: Note, user: User }) {
+export default function Editor({
+  initialNote,
+  user,
+}: {
+  initialNote: Note;
+  user: User;
+}) {
   const [title, setTitle] = useState(initialNote?.title || "");
   const [content, setContent] = useState(initialNote?.content || "");
   const [isSaved, setIsSaved] = useState(true);
-  const [showAssistant, setShowAssistant] = useState(false);
   const [showTranscriber, setShowTranscriber] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -111,8 +114,6 @@ export default function Editor({ initialNote, user }: { initialNote: Note, user:
           <EditorHeader
             title={title}
             editor={editor}
-            showAssistant={showAssistant}
-            setShowAssistant={setShowAssistant}
             showTranscriber={showTranscriber}
             setShowTranscriber={setShowTranscriber}
           />
@@ -138,12 +139,12 @@ export default function Editor({ initialNote, user }: { initialNote: Note, user:
 
           <FloatingToolbar />
 
-          <EditorFooter editor={editor} isSaved={isSaved} isSaving={isPending} />
+          <EditorFooter
+            editor={editor}
+            isSaved={isSaved}
+            isSaving={isPending}
+          />
         </div>
-
-        <RightSidebar open={showAssistant}>
-          <AiAssistant editor={editor} />
-        </RightSidebar>
       </div>
     </ToolbarProvider>
   );

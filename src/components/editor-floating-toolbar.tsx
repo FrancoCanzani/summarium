@@ -152,7 +152,7 @@ export default function FloatingToolbar() {
   ];
 
   return (
-    <div className="bg-sidebar fixed bottom-10 left-1/2 z-10 -translate-x-1/2 transform rounded-sm border shadow-sm">
+    <div className="bg-sidebar absolute bottom-10 left-1/2 z-10 -translate-x-1/2 transform rounded-sm border shadow-sm">
       <div className="flex items-center justify-center gap-1 p-0.5">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -181,7 +181,7 @@ export default function FloatingToolbar() {
                     .run()
                 }
                 className={cn(
-                  "flex items-center rounded-sm gap-2 text-sm",
+                  "flex items-center gap-2 rounded-sm text-sm",
                   editor.isActive("heading", { level: heading.level }) &&
                     "bg-accent",
                 )}
@@ -193,7 +193,7 @@ export default function FloatingToolbar() {
             <DropdownMenuItem
               onClick={() => editor.chain().focus().setParagraph().run()}
               className={cn(
-                "flex items-center rounded-sm gap-2 text-sm",
+                "flex items-center gap-2 rounded-sm text-sm",
                 editor.isActive("paragraph") && "bg-accent",
               )}
             >
@@ -283,7 +283,7 @@ export default function FloatingToolbar() {
                   key={index}
                   onClick={item.action}
                   className={cn(
-                    "flex items-center rounded-sm gap-2 text-sm",
+                    "flex items-center gap-2 rounded-sm text-sm",
                     item.isActive() && "bg-accent",
                   )}
                 >
