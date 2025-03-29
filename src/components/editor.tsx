@@ -14,11 +14,7 @@ import { ToolbarProvider } from "./toolbars/toolbar-provider";
 import FloatingToolbar from "./editor-floating-toolbar";
 import { saveNote } from "@/lib/actions";
 
-export default function Editor({
-  initialNote,
-}: {
-  initialNote: Note;
-}) {
+export default function Editor({ initialNote }: { initialNote: Note }) {
   const [title, setTitle] = useState(initialNote?.title || "");
   const [content, setContent] = useState(initialNote?.content || "");
   const [isSaved, setIsSaved] = useState(true);

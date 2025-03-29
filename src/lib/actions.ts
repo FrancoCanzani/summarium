@@ -48,7 +48,6 @@ export async function deleteNote(id: string): Promise<{ id: string }> {
   revalidatePath("/notes");
   revalidatePath(`/notes/${id}`);
 
-  console.log(`Note ${id} deleted successfully by user ${userId}.`);
   return { id: id };
 }
 
@@ -79,7 +78,6 @@ export async function saveNote(
     revalidatePath(`/notes/${noteToSave.id}`);
     revalidatePath("/notes");
 
-    console.log(`Note ${noteToSave.id} saved successfully by user ${userId}.`);
     return { success: true };
 
   } catch (error) {

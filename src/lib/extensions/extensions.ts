@@ -78,8 +78,6 @@ export const extensions = [
 
       const json = await res.json();
 
-      console.log(json.text);
-
       return json.text;
     },
   }),
