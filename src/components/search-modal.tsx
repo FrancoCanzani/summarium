@@ -14,15 +14,8 @@ import { Input } from "@/components/ui/input";
 import { Note } from "@/lib/types";
 import Link from "next/link";
 import { useQueryState } from "nuqs";
-import { use } from "react";
 
-export default function SearchModal({
-  notesPromise,
-}: {
-  notesPromise: Promise<Note[]>;
-}) {
-  const notes = use(notesPromise);
-
+export default function SearchModal({ notes }: { notes: Note[] }) {
   const [searchQuery, setSearchQuery] = useQueryState("q");
   const [searchResults, setSearchResults] = useState<FuseResult<Note>[]>([]);
   const [isOpen, setIsOpen] = useState(false);

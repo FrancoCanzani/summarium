@@ -6,15 +6,9 @@ import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import { Note } from "@/lib/types";
 import { useParams } from "next/navigation";
-import { use } from "react";
 
-export default function SidebarNotes({
-  notesPromise,
-}: {
-  notesPromise: Promise<Note[]>;
-}) {
+export default function SidebarNotes({ notes }: { notes: Note[] }) {
   const { id } = useParams();
-  const notes = use(notesPromise);
 
   return (
     <SidebarGroup>

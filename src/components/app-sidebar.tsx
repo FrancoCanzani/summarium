@@ -7,14 +7,16 @@ import {
 import Link from "next/link";
 import { getNotes } from "@/lib/api/notes";
 import SidebarNotes from "./sidebar-notes";
-import { Suspense } from "react";
-import SidebarNotesSkeleton from "./skeletons/sidebar-notes-skeleton";
 import { generateNextNoteId } from "@/lib/api/notes";
-import SidebarSearchSkeleton from "./skeletons/sidebar-search-skeleton";
 import SearchModal from "./search-modal";
+import { cache } from "react";
+
+const cachedNotes = cache(async () => {
+  return await getNotes();
+});
 
 export async function AppSidebar() {
-  const notesPromise = getNotes();
+  const notes = await cachedNotes();
 
   return (
     <Sidebar className="flex h-screen flex-col">
@@ -29,15 +31,11 @@ export async function AppSidebar() {
         >
           New Note
         </Link>
-        <Suspense fallback={<SidebarSearchSkeleton />}>
-          <SearchModal notesPromise={notesPromise} />
-        </Suspense>
+        <SearchModal notes={notes} />
       </SidebarHeader>
 
       <SidebarContent className="border-y border-dashed">
-        <Suspense fallback={<SidebarNotesSkeleton />}>
-          <SidebarNotes notesPromise={notesPromise} />
-        </Suspense>
+        <SidebarNotes notes={notes} />
       </SidebarContent>
 
       <SidebarFooter className="gap-0">
