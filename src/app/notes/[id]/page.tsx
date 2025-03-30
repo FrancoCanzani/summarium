@@ -2,40 +2,44 @@ import Editor from "@/components/editor";
 import { Note } from "@/lib/types";
 import { unstable_cache } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { validateUUID } from "@/lib/utils";
+import { notFound } from "next/navigation";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 export default async function EditorPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
+  const { id: rawId } = await params;
+  const id = validateUUID(rawId);
   const supabase = await createClient();
 
-  // Accessing dynamic data sources such as headers or cookies inside a cache scope
-  // is not supported. If you need this data inside a cached function use headers outside
-  // of the cached function and pass the required dynamic data in as an argument.
-
   const getCachedNote = unstable_cache(
-    async (id: string) => {
-      const { data: note } = await supabase
+    async (noteId: string, client: SupabaseClient) => {
+      const { data: note } = await client
         .from("notes")
         .select("*")
-        .eq("id", id)
+        .eq("id", noteId)
         .single();
       return note;
     },
     [`note-${id}`],
   );
 
-  const note = await getCachedNote(id);
+  try {
+    const note = await getCachedNote(id, supabase);
 
-  const initialNote: Note = note ?? {
-    id,
-    title: "New note",
-    content: "",
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  };
+    const initialNote: Note = note ?? {
+      id,
+      title: "New note",
+      content: "",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
 
-  return <Editor initialNote={initialNote} />;
+    return <Editor initialNote={initialNote} />;
+  } catch {
+    notFound();
+  }
 }

@@ -8,7 +8,7 @@ export default function NotFound() {
         <div className="text-2xl font-semibold lg:text-3xl">
           404 - Page Not Found
         </div>
-        <div className="mt-2 text-balance">
+        <div className="mt-2 max-w-3xl text-balance">
           Sorry, we couldn&apos;t find the page you were looking for. It might
           have been moved or deleted.
         </div>

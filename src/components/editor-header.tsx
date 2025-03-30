@@ -1,6 +1,5 @@
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { deleteNote } from "@/lib/actions";
-import { useQueryClient } from "@tanstack/react-query";
 import { Editor } from "@tiptap/core";
 import { Trash } from "lucide-react";
 import { redirect, useParams } from "next/navigation";
@@ -26,7 +25,6 @@ export default function EditorHeader({
   setShowTranscriber: Dispatch<SetStateAction<boolean>>;
 }) {
   const isMobile = useIsMobile();
-  const queryClient = useQueryClient();
   const { id } = useParams();
 
   return (
@@ -43,8 +41,6 @@ export default function EditorHeader({
               toast.promise(deleteNote(id as string), {
                 loading: "Loading...",
                 success: () => {
-                  queryClient.invalidateQueries({ queryKey: ["notes"] });
-
                   return `Note has been deleted`;
                 },
                 error: "Failed to delete note. Please try again.",

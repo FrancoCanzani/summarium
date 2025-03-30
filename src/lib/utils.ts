@@ -1,13 +1,11 @@
-import { QueryClient } from "@tanstack/react-query";
 import { clsx, type ClassValue } from "clsx";
-import { cache } from "react";
+import { notFound } from "next/navigation";
 import { twMerge } from "tailwind-merge";
+import { z } from "zod";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
-
-export const getQueryClient = cache(() => new QueryClient());
 
 export function htmlToTextDOMParser(html: string): string {
   const doc = new DOMParser().parseFromString(html, "text/html"); // 'text/html' is critical
@@ -22,3 +20,13 @@ export const fetcher = (url: string) =>
     }
     return res.json();
   });
+
+export const uuidV4Schema = z.string().uuid("Invalid UUID format");
+
+export function validateUUID(id: string) {
+  const result = uuidV4Schema.safeParse(id);
+  if (!result.success) {
+    notFound();
+  }
+  return result.data;
+}
