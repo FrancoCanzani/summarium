@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { AlertTriangle } from "lucide-react"; // Using an icon for visual cue
+import { AlertTriangle } from "lucide-react";
 
 export default function Error({
   error,
@@ -20,11 +19,6 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
-    // Log the error to an error reporting service or console
-    console.error("Unhandled Application Error:", error);
-  }, [error]);
-
   return (
     <div className="bg-background text-foreground flex min-h-screen w-full items-center justify-center p-4">
       <Card className="border-destructive/50 shadow-destructive/10 w-full max-w-md rounded-sm shadow-lg">
@@ -39,7 +33,6 @@ export default function Error({
           </CardDescription>
         </CardHeader>
         <CardContent className="text-center">
-          {/* Optionally display more info in development */}
           {process.env.NODE_ENV === "development" && error?.message && (
             <div className="border-destructive/30 bg-destructive/5 mt-4 space-y-2 rounded-sm border border-dashed p-3 text-left text-xs">
               <p className="text-destructive font-medium">
