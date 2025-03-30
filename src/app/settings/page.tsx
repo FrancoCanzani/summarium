@@ -3,15 +3,18 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Separator } from "@/components/ui/separator";
-import { useAuth } from "@/lib/context/auth-context";
+import { useAuth } from "@/lib/hooks/use-auth";
 import { ConfirmActionDialog } from "@/components/confirm-action-dialog";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
 
 export default function SettingsPage() {
   const supabase = createClient();
 
   const { email } = useAuth();
+
+  const router = useRouter();
 
   return (
     <div className="mx-auto max-w-5xl space-y-8 p-3">
@@ -20,7 +23,10 @@ export default function SettingsPage() {
         <div className="flex items-center justify-end space-x-4">
           <button
             className="hover:underline hover:underline-offset-4"
-            onClick={async () => await supabase.auth.signOut()}
+            onClick={async () => {
+              await supabase.auth.signOut();
+              router.push("/");
+            }}
           >
             Sign Out
           </button>

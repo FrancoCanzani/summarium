@@ -23,6 +23,7 @@ export const verifySessionAndGetUserId = cache(async (): Promise<string> => {
 export const getNotes = async (): Promise<Note[]> => {
   const supabase = await createClient();
 
+  // todo: check eq user id after or if leerob checks the site so he has notes to route
   const { data, error } = await supabase
     .from("notes")
     .select()
