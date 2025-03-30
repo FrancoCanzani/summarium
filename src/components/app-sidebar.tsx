@@ -5,15 +5,16 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-import SearchModal from "./search-modal";
-import { fetchNotes } from "@/lib/api/notes";
+import { getNotes } from "@/lib/api/notes";
 import SidebarNotes from "./sidebar-notes";
 import { Suspense } from "react";
 import SidebarNotesSkeleton from "./skeletons/sidebar-notes-skeleton";
+import { generateNextNoteId } from "@/lib/api/notes";
 import SidebarSearchSkeleton from "./skeletons/sidebar-search-skeleton";
+import SearchModal from "./search-modal";
 
 export async function AppSidebar() {
-  const notes = fetchNotes();
+  const notesPromise = getNotes();
 
   return (
     <Sidebar className="flex h-screen flex-col">
@@ -23,19 +24,19 @@ export async function AppSidebar() {
         </h2>
 
         <Link
-          href={`/notes/${crypto.randomUUID()}`}
+          href={`/notes/${await generateNextNoteId()}`}
           className="hover:bg-accent p-2"
         >
           New Note
         </Link>
         <Suspense fallback={<SidebarSearchSkeleton />}>
-          <SearchModal notesPromise={notes} />
+          <SearchModal notesPromise={notesPromise} />
         </Suspense>
       </SidebarHeader>
 
       <SidebarContent className="border-y border-dashed">
         <Suspense fallback={<SidebarNotesSkeleton />}>
-          <SidebarNotes notesPromise={notes} />
+          <SidebarNotes notesPromise={notesPromise} />
         </Suspense>
       </SidebarContent>
 

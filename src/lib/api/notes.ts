@@ -1,7 +1,7 @@
 import { Note } from "../types";
 import { createClient } from "../supabase/server";
-import { cache } from "react";
 import { redirect } from "next/navigation";
+import { cache } from "react";
 
 import "server-only";
 
@@ -20,15 +20,12 @@ export const verifySessionAndGetUserId = cache(async (): Promise<string> => {
   return user.id;
 });
 
-export const fetchNotes = async (): Promise<Note[]> => {
-  const userId = await verifySessionAndGetUserId();
-
+export const getNotes = async (): Promise<Note[]> => {
   const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("notes")
     .select()
-    .eq("user_id", userId)
     .order("updated_at", { ascending: false });
 
   if (error) {
@@ -39,15 +36,12 @@ export const fetchNotes = async (): Promise<Note[]> => {
   return data as Note[];
 };
 
-export const fetchNote = async (id: string): Promise<Note | null> => {
-  const userId = await verifySessionAndGetUserId();
-
+export const getNote = async (id: string): Promise<Note | null> => {
   const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("notes")
     .select()
-    .eq("user_id", userId)
     .eq("id", id)
     .single();
 
@@ -62,8 +56,6 @@ export const fetchNote = async (id: string): Promise<Note | null> => {
   return data as Note;
 };
 
-export const getNote = cache(fetchNote);
-
-export const preloadNote = (id: string) => {
-  void getNote(id);
-};
+export const generateNextNoteId = cache(async () => {
+  return crypto.randomUUID();
+});

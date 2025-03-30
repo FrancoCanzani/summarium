@@ -1,9 +1,10 @@
-"use server"
+"use server";
 
 import OpenAI from "openai";
 import { createClient } from "./supabase/server";
 import { Note } from "./types";
 import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { verifySessionAndGetUserId } from "./api/notes";
 
 const openai = new OpenAI();
@@ -47,6 +48,7 @@ export async function deleteNote(id: string): Promise<{ id: string }> {
 
   revalidatePath("/notes");
   revalidatePath(`/notes/${id}`);
+  revalidateTag(`note-${id}`);
 
   return { id: id };
 }
@@ -71,17 +73,23 @@ export async function saveNote(
       .single();
 
     if (error) {
-      console.error(`Error saving note ${noteToSave.id} for user ${userId}:`, error);
+      console.error(
+        `Error saving note ${noteToSave.id} for user ${userId}:`,
+        error,
+      );
       return { success: false, error: error.message };
     }
 
     revalidatePath(`/notes/${noteToSave.id}`);
     revalidatePath("/notes");
+    revalidateTag(`note-${noteToSave.id}`);
 
     return { success: true };
-
   } catch (error) {
-    console.error(`Unexpected error saving note ${noteToSave.id} for user ${userId}:`, error);
+    console.error(
+      `Unexpected error saving note ${noteToSave.id} for user ${userId}:`,
+      error,
+    );
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error occurred",

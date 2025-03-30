@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { randomUUID } from "crypto";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { generateNextNoteId } from "@/lib/api/notes";
 
 export default async function NotesPage() {
   return (
@@ -15,7 +15,7 @@ export default async function NotesPage() {
           or create a new one
         </p>
         <Link
-          href={`/notes/${randomUUID()}`}
+          href={`/notes/${await generateNextNoteId()}`}
           className="px-4 py-2 decoration-dashed underline-offset-4 hover:underline"
         >
           Create New Note

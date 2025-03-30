@@ -13,7 +13,7 @@ export default function SidebarNotes({
 }: {
   notesPromise: Promise<Note[]>;
 }) {
-  const { id: currentNoteId } = useParams();
+  const { id } = useParams();
   const notes = use(notesPromise);
 
   return (
@@ -25,9 +25,7 @@ export default function SidebarNotes({
             key={item.id}
             className={cn(
               "hover:bg-zed-light flex w-full flex-col items-start justify-between gap-1.5 overflow-hidden px-2 py-1.5 text-xs",
-              currentNoteId === item.id
-                ? "bg-zed-light border-l-zed border-l-2 font-medium"
-                : "bg-sidebar",
+              id === item.id ? "bg-zed-light font-medium" : "bg-sidebar",
             )}
           >
             <span className="w-full truncate text-start">
