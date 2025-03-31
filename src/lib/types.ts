@@ -10,3 +10,16 @@ export interface Note {
   archived_at?: string | null;
   deleted_at?: string | null;
 }
+
+export interface Journal {
+  id: string;
+  user_id?: string;
+  day: string;
+  content: string | null;
+  encrypted_content?: string | null;
+  sanitized_content?: string | null;
+  created_at?: string;
+  updated_at: string;
+  archived_at?: string | null;
+  deleted_at?: string | null;
+}

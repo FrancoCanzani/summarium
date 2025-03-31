@@ -30,3 +30,26 @@ export function validateUUID(id: string) {
   }
   return result.data;
 }
+
+export const getJournalDate = (dateParam?: string) => {
+  const date = dateParam ? new Date(dateParam) : new Date();
+
+  if (isNaN(date.getTime())) {
+    throw new Error("Invalid date parameter");
+  }
+
+  const urlDate = date.toISOString().split("T")[0];
+
+  const displayDate = date.toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  return {
+    urlParam: urlDate,
+    display: displayDate,
+    timestamp: date.getTime(),
+  };
+};

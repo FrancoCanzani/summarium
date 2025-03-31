@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
-import { Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import Providers from "@/components/providers";
 
 import "./globals.css";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Summarium",
@@ -23,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistMono.variable} font-[family-name:var(--font-geist-mono)] antialiased`}
+        className={`${inter.className} font-[family-name:var(--font-geist-mono)] antialiased`}
       >
         <Providers>
           {children}

@@ -1,13 +1,97 @@
 "use server";
 
-import OpenAI from "openai";
 import { createClient } from "./supabase/server";
-import { Note } from "./types";
+import { Journal, Note } from "./types";
 import { revalidatePath } from "next/cache";
 import { revalidateTag } from "next/cache";
 import { verifySessionAndGetUserId } from "./api/notes";
+import OpenAI from "openai";
 
 const openai = new OpenAI();
+export async function deleteJournal(id: string): Promise<{ id: string }> {
+  const userId = await verifySessionAndGetUserId();
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("journals")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", userId)
+    .select("id");
+
+  if (error) {
+    console.error(`Error deleting journal ${id} for user ${userId}:`, error);
+    throw new Error(error.message);
+  }
+
+  revalidatePath("/journal");
+  revalidatePath(`/journal/[day]`);
+  revalidateTag(`journal-${id}`);
+
+  return { id };
+}
+
+export async function saveJournal(
+  inputJournal: Omit<Journal, "user_id"> & { user_id?: string; id: string },
+): Promise<{ success: boolean; error?: string }> {
+  const userId = await verifySessionAndGetUserId();
+  const supabase = await createClient();
+
+  try {
+    const { data: existingJournal, error: fetchError } = await supabase
+      .from("journals")
+      .select("id")
+      .eq("user_id", userId)
+      .eq("day", inputJournal.day)
+      .single();
+
+    if (fetchError && fetchError.code !== "PGRST116") {
+      console.error("Error checking existing journal:", fetchError);
+      return { success: false, error: fetchError.message };
+    }
+
+    const journalToSave: Journal = {
+      ...inputJournal,
+      id: existingJournal?.id ?? inputJournal.id,
+      user_id: userId,
+      updated_at: new Date().toISOString(),
+      created_at: inputJournal.created_at || new Date().toISOString(),
+    };
+
+    const { error } = await supabase
+      .from("journals")
+      .upsert(journalToSave, {
+        onConflict: "user_id,day",
+        ignoreDuplicates: false,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error(
+        `Error saving journal ${journalToSave.id} for user ${userId}:`,
+        error,
+      );
+      return { success: false, error: error.message };
+    }
+
+    revalidatePath("/journal");
+    revalidatePath(`/journal/${journalToSave.day}`);
+    revalidateTag(`journal-${journalToSave.id}`);
+    revalidateTag(`journal-day-${journalToSave.day}`);
+
+    return { success: true };
+  } catch (error) {
+    console.error(
+      `Unexpected error saving journal ${inputJournal.id} for user ${userId}:`,
+      error,
+    );
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error occurred",
+    };
+  }
+}
 
 export async function transcribeAudioFile(formData: FormData) {
   try {

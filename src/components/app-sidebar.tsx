@@ -10,6 +10,7 @@ import SidebarNotes from "./sidebar-notes";
 import { generateNextNoteId } from "@/lib/api/notes";
 import SearchModal from "./search-modal";
 import { cache } from "react";
+import { getJournalDate } from "@/lib/utils";
 
 const cachedNotes = cache(async () => {
   return await getNotes();
@@ -17,6 +18,8 @@ const cachedNotes = cache(async () => {
 
 export async function AppSidebar() {
   const notes = await cachedNotes();
+
+  const { urlParam: today } = getJournalDate();
 
   return (
     <Sidebar className="flex h-screen flex-col">
@@ -39,10 +42,15 @@ export async function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="gap-0">
+        <Link
+          href={`/journal?day=${today}`}
+          className="hover:bg-accent p-2 font-medium"
+        >
+          Journal
+        </Link>
         <Link href={"/docs"} className="hover:bg-accent p-2 font-medium">
           Docs
         </Link>
-
         <Link href={"/settings"} className="hover:bg-accent p-2 font-medium">
           Settings
         </Link>
