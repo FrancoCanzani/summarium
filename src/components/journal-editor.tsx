@@ -81,14 +81,14 @@ export default function JournalEditor({
 
   return (
     <ToolbarProvider editor={editor}>
-      <div className="flex h-full w-full flex-col">
-        <div className="relative mx-auto flex w-full max-w-4xl flex-1 flex-col space-y-4 px-3 py-10">
+      <div className="relative flex h-full w-full flex-col">
+        <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col space-y-4 px-3 py-10">
           <EditorContent
             editor={editor}
             className="prose prose-p:my-0 prose-xs md:prose-sm my-0 mb-14 h-full min-w-full flex-1 text-start text-black"
           />
-          <FloatingToolbar />
         </div>
+        <FloatingToolbar />
         <EditorFooter editor={editor} isSaved={isSaved} isSaving={isPending} />
       </div>
     </ToolbarProvider>
