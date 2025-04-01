@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { ReactNode } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -12,79 +11,88 @@ import { addDays, format, parse } from "date-fns";
 import { Button } from "./ui/button";
 import { CalendarOff, ChevronLeft, ChevronRight } from "lucide-react";
 import ButtonWithTooltip from "./ui/button-with-tooltip";
-import { useJournalDate } from "@/lib/hooks/use-journal-date";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { validateDateParam } from "@/lib/utils";
 
 export default function JournalDayNavigation() {
   const searchParams = useSearchParams();
   const router = useRouter();
-
   const day = searchParams.get("day");
-
-  console.log(day);
+  const today = new Date().toISOString().split("T")[0];
+  validateDateParam(day);
+  const selectedDay = day || today;
 
   const handleDayChange = (offset: number) => {
-    const currentDate = parseDate(day!);
+    const currentDate = parseDate(selectedDay);
     const newDate = addDays(currentDate, offset);
     const formattedDate = format(newDate, "yyyy-MM-dd");
-    router.push(`journal/?day=${formattedDate}`);
+    router.push(`/journal?day=${formattedDate}`);
   };
 
   const handleGoToToday = () => {
     const today = format(new Date(), "yyyy-MM-dd");
-    router.push(`journal/?day=${today}`);
+    router.push(`/journal?day=${today}`);
   };
 
   return (
-    <header className="mx-auto mt-4 flex w-full max-w-5xl flex-col items-start justify-evenly gap-4">
-      <JournalDatePicker>
-        <Button
-          variant={"ghost"}
-          size={"lg"}
-          className="p-3 text-xl font-medium sm:text-2xl lg:text-3xl"
-        >
-          {day}
-        </Button>
-      </JournalDatePicker>
-      <div className="flex items-center justify-center space-x-2 px-3">
-        <Button
-          variant={"outline"}
-          size={"xs"}
-          onClick={() => handleDayChange(-1)}
-          className="rounded-sm"
-        >
-          <ChevronLeft className="size-4" />
-        </Button>
-        <Button
-          variant={"outline"}
-          size={"xs"}
-          onClick={() => handleDayChange(1)}
-          className="rounded-sm"
-        >
-          <ChevronRight className="size-4" />
-        </Button>
-        <ButtonWithTooltip
-          tooltipText="Today"
-          variant={"outline"}
-          size={"xs"}
-          onClick={handleGoToToday}
-          className="rounded-sm"
-        >
-          <CalendarOff className="size-4" />
-        </ButtonWithTooltip>
+    <header className="bg-background sticky top-0 z-10 w-full border-b px-4 py-4">
+      <div className="mx-auto flex max-w-5xl flex-row items-center justify-between">
+        <JournalDatePicker selectedDay={selectedDay}>
+          <Button
+            variant={"ghost"}
+            size={"lg"}
+            className="p-3 text-xl font-medium sm:text-2xl lg:text-3xl"
+          >
+            {format(parseDate(selectedDay), "MMMM d, yyyy")}
+          </Button>
+        </JournalDatePicker>
+
+        <div className="flex items-center justify-center space-x-2">
+          <Button
+            variant={"outline"}
+            size={"xs"}
+            onClick={() => handleDayChange(-1)}
+            className="rounded-sm"
+          >
+            <ChevronLeft className="size-4" />
+          </Button>
+          <Button
+            variant={"outline"}
+            size={"xs"}
+            onClick={() => handleDayChange(1)}
+            className="rounded-sm"
+          >
+            <ChevronRight className="size-4" />
+          </Button>
+          <ButtonWithTooltip
+            tooltipText="Today"
+            variant={"outline"}
+            size={"xs"}
+            onClick={handleGoToToday}
+            className="rounded-sm"
+          >
+            <CalendarOff className="size-4" />
+          </ButtonWithTooltip>
+        </div>
       </div>
     </header>
   );
 }
 
-function JournalDatePicker({ children }: { children: ReactNode }) {
-  const { currentDay, setDay } = useJournalDate();
+function JournalDatePicker({
+  children,
+  selectedDay,
+}: {
+  children: ReactNode;
+  selectedDay: string;
+}) {
+  const router = useRouter();
 
   const handleSelect = (date: Date | undefined) => {
     if (date) {
       const formattedDate = format(date, "yyyy-MM-dd");
-      setDay(formattedDate);
+      router.push(`/journal?day=${formattedDate}`);
     }
   };
 
@@ -94,7 +102,7 @@ function JournalDatePicker({ children }: { children: ReactNode }) {
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
           mode="single"
-          selected={parseDate(currentDay)}
+          selected={parseDate(selectedDay)}
           onSelect={handleSelect}
           initialFocus
         />

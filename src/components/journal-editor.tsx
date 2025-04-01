@@ -3,15 +3,13 @@
 import { extensions } from "@/lib/extensions/extensions";
 import { Journal } from "@/lib/types";
 import { EditorContent, useEditor } from "@tiptap/react";
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 import EditorFooter from "./editor-footer";
 import { ToolbarProvider } from "./toolbars/toolbar-provider";
 import FloatingToolbar from "./editor-floating-toolbar";
 import { saveJournal } from "@/lib/actions";
-import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 
 export default function JournalEditor({
   initialJournal,
@@ -21,15 +19,6 @@ export default function JournalEditor({
   const [content, setContent] = useState(initialJournal?.content || "");
   const [isSaved, setIsSaved] = useState(true);
   const [isPending, startTransition] = useTransition();
-  const searchParams = useSearchParams();
-  const day = searchParams.get("day");
-
-  useEffect(() => {
-    if (initialJournal?.content !== content) {
-      setContent(initialJournal?.content || "");
-      editor?.commands.setContent(initialJournal?.content || "");
-    }
-  }, [initialJournal, searchParams]);
 
   const handleSaveJournal = async (journalData: Partial<Journal>) => {
     startTransition(async () => {
@@ -78,18 +67,28 @@ export default function JournalEditor({
     shouldRerenderOnTransaction: false,
   });
 
+  useEffect(() => {
+    if (initialJournal && editor) {
+      if (initialJournal.content !== editor.getHTML()) {
+        editor.commands.setContent(initialJournal.content || "");
+        setContent(initialJournal.content || "");
+        setIsSaved(true);
+      }
+    }
+  }, [initialJournal, editor]);
+
   if (!editor) return null;
 
   return (
     <ToolbarProvider editor={editor}>
-      <div className="w-full flex-1">
-        <EditorContent
-          editor={editor}
-          className="prose prose-p:my-0 prose-xs md:prose-sm my-0 mb-14 min-w-full flex-1 text-start text-black"
-        />
-
-        <FloatingToolbar />
-
+      <div className="flex h-full w-full flex-col">
+        <div className="relative mx-auto flex w-full max-w-4xl flex-1 flex-col space-y-4 px-3 py-10">
+          <EditorContent
+            editor={editor}
+            className="prose prose-p:my-0 prose-xs md:prose-sm my-0 mb-14 h-full min-w-full flex-1 text-start text-black"
+          />
+          <FloatingToolbar />
+        </div>
         <EditorFooter editor={editor} isSaved={isSaved} isSaving={isPending} />
       </div>
     </ToolbarProvider>

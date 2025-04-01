@@ -8,7 +8,7 @@ export default async function NotesLayout({
   return (
     <>
       <AppSidebar />
-      <main className="flex-1">{children}</main>
+      <main className="h-screen flex-1">{children}</main>
     </>
   );
 }

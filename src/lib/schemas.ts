@@ -8,3 +8,8 @@ export const AuthSchema = z.object({
 });
 
 export const uuidV4Schema = z.string().uuid("Invalid UUID format");
+
+export const journalDateSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/)
+  .date();

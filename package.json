@@ -43,7 +43,7 @@
     "ai": "^4.1.54",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "date-fns": "^4.1.0",
+    "date-fns": "^3.6.0",
     "diff": "^7.0.0",
     "fuse.js": "^7.1.0",
     "localforage": "^1.10.0",

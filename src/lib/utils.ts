@@ -1,14 +1,15 @@
 import { clsx, type ClassValue } from "clsx";
 import { notFound } from "next/navigation";
 import { twMerge } from "tailwind-merge";
-import { z } from "zod";
+import { redirect } from "next/navigation";
+import { journalDateSchema, uuidV4Schema } from "./schemas";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 export function htmlToTextDOMParser(html: string): string {
-  const doc = new DOMParser().parseFromString(html, "text/html"); // 'text/html' is critical
+  const doc = new DOMParser().parseFromString(html, "text/html");
   return doc.body.textContent || ""; //  Return empty string if body is null
 }
 
@@ -21,14 +22,39 @@ export const fetcher = (url: string) =>
     return res.json();
   });
 
-export const uuidV4Schema = z.string().uuid("Invalid UUID format");
-
 export function validateUUID(id: string) {
   const result = uuidV4Schema.safeParse(id);
   if (!result.success) {
     notFound();
   }
   return result.data;
+}
+
+export function validateDateParam(
+  dateParam: string | undefined | null,
+  redirectPath: string = "/journal",
+) {
+  if (!dateParam) {
+    const today = new Date().toISOString().split("T")[0];
+    handleRedirect(`${redirectPath}?date=${today}`);
+  }
+
+  const parseResult = journalDateSchema.safeParse(dateParam);
+
+  if (!parseResult.success) {
+    const today = new Date().toISOString().split("T")[0];
+    handleRedirect(`${redirectPath}?date=${today}`);
+  }
+
+  return dateParam;
+}
+
+function handleRedirect(url: string) {
+  if (typeof window === "undefined") {
+    redirect(url);
+  } else {
+    window.location.href = url;
+  }
 }
 
 export const getJournalDate = (dateParam?: string) => {
