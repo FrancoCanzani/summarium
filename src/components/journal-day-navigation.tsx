@@ -13,24 +13,27 @@ import { Button } from "./ui/button";
 import { CalendarOff, ChevronLeft, ChevronRight } from "lucide-react";
 import ButtonWithTooltip from "./ui/button-with-tooltip";
 import { useJournalDate } from "@/lib/hooks/use-journal-date";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function JournalDayNavigation() {
-  const { currentDay, setDay, isToday, formattedDate } = useJournalDate();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-  const parseDate = (dateString: string) => {
-    return parse(dateString, "yyyy-MM-dd", new Date());
-  };
+  const day = searchParams.get("day");
+
+  console.log(day);
 
   const handleDayChange = (offset: number) => {
-    const currentDate = parseDate(currentDay);
+    const currentDate = parseDate(day!);
     const newDate = addDays(currentDate, offset);
     const formattedDate = format(newDate, "yyyy-MM-dd");
-    setDay(formattedDate);
+    router.push(`journal/?day=${formattedDate}`);
   };
 
   const handleGoToToday = () => {
     const today = format(new Date(), "yyyy-MM-dd");
-    setDay(today);
+    router.push(`journal/?day=${today}`);
   };
 
   return (
@@ -41,7 +44,7 @@ export default function JournalDayNavigation() {
           size={"lg"}
           className="p-3 text-xl font-medium sm:text-2xl lg:text-3xl"
         >
-          {formattedDate}
+          {day}
         </Button>
       </JournalDatePicker>
       <div className="flex items-center justify-center space-x-2 px-3">
@@ -61,17 +64,15 @@ export default function JournalDayNavigation() {
         >
           <ChevronRight className="size-4" />
         </Button>
-        {!isToday && (
-          <ButtonWithTooltip
-            tooltipText="Today"
-            variant={"outline"}
-            size={"xs"}
-            onClick={handleGoToToday}
-            className="rounded-sm"
-          >
-            <CalendarOff className="size-4" />
-          </ButtonWithTooltip>
-        )}
+        <ButtonWithTooltip
+          tooltipText="Today"
+          variant={"outline"}
+          size={"xs"}
+          onClick={handleGoToToday}
+          className="rounded-sm"
+        >
+          <CalendarOff className="size-4" />
+        </ButtonWithTooltip>
       </div>
     </header>
   );

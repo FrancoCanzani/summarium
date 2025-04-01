@@ -6,7 +6,6 @@ import { useAuth } from "@/lib/hooks/use-auth";
 export default function LandingPage() {
   const { user, loading } = useAuth();
 
-  console.log(user);
   return (
     <div className="bg-background text-foreground flex h-full min-h-screen w-full flex-col items-center justify-evenly p-8">
       <header className="mb-8 text-center">

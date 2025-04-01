@@ -6,32 +6,28 @@ import { Journal } from "@/lib/types";
 export default async function JournalPage({
   searchParams,
 }: {
-  searchParams: Promise<{ date?: string }>;
+  searchParams: Promise<{ day?: string }>;
 }) {
-  const { date } = await searchParams;
+  const { day } = await searchParams;
 
-  const day = date || new Date().toISOString().split("T")[0];
-
-  console.log(day);
+  const selectedDay = day || new Date().toISOString().split("T")[0];
 
   try {
-    const journal = await getJournalByDay(day);
-
-    console.log(journal);
+    const journal = await getJournalByDay(selectedDay);
 
     const initialJournal: Journal = journal ?? {
       id: crypto.randomUUID(),
-      day: day,
+      day: selectedDay,
       content: "",
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
 
     return (
-      <main className="h-full w-full">
+      <>
         <JournalDayNavigation />
         <JournalEditor initialJournal={initialJournal} />
-      </main>
+      </>
     );
   } catch (error) {
     console.error("Error fetching journal:", error);

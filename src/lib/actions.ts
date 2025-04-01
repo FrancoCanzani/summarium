@@ -58,14 +58,10 @@ export async function saveJournal(
       created_at: inputJournal.created_at || new Date().toISOString(),
     };
 
-    const { error } = await supabase
-      .from("journals")
-      .upsert(journalToSave, {
-        onConflict: "user_id,day",
-        ignoreDuplicates: false,
-      })
-      .select()
-      .single();
+    const { error } = await supabase.from("journals").upsert(journalToSave, {
+      onConflict: "id",
+      ignoreDuplicates: false,
+    });
 
     if (error) {
       console.error(

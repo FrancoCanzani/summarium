@@ -10,6 +10,8 @@ import EditorFooter from "./editor-footer";
 import { ToolbarProvider } from "./toolbars/toolbar-provider";
 import FloatingToolbar from "./editor-floating-toolbar";
 import { saveJournal } from "@/lib/actions";
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 export default function JournalEditor({
   initialJournal,
@@ -19,6 +21,15 @@ export default function JournalEditor({
   const [content, setContent] = useState(initialJournal?.content || "");
   const [isSaved, setIsSaved] = useState(true);
   const [isPending, startTransition] = useTransition();
+  const searchParams = useSearchParams();
+  const day = searchParams.get("day");
+
+  useEffect(() => {
+    if (initialJournal?.content !== content) {
+      setContent(initialJournal?.content || "");
+      editor?.commands.setContent(initialJournal?.content || "");
+    }
+  }, [initialJournal, searchParams]);
 
   const handleSaveJournal = async (journalData: Partial<Journal>) => {
     startTransition(async () => {
