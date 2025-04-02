@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "clean": "rm -rf .next node_modules package-lock.json",
+    "clean:full": "npm run clean && npm cache clean --force"
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.2.1",
