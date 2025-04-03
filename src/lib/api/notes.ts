@@ -14,6 +14,7 @@ export const verifySessionAndGetUserId = cache(async (): Promise<string> => {
   } = await supabase.auth.getUser();
 
   if (error || !user) {
+    console.log(error)
     redirect("/login");
   }
 

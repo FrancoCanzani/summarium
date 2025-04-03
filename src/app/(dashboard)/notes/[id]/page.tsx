@@ -1,7 +1,6 @@
 import Editor from "@/components/editor";
 import { Note } from "@/lib/types";
 import { validateUUID } from "@/lib/utils";
-import { notFound } from "next/navigation";
 import { headers } from "next/headers";
 
 export default async function EditorPage({
@@ -11,35 +10,44 @@ export default async function EditorPage({
 }) {
   const { id: rawId } = await params;
   const result = validateUUID(rawId);
+
+  if (!result.success) {
+    return null
+  }
+
+  const id = result.data;
   
-  if(!result.success) {
-    return Response.json("Invalid UUID format", {status: 400} )
-}
-
-  const id = result.data
-
   try {
-    const response = await fetch(`https://symmetrical-broccoli-55w66qrx956cj5w-3000.app.github.dev/note/${id}`, { 
-    /* If the Server Component makes a fetch call to a Route Handler, it doesn ‘t know to attach the original request ‘s headers and cookies.
-    Browser → Server Component → Route Handler */
-      headers: await headers(),
+    const headersList = await headers();
+    const host = headersList.get("host") || "";
+    const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
+    
+    const response = await fetch(`${protocol}://${host}/api/note/${id}`, {
+      headers: headersList,
       cache: 'force-cache',
-      next: { tags: [`note-${id}`] } 
-    })
+      next: { tags: [`note-${id}`] }
+    });
 
+    if (!response.ok) {
+      if (response.status === 404) {
+        const initialNote: Note = {
+          id,
+          title: "New note",
+          content: "",
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+        return <Editor initialNote={initialNote} />;
+      }
+      
+      console.error("Error fetching note:", response.status, response.statusText);
+      return <div>Error loading note. Status: {response.status} {response.statusText}</div>;
+    }
 
-    const note = await response.json()
-
-    const initialNote: Note = note ?? {
-      id,
-      title: "New note",
-      content: "",
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
-
-    return <Editor initialNote={initialNote} />;
-  } catch {
-    notFound();
+    const note = await response.json();
+    return <Editor initialNote={note} />;
+  } catch (error) {
+    console.error("Error during fetch or JSON parsing:", error);
+    return <div>Error loading note: {String(error)}</div>;
   }
 }
