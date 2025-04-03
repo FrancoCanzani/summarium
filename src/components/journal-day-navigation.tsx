@@ -14,8 +14,11 @@ import ButtonWithTooltip from "./ui/button-with-tooltip";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { validateDateParam } from "@/lib/utils";
+import { fetchJournal } from "@/lib/fetchers";
+import { getQueryClient } from "@/lib/utils";
 
 export default function JournalDayNavigation() {
+  const queryClient = getQueryClient();
   const searchParams = useSearchParams();
   const router = useRouter();
   const day = searchParams.get("day");
@@ -35,6 +38,33 @@ export default function JournalDayNavigation() {
     router.push(`/journal?day=${today}`);
   };
 
+  const prefetchJournalData = async (date: string) => {
+    const formattedDate = format(parseDate(date), "yyyy-MM-dd");
+    await queryClient.prefetchQuery({
+      queryKey: [`journal-${formattedDate}`],
+      queryFn: async () => await fetchJournal(formattedDate),
+    });
+  };
+
+  const prefetchPreviousDay = async () => {
+    const currentDate = parseDate(selectedDay);
+    const previousDate = addDays(currentDate, -1);
+    const formattedDate = format(previousDate, "yyyy-MM-dd");
+    await prefetchJournalData(formattedDate);
+  };
+
+  const prefetchNextDay = async () => {
+    const currentDate = parseDate(selectedDay);
+    const nextDate = addDays(currentDate, 1);
+    const formattedDate = format(nextDate, "yyyy-MM-dd");
+    await prefetchJournalData(formattedDate);
+  };
+
+  const prefetchToday = async () => {
+    const today = format(new Date(), "yyyy-MM-dd");
+    await prefetchJournalData(today);
+  };
+
   return (
     <header className="bg-background sticky top-0 z-10 w-full px-3 py-4">
       <div className="mx-auto flex max-w-5xl flex-row items-center justify-between">
@@ -43,17 +73,38 @@ export default function JournalDayNavigation() {
             variant={"ghost"}
             size={"lg"}
             className="p-3 text-xl font-medium sm:text-2xl lg:text-3xl"
+            onMouseEnter={async () => {
+              const formattedDate = format(
+                parseDate(selectedDay),
+                "yyyy-MM-dd",
+              );
+              await queryClient.prefetchQuery({
+                queryKey: [`journal-${formattedDate}`],
+                queryFn: async () => await fetchJournal(formattedDate),
+              });
+            }}
+            onFocus={async () => {
+              const formattedDate = format(
+                parseDate(selectedDay),
+                "yyyy-MM-dd",
+              );
+              await queryClient.prefetchQuery({
+                queryKey: [`journal-${formattedDate}`],
+                queryFn: async () => await fetchJournal(formattedDate),
+              });
+            }}
           >
             {format(parseDate(selectedDay), "MMMM d, yyyy")}
           </Button>
         </JournalDatePicker>
-
         <div className="flex items-center justify-center space-x-2">
           <Button
             variant={"outline"}
             size={"xs"}
             onClick={() => handleDayChange(-1)}
             className="rounded-sm"
+            onMouseEnter={prefetchPreviousDay}
+            onFocus={prefetchPreviousDay}
           >
             <ChevronLeft className="size-4" />
           </Button>
@@ -62,6 +113,8 @@ export default function JournalDayNavigation() {
             size={"xs"}
             onClick={() => handleDayChange(1)}
             className="rounded-sm"
+            onMouseEnter={prefetchNextDay}
+            onFocus={prefetchNextDay}
           >
             <ChevronRight className="size-4" />
           </Button>
@@ -71,6 +124,8 @@ export default function JournalDayNavigation() {
             size={"xs"}
             onClick={handleGoToToday}
             className="rounded-sm"
+            onMouseEnter={prefetchToday}
+            onFocus={prefetchToday}
           >
             <CalendarOff className="size-4" />
           </ButtonWithTooltip>
@@ -88,14 +143,12 @@ function JournalDatePicker({
   selectedDay: string;
 }) {
   const router = useRouter();
-
   const handleSelect = (date: Date | undefined) => {
     if (date) {
       const formattedDate = format(date, "yyyy-MM-dd");
       router.push(`/journal?day=${formattedDate}`);
     }
   };
-
   return (
     <Popover>
       <PopoverTrigger asChild>{children}</PopoverTrigger>

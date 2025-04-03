@@ -14,7 +14,7 @@ export const verifySessionAndGetUserId = cache(async (): Promise<string> => {
   } = await supabase.auth.getUser();
 
   if (error || !user) {
-    console.log(error)
+    console.log(error);
     redirect("/login");
   }
 
@@ -36,26 +36,6 @@ export const getNotes = async (): Promise<Note[]> => {
   }
 
   return data as Note[];
-};
-
-export const getNote = async (id: string): Promise<Note | null> => {
-  const supabase = await createClient();
-
-  const { data, error } = await supabase
-    .from("notes")
-    .select()
-    .eq("id", id)
-    .single();
-
-  if (error) {
-    if (error.code === "PGRST116") {
-      return null;
-    }
-    console.error(`Error fetching note ${id}:`, error);
-    throw new Error(error.message);
-  }
-
-  return data as Note;
 };
 
 export const generateNextNoteId = cache(async () => {
