@@ -1,5 +1,4 @@
 import { createClient } from "@/lib/supabase/server";
-import { verifySessionAndGetUserId } from "@/lib/api/notes";
 import { validateUUID } from "@/lib/utils";
 
 export async function GET(
@@ -19,13 +18,20 @@ export async function GET(
 
   const supabase = await createClient();
 
-  const userId = await verifySessionAndGetUserId();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (!user || authError) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   const { data: note, error } = await supabase
     .from("notes")
     .select("*")
     .eq("id", id)
-    .eq("user_id", userId)
+    .eq("user_id", user?.id)
     .single();
 
   if (error) {
