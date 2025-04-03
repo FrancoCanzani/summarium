@@ -10,7 +10,7 @@ export default function EditorFooter({
   isSaving?: boolean;
 }) {
   return (
-    <div className="bg-background sticky bottom-0 mx-auto flex w-full items-center justify-between space-x-2 p-1.5 text-xs text-gray-600">
+    <div className="bg-background sticky bottom-0 mx-auto flex w-full items-center justify-between space-x-2 p-2 text-xs text-gray-600">
       {isSaved && <span>Saved</span>}
       {isSaving && <span>Saving</span>}
       <div className="flex w-full items-center justify-end space-x-1">

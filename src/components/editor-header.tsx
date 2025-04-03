@@ -14,12 +14,10 @@ import ButtonWithTooltip from "./ui/button-with-tooltip";
 import { SidebarTrigger } from "./ui/sidebar";
 
 export default function EditorHeader({
-  title,
   editor,
   showTranscriber,
   setShowTranscriber,
 }: {
-  title: string;
   editor: Editor;
   showTranscriber: boolean;
   setShowTranscriber: Dispatch<SetStateAction<boolean>>;
@@ -29,10 +27,8 @@ export default function EditorHeader({
 
   return (
     <header className="bg-background sticky top-0 z-10 w-full">
-      <div className="flex w-full items-start justify-between px-1 py-2">
-        <div className="flex items-center justify-start space-x-1.5">
-          {isMobile && <SidebarTrigger />} <h2>{title}</h2>
-        </div>
+      <div className="flex w-full items-start justify-between p-2">
+        <div>{isMobile && <SidebarTrigger />}</div>
         <div className="flex items-center justify-start space-x-1.5">
           <ConfirmActionDialog
             title="Delete this note?"

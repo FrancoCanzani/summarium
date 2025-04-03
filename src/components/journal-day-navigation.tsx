@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { validateDateParam } from "@/lib/utils";
 import { fetchJournal } from "@/lib/fetchers";
 import { getQueryClient } from "@/lib/utils";
+import { SidebarTrigger } from "./ui/sidebar";
 
 export default function JournalDayNavigation() {
   const queryClient = getQueryClient();
@@ -67,7 +68,10 @@ export default function JournalDayNavigation() {
   return (
     <header className="bg-background sticky top-0 z-10 w-full px-3 py-4">
       <div className="mx-auto flex max-w-5xl flex-row items-center justify-between">
-        <JournalDatePicker selectedDay={selectedDay} />
+        <div className="flex items-center justify-start space-x-1.5">
+          <SidebarTrigger />
+          <JournalDatePicker selectedDay={selectedDay} />
+        </div>
         <div className="flex items-center justify-center space-x-2">
           <Button
             variant={"outline"}

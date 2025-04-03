@@ -99,10 +99,9 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
 
   return (
     <ToolbarProvider editor={editor}>
-      <div className="flex min-h-svh w-full">
+      <div className="flex min-h-full w-full">
         <div className="relative mx-auto flex min-h-svh flex-1 flex-col">
           <EditorHeader
-            title={title}
             editor={editor}
             showTranscriber={showTranscriber}
             setShowTranscriber={setShowTranscriber}
