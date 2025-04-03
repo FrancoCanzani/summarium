@@ -152,7 +152,7 @@ export default function FloatingToolbar() {
   ];
 
   return (
-    <div className="bg-sidebar sticky bottom-10 mx-auto rounded-sm border shadow-sm">
+    <div className="bg-background sticky bottom-10 mx-auto rounded-sm border shadow-sm">
       <div className="flex items-center justify-center gap-1 p-0.5">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

@@ -1,10 +1,8 @@
 import Editor from "@/components/editor";
 import { Note } from "@/lib/types";
-import { unstable_cache } from "next/cache";
-import { createClient } from "@/lib/supabase/server";
 import { validateUUID } from "@/lib/utils";
 import { notFound } from "next/navigation";
-import { SupabaseClient } from "@supabase/supabase-js";
+import { headers } from "next/headers";
 
 export default async function EditorPage({
   params,
@@ -12,23 +10,25 @@ export default async function EditorPage({
   params: Promise<{ id: string }>;
 }) {
   const { id: rawId } = await params;
-  const id = validateUUID(rawId);
-  const supabase = await createClient();
+  const result = validateUUID(rawId);
+  
+  if(!result.success) {
+    return Response.json("Invalid UUID format", {status: 400} )
+}
 
-  const getCachedNote = unstable_cache(
-    async (noteId: string, client: SupabaseClient) => {
-      const { data: note } = await client
-        .from("notes")
-        .select("*")
-        .eq("id", noteId)
-        .single();
-      return note;
-    },
-    [`note-${id}`],
-  );
+  const id = result.data
 
   try {
-    const note = await getCachedNote(id, supabase);
+    const response = await fetch(`https://symmetrical-broccoli-55w66qrx956cj5w-3000.app.github.dev/note/${id}`, { 
+    /* If the Server Component makes a fetch call to a Route Handler, it doesn ‘t know to attach the original request ‘s headers and cookies.
+    Browser → Server Component → Route Handler */
+      headers: await headers(),
+      cache: 'force-cache',
+      next: { tags: [`note-${id}`] } 
+    })
+
+
+    const note = await response.json()
 
     const initialNote: Note = note ?? {
       id,

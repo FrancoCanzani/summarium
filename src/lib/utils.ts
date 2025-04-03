@@ -1,5 +1,4 @@
 import { clsx, type ClassValue } from "clsx";
-import { notFound } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 import { redirect } from "next/navigation";
 import { journalDateSchema, uuidV4Schema } from "./schemas";
@@ -24,10 +23,8 @@ export const fetcher = (url: string) =>
 
 export function validateUUID(id: string) {
   const result = uuidV4Schema.safeParse(id);
-  if (!result.success) {
-    notFound();
-  }
-  return result.data;
+
+  return result;
 }
 
 export function validateDateParam(

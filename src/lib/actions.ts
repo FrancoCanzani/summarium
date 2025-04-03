@@ -7,7 +7,6 @@ import { revalidateTag } from "next/cache";
 import { verifySessionAndGetUserId } from "./api/notes";
 import OpenAI from "openai";
 
-const openai = new OpenAI();
 export async function deleteJournal(id: string): Promise<{ id: string }> {
   const userId = await verifySessionAndGetUserId();
   const supabase = await createClient();
@@ -90,6 +89,8 @@ export async function saveJournal(
 }
 
 export async function transcribeAudioFile(formData: FormData) {
+  const openai = new OpenAI();
+
   try {
     const audioFile = formData.get("audio") as File;
 
