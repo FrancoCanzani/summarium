@@ -24,7 +24,6 @@ export async function GET(
   } = await supabase.auth.getUser();
 
   if (!user || authError) {
-    console.log(user, authError);
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 

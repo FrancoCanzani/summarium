@@ -25,9 +25,19 @@ export default function EditorPage() {
     queryFn: () => fetchNote(id!),
   });
 
+  const initialNote = note
+    ? note
+    : {
+        id: id!,
+        title: "New Note",
+        content: "",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Editor initialNote={note} />
+      <Editor initialNote={initialNote} />
     </HydrationBoundary>
   );
 }
