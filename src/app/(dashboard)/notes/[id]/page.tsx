@@ -1,5 +1,3 @@
-export const dynamic = 'force-static'
-
 import Editor from "@/components/editor";
 import { Note } from "@/lib/types";
 import { validateUUID } from "@/lib/utils";
