@@ -4,11 +4,10 @@ import { createClient } from "@/lib/supabase/server"
 import { verifySessionAndGetUserId } from "@/lib/api/notes"
 import { validateUUID } from "@/lib/utils";
 
-export async function GET({
-    params,
-  }: {
-    params: Promise<{ id: string }>;
-  }){
+export async function GET(
+    request: Request,
+    { params }: { params: Promise<{ id: string }> }
+  ) {
     const { id: rawId } = await params;
     const result = validateUUID(rawId);
 
