@@ -18,7 +18,7 @@ export default async function EditorPage({
   const id = result.data;
   
   try {
-    const headersList = await headers();
+    const headersList = new Headers(headers())
     const host = headersList.get("host") || "";
     const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
     
