@@ -36,8 +36,7 @@ export default async function JournalPage({
         </div>
       </div>
     );
-  } catch (error) {
-    console.error("Error fetching journal:", error);
+  } catch {
     return <div>Error loading journal</div>;
   }
 }

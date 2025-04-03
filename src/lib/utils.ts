@@ -2,6 +2,12 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { redirect } from "next/navigation";
 import { journalDateSchema, uuidV4Schema } from "./schemas";
+import {
+  isServer,
+  QueryClient,
+  defaultShouldDehydrateQuery,
+} from "@tanstack/react-query";
+import { ParamValue } from "next/dist/server/request/params";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -21,7 +27,7 @@ export const fetcher = (url: string) =>
     return res.json();
   });
 
-export function validateUUID(id: string) {
+export function validateUUID(id: string | ParamValue) {
   const result = uuidV4Schema.safeParse(id);
 
   return result;
@@ -76,3 +82,43 @@ export const getJournalDate = (dateParam?: string) => {
     timestamp: date.getTime(),
   };
 };
+
+function makeQueryClient() {
+  return new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 60 * 1000,
+      },
+      dehydrate: {
+        // include pending queries in dehydration
+        shouldDehydrateQuery: (query) =>
+          defaultShouldDehydrateQuery(query) ||
+          query.state.status === "pending",
+        shouldRedactErrors: () => {
+          // We should not catch Next.js server errors
+          // as that's how Next.js detects dynamic pages
+          // so we cannot redact them.
+          // Next.js also automatically redacts errors for us
+          // with better digests.
+          return false;
+        },
+      },
+    },
+  });
+}
+
+let browserQueryClient: QueryClient | undefined = undefined;
+
+export function getQueryClient() {
+  if (isServer) {
+    // Server: always make a new query client
+    return makeQueryClient();
+  } else {
+    // Browser: make a new query client if we don't already have one
+    // This is very important, so we don't re-make a new client if React
+    // suspends during the initial render. This may not be needed if we
+    // have a suspense boundary BELOW the creation of the query client
+    if (!browserQueryClient) browserQueryClient = makeQueryClient();
+    return browserQueryClient;
+  }
+}
