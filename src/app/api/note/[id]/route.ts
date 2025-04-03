@@ -36,7 +36,7 @@ export async function GET(
 
   if (error) {
     if (error.code === "PGRST116") {
-      return Response.json({ error: "Note not found" }, { status: 404 });
+      return Response.json(null);
     } else {
       return Response.json({ error: "Failed to fetch note" }, { status: 500 });
     }

@@ -1,6 +1,5 @@
 "use client";
 
-import { ReactNode } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -9,7 +8,7 @@ import {
 } from "@/components/ui/popover";
 import { addDays, format, parse } from "date-fns";
 import { Button } from "./ui/button";
-import { CalendarOff, ChevronLeft, ChevronRight } from "lucide-react";
+import { CalendarSync, ChevronLeft, ChevronRight } from "lucide-react";
 import ButtonWithTooltip from "./ui/button-with-tooltip";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -68,35 +67,7 @@ export default function JournalDayNavigation() {
   return (
     <header className="bg-background sticky top-0 z-10 w-full px-3 py-4">
       <div className="mx-auto flex max-w-5xl flex-row items-center justify-between">
-        <JournalDatePicker selectedDay={selectedDay}>
-          <Button
-            variant={"ghost"}
-            size={"lg"}
-            className="p-3 text-xl font-medium sm:text-2xl lg:text-3xl"
-            onMouseEnter={async () => {
-              const formattedDate = format(
-                parseDate(selectedDay),
-                "yyyy-MM-dd",
-              );
-              await queryClient.prefetchQuery({
-                queryKey: [`journal-${formattedDate}`],
-                queryFn: async () => await fetchJournal(formattedDate),
-              });
-            }}
-            onFocus={async () => {
-              const formattedDate = format(
-                parseDate(selectedDay),
-                "yyyy-MM-dd",
-              );
-              await queryClient.prefetchQuery({
-                queryKey: [`journal-${formattedDate}`],
-                queryFn: async () => await fetchJournal(formattedDate),
-              });
-            }}
-          >
-            {format(parseDate(selectedDay), "MMMM d, yyyy")}
-          </Button>
-        </JournalDatePicker>
+        <JournalDatePicker selectedDay={selectedDay} />
         <div className="flex items-center justify-center space-x-2">
           <Button
             variant={"outline"}
@@ -126,8 +97,9 @@ export default function JournalDayNavigation() {
             className="rounded-sm"
             onMouseEnter={prefetchToday}
             onFocus={prefetchToday}
+            disabled={day === today}
           >
-            <CalendarOff className="size-4" />
+            <CalendarSync className="size-4" />
           </ButtonWithTooltip>
         </div>
       </div>
@@ -135,13 +107,7 @@ export default function JournalDayNavigation() {
   );
 }
 
-function JournalDatePicker({
-  children,
-  selectedDay,
-}: {
-  children: ReactNode;
-  selectedDay: string;
-}) {
+function JournalDatePicker({ selectedDay }: { selectedDay: string }) {
   const router = useRouter();
   const handleSelect = (date: Date | undefined) => {
     if (date) {
@@ -151,13 +117,20 @@ function JournalDatePicker({
   };
   return (
     <Popover>
-      <PopoverTrigger asChild>{children}</PopoverTrigger>
+      <PopoverTrigger asChild>
+        <Button
+          variant={"ghost"}
+          size={"lg"}
+          className="p-3 text-xl font-medium sm:text-2xl lg:text-3xl"
+        >
+          {format(parseDate(selectedDay), "MMMM d, yyyy")}
+        </Button>
+      </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
           mode="single"
           selected={parseDate(selectedDay)}
           onSelect={handleSelect}
-          initialFocus
         />
       </PopoverContent>
     </Popover>
