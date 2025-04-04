@@ -8,7 +8,10 @@ export const fetchNote = async (id: string): Promise<Note> => {
   if (!response.ok) {
     throw new Error("Failed to fetch note");
   }
-  return response.json();
+
+  const data = await response.json();
+
+  return data;
 };
 
 export const fetchJournal = async (day: string): Promise<Journal> => {

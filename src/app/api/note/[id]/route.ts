@@ -1,8 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { validateUUID } from "@/lib/utils";
+import { getCachedUser } from "@/lib/api/auth";
 
 export async function GET(
-  // request has to be here or params is undefined
   request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
@@ -21,7 +21,7 @@ export async function GET(
   const {
     data: { user },
     error: authError,
-  } = await supabase.auth.getUser();
+  } = await getCachedUser();
 
   if (!user || authError) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });

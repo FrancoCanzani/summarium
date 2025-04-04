@@ -1,6 +1,5 @@
 "use client";
 
-import Editor from "@/components/editor";
 import { validateUUID } from "@/lib/utils";
 import {
   dehydrate,
@@ -10,6 +9,12 @@ import {
 import { getQueryClient } from "@/lib/utils";
 import { fetchNote } from "@/lib/fetchers";
 import { useParams } from "next/navigation";
+import dynamic from "next/dynamic";
+import EditorSkeleton from "@/components/skeletons/editor-skeleton";
+
+const Editor = dynamic(() => import("@/components/editor"), {
+  loading: () => <EditorSkeleton />,
+});
 
 export default function EditorPage() {
   const { id: rawId } = useParams();
@@ -22,7 +27,7 @@ export default function EditorPage() {
 
   const { data: note } = useSuspenseQuery({
     queryKey: [`note-${id}`],
-    queryFn: () => fetchNote(id!),
+    queryFn: async () => await fetchNote(id!),
   });
 
   const initialNote = note ?? {

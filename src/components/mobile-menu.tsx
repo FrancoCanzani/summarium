@@ -21,13 +21,13 @@ export default function MobileMenu() {
       </Link>
       <Link
         className="hover:bg-muted group flex h-10 flex-1 items-center justify-center rounded-sm px-3 py-1.5"
-        href="/inbox"
+        href="/#"
       >
         <Inbox className="size-5" />
       </Link>
       <Link
         className="hover:bg-muted group flex h-10 flex-1 items-center justify-center rounded-sm px-3 py-1.5"
-        href="/articles"
+        href="/#"
       >
         <Newspaper className="size-5" />
       </Link>

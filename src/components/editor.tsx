@@ -4,7 +4,7 @@ import { extensions } from "@/lib/extensions/extensions";
 import { Note } from "@/lib/types";
 import { EditorContent, useEditor } from "@tiptap/react";
 import localForage from "localforage";
-import { useState } from "react";
+import { useState, memo, useMemo } from "react";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 import AudioTranscriber from "./audio-transcriber";
@@ -12,10 +12,14 @@ import EditorHeader from "./editor-header";
 import { ToolbarProvider } from "./toolbars/toolbar-provider";
 import { saveNote } from "@/lib/actions";
 
+const MemoizedEditorContent = memo(EditorContent);
+
 export default function Editor({ initialNote }: { initialNote: Note }) {
   const [title, setTitle] = useState(initialNote?.title || "");
   const [content, setContent] = useState(initialNote?.content || "");
   const [showTranscriber, setShowTranscriber] = useState(false);
+
+  const editorExtensions = useMemo(() => extensions, []);
 
   const handleSaveNote = async (noteData: Note) => {
     try {
@@ -59,13 +63,16 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
         driver: localForage.INDEXEDDB,
         storeName: "note_versions",
       });
-      localForage.setItem(`${initialNote.id}+${new Date().toISOString()}`, {
-        id: initialNote.id,
-        title: title,
-        content: value,
-        sanitized_content: editor?.getText(),
-        updated_at: new Date().toISOString(),
-      });
+      await localForage.setItem(
+        `${initialNote.id}+${new Date().toISOString()}`,
+        {
+          id: initialNote.id,
+          title: title,
+          content: value,
+          sanitized_content: editor?.getText(),
+          updated_at: new Date().toISOString(),
+        },
+      );
     },
     1000,
   );
@@ -76,7 +83,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   };
 
   const editor = useEditor({
-    extensions: extensions,
+    extensions: editorExtensions,
     content: content,
     onUpdate: ({ editor }) => {
       handleContentChange(editor.getHTML());
@@ -104,7 +111,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
               value={title}
               onChange={(e) => handleTitleChange(e.target.value)}
             />
-            <EditorContent
+            <MemoizedEditorContent
               editor={editor}
               className="prose prose-p:my-0 prose-xs md:prose-sm my-0 mb-14 h-full min-w-full flex-1 text-start text-black"
             />
