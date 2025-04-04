@@ -48,13 +48,22 @@ export const LinkToolbar = React.forwardRef<HTMLButtonElement>((props, ref) => {
   return (
     <>
       <Tooltip>
-        <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <Popover
+          open={isOpen}
+          onOpenChange={(open) => {
+            setUrl("");
+            setIsOpen(open);
+          }}
+        >
           <TooltipTrigger asChild>
             <PopoverTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
-                className={cn("size-6", editor.isActive("link") && "bg-accent")}
+                className={cn(
+                  "size-7 rounded-sm p-1",
+                  editor.isActive("link") && "bg-accent",
+                )}
                 ref={ref}
                 {...props}
               >
@@ -63,23 +72,26 @@ export const LinkToolbar = React.forwardRef<HTMLButtonElement>((props, ref) => {
               </Button>
             </PopoverTrigger>
           </TooltipTrigger>
-          <PopoverContent className="bg-background w-80">
-            <div className="flex flex-col space-y-2.5">
-              <Label htmlFor="url">URL</Label>
+          <PopoverContent className="bg-background rounded-sm p-2">
+            <div className="flex items-center justify-center space-x-1.5">
+              <Label htmlFor="url" className="sr-only">
+                URL
+              </Label>
               <Input
                 id="url"
                 placeholder="https://example.com"
                 value={url}
-                className="h-9 text-sm"
+                className="h-8 rounded-sm text-sm"
                 onChange={(e) => setUrl(e.target.value)}
               />
               <Button
                 variant="outline"
                 size="sm"
-                className="h-8"
+                className="h-8 rounded-sm font-medium"
                 onClick={setLink}
+                disabled={!url}
               >
-                {editor.isActive("link") ? "Update Link" : "Add Link"}
+                {editor.isActive("link") ? "Update" : "Save"}
               </Button>
             </div>
           </PopoverContent>

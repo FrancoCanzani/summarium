@@ -11,6 +11,7 @@ import AudioTranscriber from "./audio-transcriber";
 import EditorHeader from "./editor-header";
 import { ToolbarProvider } from "./toolbars/toolbar-provider";
 import { saveNote } from "@/lib/actions";
+import EditorBubbleMenu from "./editor-bubble-menu";
 
 const MemoizedEditorContent = memo(EditorContent);
 
@@ -111,6 +112,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
               value={title}
               onChange={(e) => handleTitleChange(e.target.value)}
             />
+            <EditorBubbleMenu />
             <MemoizedEditorContent
               editor={editor}
               className="prose prose-p:my-0 prose-xs md:prose-sm my-0 mb-14 h-full min-w-full flex-1 text-start text-black"
