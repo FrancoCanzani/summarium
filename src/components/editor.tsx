@@ -4,37 +4,29 @@ import { extensions } from "@/lib/extensions/extensions";
 import { Note } from "@/lib/types";
 import { EditorContent, useEditor } from "@tiptap/react";
 import localForage from "localforage";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 import AudioTranscriber from "./audio-transcriber";
-import EditorFooter from "./editor-footer";
 import EditorHeader from "./editor-header";
 import { ToolbarProvider } from "./toolbars/toolbar-provider";
-import FloatingToolbar from "./editor-floating-toolbar";
 import { saveNote } from "@/lib/actions";
 
 export default function Editor({ initialNote }: { initialNote: Note }) {
   const [title, setTitle] = useState(initialNote?.title || "");
   const [content, setContent] = useState(initialNote?.content || "");
-  const [isSaved, setIsSaved] = useState(true);
   const [showTranscriber, setShowTranscriber] = useState(false);
-  const [isPending, startTransition] = useTransition();
 
   const handleSaveNote = async (noteData: Note) => {
-    startTransition(async () => {
-      try {
-        const result = await saveNote(noteData);
+    try {
+      const result = await saveNote(noteData);
 
-        if (result.success) {
-          setIsSaved(true);
-        } else {
-          toast.error(result.error || "Failed to save note");
-        }
-      } catch {
-        toast.error("There was an error saving your note");
+      if (!result.success) {
+        toast.error(result.error || "Failed to save note");
       }
-    });
+    } catch {
+      toast.error("There was an error saving your note");
+    }
   };
 
   const handleDebouncedTitleChange = useDebouncedCallback((value: string) => {
@@ -48,7 +40,6 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   }, 1000);
 
   const handleTitleChange = (value: string) => {
-    setIsSaved(false);
     setTitle(value);
     handleDebouncedTitleChange(value);
   };
@@ -80,7 +71,6 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   );
 
   const handleContentChange = (value: string) => {
-    setIsSaved(false);
     setContent(value);
     handleDebouncedContentChange(value);
   };
@@ -125,14 +115,6 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
               />
             </div>
           </div>
-
-          <FloatingToolbar />
-
-          <EditorFooter
-            editor={editor}
-            isSaved={isSaved}
-            isSaving={isPending}
-          />
         </div>
       </div>
     </ToolbarProvider>

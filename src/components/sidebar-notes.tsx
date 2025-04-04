@@ -19,6 +19,7 @@ export default function SidebarNotes({ notes }: { notes: Note[] }) {
         {notes?.map((item) => (
           <Link
             href={`/notes/${item.id}`}
+            prefetch={true}
             onMouseOver={async () =>
               await queryClient.prefetchQuery({
                 queryKey: [`note-${item.id}`],

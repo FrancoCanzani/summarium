@@ -1,4 +1,3 @@
-import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { deleteNote } from "@/lib/actions";
 import { Editor } from "@tiptap/core";
 import { Trash } from "lucide-react";
@@ -11,7 +10,6 @@ import { InlineAssistantToolbar } from "./toolbars/inline-assistant";
 import { SearchAndReplaceToolbar } from "./toolbars/search-and-replace";
 import { TranscribeToolbar } from "./toolbars/transcribe";
 import ButtonWithTooltip from "./ui/button-with-tooltip";
-import { SidebarTrigger } from "./ui/sidebar";
 
 export default function EditorHeader({
   editor,
@@ -22,13 +20,11 @@ export default function EditorHeader({
   showTranscriber: boolean;
   setShowTranscriber: Dispatch<SetStateAction<boolean>>;
 }) {
-  const isMobile = useIsMobile();
   const { id } = useParams();
 
   return (
     <header className="bg-background sticky top-0 z-10 w-full">
-      <div className="flex w-full items-start justify-between p-2">
-        <div>{isMobile && <SidebarTrigger />}</div>
+      <div className="flex w-full items-start justify-end p-2">
         <div className="flex items-center justify-start space-x-1.5">
           <ConfirmActionDialog
             title="Delete this note?"
