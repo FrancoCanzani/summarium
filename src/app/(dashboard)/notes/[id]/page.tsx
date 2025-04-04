@@ -1,34 +1,33 @@
-"use client";
-
 import { validateUUID } from "@/lib/utils";
-import {
-  dehydrate,
-  HydrationBoundary,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { getQueryClient } from "@/lib/utils";
-import { fetchNote } from "@/lib/fetchers";
-import { useParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import EditorSkeleton from "@/components/skeletons/editor-skeleton";
+import { getNote } from "@/lib/api/notes";
+import { getCachedUser } from "@/lib/api/auth";
+import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 const Editor = dynamic(() => import("@/components/editor"), {
   loading: () => <EditorSkeleton />,
 });
 
-export default function EditorPage() {
-  const { id: rawId } = useParams();
+export default async function EditorPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id: rawId } = await params;
 
   const result = validateUUID(rawId);
 
-  const queryClient = getQueryClient();
-
   const id = result.data;
 
-  const { data: note } = useSuspenseQuery({
-    queryKey: [`note-${id}`],
-    queryFn: async () => await fetchNote(id!),
-  });
+  const { data, error } = await getCachedUser();
+
+  if (error || !data || !data.user) {
+    redirect("/login");
+  }
+
+  const note = await getNote(id!, data.user.id);
 
   const initialNote = note ?? {
     id: id!,
@@ -39,8 +38,8 @@ export default function EditorPage() {
   };
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
+    <Suspense fallback={<EditorSkeleton />}>
       <Editor initialNote={initialNote} />
-    </HydrationBoundary>
+    </Suspense>
   );
 }

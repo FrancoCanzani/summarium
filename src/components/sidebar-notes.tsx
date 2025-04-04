@@ -6,12 +6,9 @@ import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import { Note } from "@/lib/types";
 import { useParams } from "next/navigation";
-import { fetchNote } from "@/lib/fetchers";
-import { getQueryClient } from "@/lib/utils";
 
 export default function SidebarNotes({ notes }: { notes: Note[] }) {
   const { id } = useParams();
-  const queryClient = getQueryClient();
 
   return (
     <SidebarGroup>
@@ -20,18 +17,6 @@ export default function SidebarNotes({ notes }: { notes: Note[] }) {
           <Link
             href={`/notes/${item.id}`}
             prefetch={true}
-            onMouseOver={async () =>
-              await queryClient.prefetchQuery({
-                queryKey: [`note-${item.id}`],
-                queryFn: async () => await fetchNote(item.id),
-              })
-            }
-            onFocus={async () =>
-              await queryClient.prefetchQuery({
-                queryKey: [`note-${item.id}`],
-                queryFn: async () => await fetchNote(item.id),
-              })
-            }
             key={item.id}
             className={cn(
               "hover:bg-zed-light flex w-full flex-col items-start justify-between gap-1.5 overflow-hidden px-2 py-1.5 text-xs",

@@ -1,7 +1,7 @@
 import { Note } from "../types";
 import { createClient } from "../supabase/server";
-import { redirect } from "next/navigation";
 import { cache } from "react";
+import { redirect } from "next/navigation";
 
 import "server-only";
 
@@ -21,13 +21,31 @@ export const verifySessionAndGetUserId = cache(async (): Promise<string> => {
   return user.id;
 });
 
-export const getNotes = async (): Promise<Note[]> => {
+export const getNote = async (id: string, userId: string): Promise<Note> => {
   const supabase = await createClient();
 
-  // todo: check eq user id after or if leerob checks the site so he has notes to route
   const { data, error } = await supabase
     .from("notes")
     .select()
+    .eq("id", id)
+    .eq("user_id", userId)
+    .single();
+
+  if (error) {
+    console.error("Error fetching notes:", error);
+    throw new Error(error.message);
+  }
+
+  return data as Note;
+};
+
+export const getNotes = async (userId: string): Promise<Note[]> => {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("notes")
+    .select()
+    .eq("user_id", userId)
     .order("updated_at", { ascending: false });
 
   if (error) {

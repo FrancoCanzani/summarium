@@ -1,3 +1,6 @@
+import { ReactNode } from "react";
+import { Editor, Range } from "@tiptap/core";
+
 export interface Note {
   id: string;
   user_id?: string;
@@ -22,4 +25,11 @@ export interface Journal {
   updated_at: string;
   archived_at?: string | null;
   deleted_at?: string | null;
+}
+
+export interface CommandItem {
+  title: string;
+  description: string;
+  icon: ReactNode;
+  command: ({ editor, range }: { editor: Editor; range: Range }) => void;
 }

@@ -11,9 +11,16 @@ import { generateNextNoteId } from "@/lib/api/notes";
 import SearchModal from "./search-modal";
 import { cache } from "react";
 import { getJournalDate } from "@/lib/utils";
+import { getCachedUser } from "@/lib/api/auth";
+import { redirect } from "next/navigation";
 
 const cachedNotes = cache(async () => {
-  return await getNotes();
+  const { data, error } = await getCachedUser();
+
+  if (error || !data || !data.user) {
+    redirect("/login");
+  }
+  return await getNotes(data.user.id);
 });
 
 export async function AppSidebar() {
