@@ -32,4 +32,6 @@ export interface CommandItem {
   description: string;
   icon: ReactNode;
   command: ({ editor, range }: { editor: Editor; range: Range }) => void;
+  category?: string;
+  shortcut?: string;
 }

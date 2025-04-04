@@ -1,22 +1,31 @@
 "use client";
 
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+  useRef,
+  useLayoutEffect,
+} from "react";
 import { Editor, Extension, Range } from "@tiptap/core";
 import Suggestion from "@tiptap/suggestion";
 import { ReactRenderer } from "@tiptap/react";
 import tippy, { Instance as TippyInstance } from "tippy.js";
 import {
-  Bold,
-  Italic,
   List,
   ListOrdered,
   Heading1,
   Heading2,
   Heading3,
-  Code,
   CheckSquare,
+  Quote,
+  Minus,
+  Bot,
+  Text,
 } from "lucide-react";
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { CommandItem } from "../types";
+import { updateScrollView } from "../utils";
 
 export const SlashCommand = Extension.create({
   name: "slashCommand",
@@ -48,9 +57,27 @@ export const SlashCommand = Extension.create({
         items: ({ query }: { query: string }) => {
           const items: CommandItem[] = [
             {
+              title: "Text",
+              description: "Paragraph",
+              icon: <Text className="size-4" />,
+              category: "Content",
+              shortcut: "",
+              command: ({
+                editor,
+                range,
+              }: {
+                editor: Editor;
+                range: Range;
+              }) => {
+                editor.chain().focus().deleteRange(range).setParagraph().run();
+              },
+            },
+            {
               title: "Heading 1",
               description: "Large section heading",
-              icon: <Heading1 className="h-4 w-4" />,
+              icon: <Heading1 className="size-4" />,
+              category: "Content",
+              shortcut: "#",
               command: ({
                 editor,
                 range,
@@ -69,7 +96,9 @@ export const SlashCommand = Extension.create({
             {
               title: "Heading 2",
               description: "Medium section heading",
-              icon: <Heading2 className="h-4 w-4" />,
+              icon: <Heading2 className="size-4" />,
+              category: "Content",
+              shortcut: "##",
               command: ({
                 editor,
                 range,
@@ -88,7 +117,9 @@ export const SlashCommand = Extension.create({
             {
               title: "Heading 3",
               description: "Small section heading",
-              icon: <Heading3 className="h-4 w-4" />,
+              icon: <Heading3 className="size-4" />,
+              category: "Content",
+              shortcut: "###",
               command: ({
                 editor,
                 range,
@@ -107,7 +138,9 @@ export const SlashCommand = Extension.create({
             {
               title: "Bullet List",
               description: "Create a simple bullet list",
-              icon: <List className="h-4 w-4" />,
+              icon: <List className="size-4" />,
+              category: "Lists",
+              shortcut: "-",
               command: ({
                 editor,
                 range,
@@ -124,9 +157,11 @@ export const SlashCommand = Extension.create({
               },
             },
             {
-              title: "Numbered List",
+              title: "Ordered list",
               description: "Create a numbered list",
-              icon: <ListOrdered className="h-4 w-4" />,
+              icon: <ListOrdered className="size-4" />,
+              category: "Lists",
+              shortcut: "1.",
               command: ({
                 editor,
                 range,
@@ -145,7 +180,9 @@ export const SlashCommand = Extension.create({
             {
               title: "Task List",
               description: "Create a task list",
-              icon: <CheckSquare className="h-4 w-4" />,
+              icon: <CheckSquare className="size-4" />,
+              category: "Lists",
+              shortcut: "[]",
               command: ({
                 editor,
                 range,
@@ -162,23 +199,11 @@ export const SlashCommand = Extension.create({
               },
             },
             {
-              title: "Bold",
-              description: "Make text bold",
-              icon: <Bold className="h-4 w-4" />,
-              command: ({
-                editor,
-                range,
-              }: {
-                editor: Editor;
-                range: Range;
-              }) => {
-                editor.chain().focus().deleteRange(range).setMark("bold").run();
-              },
-            },
-            {
-              title: "Italic",
-              description: "Make text italic",
-              icon: <Italic className="h-4 w-4" />,
+              title: "Quote",
+              description: "Insert a blockquote",
+              icon: <Quote className="size-4" />,
+              category: "Blocks",
+              shortcut: "|",
               command: ({
                 editor,
                 range,
@@ -190,14 +215,16 @@ export const SlashCommand = Extension.create({
                   .chain()
                   .focus()
                   .deleteRange(range)
-                  .setMark("italic")
+                  .toggleBlockquote()
                   .run();
               },
             },
             {
-              title: "Code Block",
-              description: "Add a code block",
-              icon: <Code className="h-4 w-4" />,
+              title: "Divider",
+              description: "Insert a horizontal rule",
+              icon: <Minus className="size-4" />,
+              category: "Blocks",
+              shortcut: "---",
               command: ({
                 editor,
                 range,
@@ -209,7 +236,28 @@ export const SlashCommand = Extension.create({
                   .chain()
                   .focus()
                   .deleteRange(range)
-                  .toggleCodeBlock()
+                  .setHorizontalRule()
+                  .run();
+              },
+            },
+            {
+              title: "Inline Assistant",
+              description: "Insert AI assistant block",
+              icon: <Bot className="size-4" />,
+              category: "Blocks",
+              shortcut: "todo",
+              command: ({
+                editor,
+                range,
+              }: {
+                editor: Editor;
+                range: Range;
+              }) => {
+                editor
+                  .chain()
+                  .focus()
+                  .deleteRange(range)
+                  .insertInlineAssistant()
                   .run();
               },
             },
@@ -280,6 +328,7 @@ interface CommandListRef {
 const CommandList = forwardRef<CommandListRef, CommandListProps>(
   (props, ref) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const selectItem = (index: number) => {
       const item = props.items[index];
@@ -315,29 +364,58 @@ const CommandList = forwardRef<CommandListRef, CommandListProps>(
       setSelectedIndex(0);
     }, [props.items]);
 
+    useLayoutEffect(() => {
+      const container = containerRef.current;
+      const item = container?.querySelector(
+        `[data-index="${selectedIndex}"]`,
+      ) as HTMLElement;
+      if (container && item) {
+        updateScrollView(container, item);
+      }
+    }, [selectedIndex]);
+
     if (props.items.length === 0) {
       return null;
     }
 
+    let lastCategory: string | undefined = undefined;
+
     return (
-      <div className="z-50 h-auto max-h-[330px] w-72 overflow-y-auto rounded-md border border-gray-200 bg-white p-1 shadow-md">
-        {props.items.map((item, index) => (
-          <button
-            key={index}
-            className={`flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm hover:bg-gray-100 ${
-              index === selectedIndex ? "bg-gray-100" : ""
-            }`}
-            onClick={() => selectItem(index)}
-          >
-            <div className="flex h-10 w-10 items-center justify-center rounded-md border border-gray-200 bg-white">
-              {item.icon}
-            </div>
-            <div>
-              <p className="font-medium">{item.title}</p>
-              <p className="text-xs text-gray-500">{item.description}</p>
-            </div>
-          </button>
-        ))}
+      <div
+        ref={containerRef}
+        className="no-scrollbar bg-background shadow-2xs z-50 h-auto max-h-[330px] w-56 overflow-y-auto rounded-sm border p-1"
+      >
+        {props.items.map((item, index) => {
+          const showCategoryHeader =
+            item.category && item.category !== lastCategory;
+          lastCategory = item.category;
+          return (
+            <React.Fragment key={index}>
+              {showCategoryHeader && (
+                <div className="p-2 text-xs font-medium text-gray-700">
+                  {item.category}
+                </div>
+              )}
+              <button
+                data-index={index}
+                className={`hover:bg-accent flex w-full items-center justify-between rounded-sm p-2 text-left text-sm ${
+                  index === selectedIndex ? "bg-accent text-black" : ""
+                }`}
+                onClick={() => selectItem(index)}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="text-gray-700">{item.icon}</div>
+                  <p className="text-xs font-medium text-gray-700">
+                    {item.title}
+                  </p>
+                </div>
+                {item.shortcut && (
+                  <span className="text-xs text-gray-700">{item.shortcut}</span>
+                )}
+              </button>
+            </React.Fragment>
+          );
+        })}
       </div>
     );
   },

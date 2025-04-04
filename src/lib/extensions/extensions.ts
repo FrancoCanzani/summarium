@@ -12,8 +12,6 @@ import { InlineAssistant } from "./inline-assistant";
 import SearchAndReplace from "./search-and-replace-extension";
 import { InlineSuggestion } from "./suggestion-extension";
 import { SlashCommand } from "./slash-command";
-import getSuggestionItems from "@/components/slash-command/suggestion-items";
-import { renderItems } from "@/components/slash-command/render-items";
 
 export const extensions = [
   StarterKit.configure({
