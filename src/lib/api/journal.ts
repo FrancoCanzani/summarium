@@ -1,11 +1,12 @@
 import { Journal } from "../types";
 import { createClient } from "../supabase/server";
-import { verifySessionAndGetUserId } from "./notes";
 
 import "server-only";
 
-export async function getJournalByDay(day: string): Promise<Journal | null> {
-  const userId = await verifySessionAndGetUserId();
+export async function getJournalByDay(
+  day: string,
+  userId: string,
+): Promise<Journal | null> {
   const supabase = await createClient();
 
   const { data, error } = await supabase

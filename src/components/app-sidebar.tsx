@@ -10,9 +10,10 @@ import SidebarNotes from "./sidebar-notes";
 import { generateNextNoteId } from "@/lib/api/notes";
 import SearchModal from "./search-modal";
 import { cache } from "react";
-import { getJournalDate } from "@/lib/utils";
 import { getCachedUser } from "@/lib/api/auth";
 import { redirect } from "next/navigation";
+import { QueryClient } from "@tanstack/react-query";
+import { fetchJournal } from "@/lib/fetchers";
 
 const cachedNotes = cache(async () => {
   const { data, error } = await getCachedUser();
@@ -26,7 +27,14 @@ const cachedNotes = cache(async () => {
 export async function AppSidebar() {
   const notes = await cachedNotes();
 
-  const { urlParam: today } = getJournalDate();
+  const queryClient = new QueryClient();
+
+  const today = new Date().toISOString().split("T")[0];
+
+  await queryClient.prefetchQuery({
+    queryKey: ["journal"],
+    queryFn: async () => await fetchJournal(today),
+  });
 
   return (
     <Sidebar className="flex h-screen flex-col">

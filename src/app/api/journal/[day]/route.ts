@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { getCachedUser } from "@/lib/api/auth";
 
 export async function GET(
   // request has to be here or params is undefined
@@ -9,19 +10,16 @@ export async function GET(
 
   const supabase = await createClient();
 
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
+  const { data, error: authError } = await getCachedUser();
 
-  if (!user || authError) {
+  if (!data || !data.user || authError) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { data: journal, error } = await supabase
     .from("journals")
     .select("*")
-    .eq("user_id", user.id)
+    .eq("user_id", data.user.id)
     .eq("day", day as string)
     .single();
 
