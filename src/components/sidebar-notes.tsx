@@ -12,14 +12,14 @@ export default function SidebarNotes({ notes }: { notes: Note[] }) {
 
   return (
     <SidebarGroup>
-      <SidebarGroupContent className="thin-scrollbar">
+      <SidebarGroupContent className="thin-scrollbar space-y-0.5">
         {notes?.map((item) => (
           <Link
             href={`/notes/${item.id}`}
             prefetch={true}
             key={item.id}
             className={cn(
-              "hover:bg-zed-light flex w-full flex-col items-start justify-between gap-1.5 overflow-hidden px-2 py-1.5 text-xs",
+              "hover:bg-zed-light flex w-full flex-col items-start justify-between gap-1.5 overflow-hidden rounded-sm px-2 py-1.5 text-xs",
               id === item.id ? "bg-zed-light font-medium" : "bg-sidebar",
             )}
           >

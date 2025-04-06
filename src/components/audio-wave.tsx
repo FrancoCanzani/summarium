@@ -103,7 +103,7 @@ export default function AudioWave({ stream, isRecording }: AudioWaveProps) {
   return (
     <canvas
       ref={canvasRef}
-      className="h-8 w-full rounded-md bg-gray-100"
+      className="h-8 w-full rounded-sm bg-gray-50"
     ></canvas>
   );
 }

@@ -37,7 +37,7 @@ export async function AppSidebar() {
 
         <Link
           href={`/notes/${await generateNextNoteId()}`}
-          className="hover:bg-accent p-2"
+          className="hover:bg-accent rounded-sm p-2 font-medium"
         >
           New Note
         </Link>
@@ -51,14 +51,20 @@ export async function AppSidebar() {
       <SidebarFooter className="gap-0">
         <Link
           href={`/journal?day=${today}`}
-          className="hover:bg-accent p-2 font-medium"
+          className="hover:bg-accent rounded-sm p-2 font-medium"
         >
           Journal
         </Link>
-        <Link href={"/docs"} className="hover:bg-accent p-2 font-medium">
+        <Link
+          href={"/docs"}
+          className="hover:bg-accent rounded-sm p-2 font-medium"
+        >
           Docs
         </Link>
-        <Link href={"/settings"} className="hover:bg-accent p-2 font-medium">
+        <Link
+          href={"/settings"}
+          className="hover:bg-accent rounded-sm p-2 font-medium"
+        >
           Settings
         </Link>
       </SidebarFooter>

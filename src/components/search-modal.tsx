@@ -59,7 +59,7 @@ export default function SearchModal({ notes }: { notes: Note[] }) {
       }}
     >
       <DialogTrigger
-        className="hover:bg-accent p-2 text-start"
+        className="hover:bg-accent rounded-sm p-2 text-start font-medium"
         onClick={() => setIsOpen(true)}
       >
         Search

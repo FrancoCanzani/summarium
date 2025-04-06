@@ -81,7 +81,7 @@ export default function InlineAssistantView({ editor }: { editor: Editor }) {
                   setCompletion("");
                   editor.commands.removeAllInlineAssistants();
                 }}
-                disabled={isLoading}
+                disabled={isLoading || !input}
                 variant={"ghost"}
                 size={"icon"}
               >
@@ -91,7 +91,7 @@ export default function InlineAssistantView({ editor }: { editor: Editor }) {
           ) : (
             <Button
               onClick={handleGenerate}
-              disabled={isLoading}
+              disabled={isLoading || !input}
               variant={"ghost"}
               size={"icon"}
               type="submit"

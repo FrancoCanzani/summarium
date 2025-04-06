@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 import EditorFooter from "./editor-footer";
 import { ToolbarProvider } from "./toolbars/toolbar-provider";
-import FloatingToolbar from "./editor-floating-toolbar";
+import EditorBubbleMenu from "./editor-bubble-menu";
 import { saveJournal } from "@/lib/actions";
 
 export default function JournalEditor({
@@ -83,12 +83,12 @@ export default function JournalEditor({
     <ToolbarProvider editor={editor}>
       <div className="relative flex h-full w-full flex-col">
         <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col space-y-4 px-3 py-10">
+          <EditorBubbleMenu />
           <EditorContent
             editor={editor}
-            className="prose prose-p:my-0 prose-xs md:prose-sm my-0 mb-14 h-full min-w-full flex-1 text-start text-black"
+            className="prose prose-p:my-0 prose-sm my-0 mb-14 h-full min-w-full flex-1 text-start text-black"
           />
         </div>
-        <FloatingToolbar />
         <EditorFooter editor={editor} isSaved={isSaved} isSaving={isPending} />
       </div>
     </ToolbarProvider>

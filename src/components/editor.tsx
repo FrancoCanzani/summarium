@@ -112,12 +112,15 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
               value={title}
               onChange={(e) => handleTitleChange(e.target.value)}
             />
-            <EditorBubbleMenu />
-            <MemoizedEditorContent
-              editor={editor}
-              className="prose prose-p:my-0 prose-xs md:prose-sm my-0 mb-14 h-full min-w-full flex-1 text-start text-black"
-            />
-            <div className="absolute bottom-0 right-2 flex flex-col items-end justify-center space-y-2">
+            {/* prevents bubble menu layout shift */}
+            <div>
+              <EditorBubbleMenu />
+              <MemoizedEditorContent
+                editor={editor}
+                className="prose prose-p:my-0 prose-sm my-0 mb-14 h-full min-w-full flex-1 text-start text-black"
+              />
+            </div>
+            <div className="absolute bottom-16 left-1/2 -translate-x-1/2 transform">
               <AudioTranscriber
                 editor={editor}
                 showTranscriber={showTranscriber}

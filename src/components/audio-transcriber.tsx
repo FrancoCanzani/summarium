@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Copy, Mic, Square, Circle, StickyNote, RotateCw } from "lucide-react";
+import { Mic, Square, Circle, RotateCw } from "lucide-react";
 import AudioWave from "./audio-wave";
 import { Editor } from "@tiptap/core";
 import { cn } from "@/lib/utils";
@@ -8,24 +8,24 @@ import { toast } from "sonner";
 
 export default function AudioTranscriber({
   editor,
-  showTranscriber,
+  showTranscriber = true,
 }: {
   editor: Editor;
-  showTranscriber: boolean;
+  showTranscriber?: boolean;
 }) {
   const [isRecording, setIsRecording] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
-  const [transcript, setTranscript] = useState<string>("");
   const [recordingTime, setRecordingTime] = useState(0);
   const [stream, setStream] = useState<MediaStream | null>(null);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const lastPosRef = useRef<number | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const startRecording = async () => {
     try {
-      setTranscript("");
       setRecordingTime(0);
       audioChunksRef.current = [];
 
@@ -49,7 +49,8 @@ export default function AudioTranscriber({
       timerRef.current = setInterval(() => {
         setRecordingTime((prev) => prev + 1);
       }, 1000);
-    } catch {
+    } catch (error) {
+      console.error("Microphone access error:", error);
       toast.error(
         "Could not access microphone. Please ensure you have granted permission.",
       );
@@ -73,10 +74,17 @@ export default function AudioTranscriber({
     }
   };
 
+  const cancelTranscription = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+      setIsTranscribing(false);
+    }
+  };
+
   const handleRecordingStop = async () => {
     try {
       setIsTranscribing(true);
-      setTranscript("");
 
       const audioBlob = new Blob(audioChunksRef.current, {
         type: "audio/webm",
@@ -88,24 +96,46 @@ export default function AudioTranscriber({
       const formData = new FormData();
       formData.append("audio", audioFile);
 
+      abortControllerRef.current = new AbortController();
+
       const response = await fetch("/api/transcribe", {
         method: "POST",
         body: formData,
+        signal: abortControllerRef.current.signal,
       });
 
-      const reader = response.body?.getReader();
-
-      if (reader) {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          setTranscript((prev) => prev + new TextDecoder().decode(value));
-        }
+      if (!response.ok) {
+        throw new Error(
+          `Server responded with ${response.status}: ${response.statusText}`,
+        );
       }
-    } catch {
-      toast.error("Error processing recording. Please try again.");
+
+      if (!response.body) {
+        throw new Error("Response body is null");
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const textChunk = decoder.decode(value, { stream: true });
+
+        editor.chain().focus().insertContent(textChunk).run();
+      }
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") {
+        toast.info("Transcription canceled");
+      } else {
+        console.error("Error processing recording:", error);
+        toast.error("Error processing recording. Please try again.");
+      }
     } finally {
       setIsTranscribing(false);
+      lastPosRef.current = null;
+      abortControllerRef.current = null;
     }
   };
 
@@ -114,42 +144,34 @@ export default function AudioTranscriber({
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
     };
   }, []);
 
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
-    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
-      2,
-      "0",
-    )}`;
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
   };
+
+  if (!showTranscriber) {
+    return null;
+  }
 
   return (
     <div
-      className={cn(
-        "bg-background z-50 hidden w-80 space-y-2 rounded-md border p-2 opacity-0 transition-all duration-300",
-        showTranscriber && "block opacity-100",
-      )}
+      className={cn("bg-background z-50 w-80 space-y-2 rounded-sm border p-2")}
     >
-      <h6 className="text-sm font-medium capitalize text-gray-600">
-        Speech to text
-      </h6>
-      {transcript ? (
-        <div className="max-h-36 overflow-scroll rounded-sm border bg-gray-50 p-1 text-xs text-gray-700">
-          <p>{transcript}</p>
-        </div>
-      ) : (
-        <AudioWave stream={stream} isRecording={isRecording} />
-      )}
-
+      <h6 className="text-sm font-medium capitalize">Speech to text</h6>
+      <AudioWave stream={stream} isRecording={isRecording} />
       <div className="flex items-center justify-between space-x-2 p-1">
         <div className="flex items-center justify-start space-x-2">
           <Button
             variant="outline"
             size="xs"
-            className="cursor-pointer rounded-sm text-gray-500"
+            className="cursor-pointer rounded-sm"
             onClick={startRecording}
             disabled={isTranscribing || isRecording}
           >
@@ -166,39 +188,22 @@ export default function AudioTranscriber({
           <Button
             variant="outline"
             size="xs"
-            className="cursor-pointer rounded-sm text-gray-500"
-            onClick={stopRecording}
-            disabled={!isRecording || isTranscribing}
+            className="cursor-pointer rounded-sm"
+            onClick={isRecording ? stopRecording : cancelTranscription}
+            disabled={
+              (isRecording && isTranscribing) ||
+              (!isRecording && !isTranscribing)
+            }
           >
             <Square className="size-3.5" />
           </Button>
-          <Button
-            variant="outline"
-            size="xs"
-            className="cursor-pointer rounded-sm text-gray-500"
-            onClick={() => editor.commands.insertContent(`\n${transcript}`)}
-            disabled={isRecording || isTranscribing}
-          >
-            <StickyNote className="size-3.5" />
-          </Button>
-          <Button
-            variant="outline"
-            size="xs"
-            className="cursor-pointer rounded-sm text-gray-500"
-            onClick={stopRecording}
-            disabled={isRecording || isTranscribing}
-          >
-            <Copy className="size-3.5" />
-          </Button>
         </div>
-
         <div className="flex items-center justify-end space-x-2">
-          <span className="animate-in text-sm font-medium text-gray-500">
+          <span className="animate-in text-sm font-medium">
             {formatTime(recordingTime)}
           </span>
-
           {isTranscribing && (
-            <RotateCw className="size-3.5 animate-spin cursor-pointer rounded-sm text-gray-500" />
+            <RotateCw className="size-3.5 animate-spin cursor-pointer rounded-sm" />
           )}
         </div>
       </div>
