@@ -21,14 +21,13 @@ export const verifySessionAndGetUserId = cache(async (): Promise<string> => {
   return user.id;
 });
 
-export const getNote = async (id: string, userId: string): Promise<Note> => {
+export const getNote = async (id: string): Promise<Note> => {
   const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("notes")
     .select()
     .eq("id", id)
-    .eq("user_id", userId)
     .single();
 
   if (error) {

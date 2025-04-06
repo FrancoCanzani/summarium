@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Mic, Square, Circle, RotateCw } from "lucide-react";
-import AudioWave from "./audio-wave";
 import { Editor } from "@tiptap/core";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import AudioWave from "./audio-wave";
 
 export default function AudioTranscriber({
   editor,
@@ -162,42 +162,47 @@ export default function AudioTranscriber({
 
   return (
     <div
-      className={cn("bg-background z-50 w-80 space-y-2 rounded-sm border p-2")}
+      className={cn(
+        "bg-background shadow-2xs z-50 rounded-3xl border px-1 py-0.5 transition-opacity duration-300 ease-in-out",
+        showTranscriber ? "opacity-100" : "opacity-0",
+      )}
+      aria-hidden={!showTranscriber}
     >
-      <h6 className="text-sm font-medium capitalize">Speech to text</h6>
-      <AudioWave stream={stream} isRecording={isRecording} />
       <div className="flex items-center justify-between space-x-2 p-1">
         <div className="flex items-center justify-start space-x-2">
           <Button
             variant="outline"
             size="xs"
-            className="cursor-pointer rounded-sm"
+            className="size-8 rounded-full"
             onClick={startRecording}
             disabled={isTranscribing || isRecording}
           >
             {isRecording ? (
               <Circle
-                className="size-3.5 animate-pulse"
+                className="size-4 animate-pulse"
                 fill="red"
                 stroke="red"
               />
             ) : (
-              <Mic className="size-3.5" />
+              <Mic className="size-4" />
             )}
           </Button>
           <Button
             variant="outline"
             size="xs"
-            className="cursor-pointer rounded-sm"
+            className="size-8 rounded-full"
             onClick={isRecording ? stopRecording : cancelTranscription}
             disabled={
               (isRecording && isTranscribing) ||
               (!isRecording && !isTranscribing)
             }
           >
-            <Square className="size-3.5" />
+            <Square className="size-4" />
           </Button>
         </div>
+
+        <AudioWave stream={stream} isRecording />
+
         <div className="flex items-center justify-end space-x-2">
           <span className="animate-in text-sm font-medium">
             {formatTime(recordingTime)}

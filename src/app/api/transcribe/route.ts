@@ -16,12 +16,20 @@ export async function POST(request: Request) {
   }
 
   try {
+    const bytes = await audioFile.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    const tempFilePath = `/tmp/${audioFile.name}`;
+    await fs.promises.writeFile(tempFilePath, buffer);
+
     const stream = await openai.audio.transcriptions.create({
-      file: fs.createReadStream(process.cwd() + "/public/audio/sample.wav"),
+      file: fs.createReadStream(tempFilePath),
       model: "gpt-4o-mini-transcribe",
       response_format: "text",
       stream: true,
     });
+
+    fs.promises.unlink(tempFilePath).catch(console.error);
 
     const encoder = new TextEncoder();
 
