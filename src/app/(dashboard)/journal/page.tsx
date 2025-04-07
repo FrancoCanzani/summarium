@@ -17,7 +17,7 @@ export default async function JournalPage({
   const today = new Date().toISOString().split("T")[0];
   const selectedDay = day || today;
 
-  await queryClient.prefetchQuery({
+  void queryClient.prefetchQuery({
     queryKey: ["journal", selectedDay],
     queryFn: async () => await fetchJournal(selectedDay),
   });

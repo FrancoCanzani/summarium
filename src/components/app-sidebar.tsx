@@ -31,7 +31,7 @@ export async function AppSidebar() {
 
   const today = new Date().toISOString().split("T")[0];
 
-  await queryClient.prefetchQuery({
+  void queryClient.prefetchQuery({
     queryKey: ["journal"],
     queryFn: async () => await fetchJournal(today),
   });
