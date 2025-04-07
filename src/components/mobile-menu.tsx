@@ -5,6 +5,7 @@ import {
   Notebook,
   NotepadText,
   Settings,
+  SquareCheckBig,
 } from "lucide-react";
 import Link from "next/link";
 import { QueryClient } from "@tanstack/react-query";
@@ -36,9 +37,9 @@ export default async function MobileMenu() {
       </Link>
       <Link
         className="hover:bg-muted group flex h-10 flex-1 items-center justify-center rounded-sm px-3 py-1.5"
-        href="/#"
+        href="/tasks"
       >
-        <Newspaper className="size-5" />
+        <SquareCheckBig className="size-5" />
       </Link>
       <Link
         prefetch={true}

@@ -64,6 +64,12 @@ export async function AppSidebar() {
           Journal
         </Link>
         <Link
+          href={"/tasks"}
+          className="hover:bg-accent rounded-sm p-2 font-medium"
+        >
+          Tasks
+        </Link>
+        <Link
           href={"/docs"}
           className="hover:bg-accent rounded-sm p-2 font-medium"
         >

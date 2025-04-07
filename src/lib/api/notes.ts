@@ -21,7 +21,7 @@ export const verifySessionAndGetUserId = cache(async (): Promise<string> => {
   return user.id;
 });
 
-export const getNote = async (id: string): Promise<Note> => {
+export const getNote = async (id: string): Promise<Note | null> => {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -31,7 +31,9 @@ export const getNote = async (id: string): Promise<Note> => {
     .single();
 
   if (error) {
-    console.error("Error fetching notes:", error);
+    if (error.code === "PGRST116") {
+      return null;
+    }
     throw new Error(error.message);
   }
 

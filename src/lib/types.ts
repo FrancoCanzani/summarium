@@ -1,5 +1,7 @@
 import { ReactNode } from "react";
 import { Editor, Range } from "@tiptap/core";
+import { taskSchema } from "./schemas";
+import { z } from "zod";
 
 export interface Note {
   id: string;
@@ -34,4 +36,14 @@ export interface CommandItem {
   command: ({ editor, range }: { editor: Editor; range: Range }) => void;
   category?: string;
   shortcut?: string;
+}
+
+type TaskSchema = z.infer<typeof taskSchema>;
+
+export interface Task extends Omit<TaskSchema, "date"> {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  due_date: TaskSchema["date"];
+  user_id: string;
 }

@@ -5,6 +5,10 @@ import { Journal, Note } from "./types";
 import { revalidatePath } from "next/cache";
 import { revalidateTag } from "next/cache";
 import { verifySessionAndGetUserId } from "./api/notes";
+import { taskSchema } from "./schemas";
+import { getCachedUser } from "./api/auth";
+import { redirect } from "next/navigation";
+
 import OpenAI from "openai";
 
 export async function deleteJournal(id: string): Promise<{ id: string }> {
@@ -176,4 +180,47 @@ export async function saveNote(
       error: error instanceof Error ? error.message : "Unknown error occurred",
     };
   }
+}
+
+export async function createTask(formData: FormData) {
+  const supabase = await createClient();
+
+  const rawData = {
+    title: formData.get("title"),
+    description: formData.get("description"),
+    date: formData.get("date"),
+    status: formData.get("status"),
+    priority: formData.get("priority"),
+  };
+
+  const result = taskSchema.safeParse(rawData);
+
+  if (!result.success) {
+    return { success: false, errors: result.error.flatten().fieldErrors };
+  }
+
+  const validData = result.data;
+
+  const { data, error: authError } = await getCachedUser();
+
+  if (authError || !data || !data.user) {
+    redirect("/login");
+  }
+
+  const { error } = await supabase.from("tasks").insert({
+    title: validData.title,
+    due_date: validData.date,
+    description: validData.description,
+    status: validData.status,
+    priority: validData.priority,
+    user_id: data.user.id,
+  });
+
+  if (error) {
+    return { success: false, errors: error };
+  }
+
+  revalidatePath("/tasks");
+
+  return { success: true, data: validData };
 }

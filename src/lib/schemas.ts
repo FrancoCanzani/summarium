@@ -1,4 +1,5 @@
 import { z } from "zod";
+import * as chrono from "chrono-node";
 
 export const AuthSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address." }),
@@ -13,3 +14,18 @@ export const journalDateSchema = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/)
   .date();
+
+export const taskSchema = z.object({
+  title: z.string().min(1, { message: "Title is required" }),
+  description: z.string().optional(),
+  date: z
+    .string()
+    .optional()
+    .transform((val) => {
+      if (!val) return null;
+      const parsed = chrono.parseDate(val);
+      return parsed ? parsed : null;
+    }),
+  status: z.string().optional(),
+  priority: z.string().optional(),
+});
