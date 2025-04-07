@@ -6,9 +6,7 @@ import { getCachedUser } from "@/lib/api/auth";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 
-const Editor = dynamic(() => import("@/components/editor"), {
-  loading: () => <EditorSkeleton />,
-});
+const Editor = dynamic(() => import("@/components/editor"));
 
 export default async function EditorPage({
   params,

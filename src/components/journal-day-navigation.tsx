@@ -14,10 +14,10 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { validateDateParam } from "@/lib/utils";
 import { fetchJournal } from "@/lib/fetchers";
-import { getQueryClient } from "@/lib/utils";
+import { QueryClient } from "@tanstack/react-query";
 
 export default function JournalDayNavigation() {
-  const queryClient = getQueryClient();
+  const queryClient = new QueryClient();
   const searchParams = useSearchParams();
   const router = useRouter();
   const day = searchParams.get("day");
