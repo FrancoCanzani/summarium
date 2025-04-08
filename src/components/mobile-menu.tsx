@@ -1,7 +1,6 @@
 import {
   Home,
   Inbox,
-  Newspaper,
   Notebook,
   NotepadText,
   Settings,

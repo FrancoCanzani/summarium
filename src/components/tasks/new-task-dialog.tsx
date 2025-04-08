@@ -86,7 +86,7 @@ export default function NewTaskDialog() {
 
   return (
     <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button variant="outline" size="xs">
           <Plus className="size-4" />
         </Button>
