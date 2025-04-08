@@ -28,16 +28,12 @@ export default function Task({ task }: { task: TaskType }) {
     >
       <div className="flex min-w-0 items-center gap-3">
         <Checkbox />
-
         {renderStatusIcon(task.status)}
         {renderPriorityIcon(task.priority)}
-        <span
-          className="flex-shrink truncate text-sm font-medium"
-          title={task.title}
-        >
+        <span className="shrink-0 text-sm font-medium" title={task.title}>
           {task.title}
         </span>
-        <span className="text-muted-foreground flex-shrink-0 truncate text-xs">
+        <span className="text-muted-foreground shrink truncate text-xs">
           {task.description}
         </span>
       </div>

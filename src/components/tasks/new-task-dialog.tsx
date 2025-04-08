@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Plus,
   X,
   SignalLow,
   SignalMedium,
@@ -87,8 +86,8 @@ export default function NewTaskDialog() {
   return (
     <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="xs">
-          <Plus className="size-4" />
+        <Button variant="outline" size="sm">
+          New
         </Button>
       </DialogTrigger>
       <DialogContent className="gap-0 overflow-hidden rounded-sm p-0 sm:max-w-[650px]">
