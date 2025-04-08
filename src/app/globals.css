@@ -5,10 +5,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme {
-  --font-mono: var(--font-geist-mono);
-}
-
 .tiptap p.is-editor-empty:first-child::before {
   @apply text-muted-foreground pointer-events-none float-left h-0;
   content: attr(data-placeholder);

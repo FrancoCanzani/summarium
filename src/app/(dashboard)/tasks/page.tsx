@@ -16,19 +16,14 @@ import {
   SignalMedium,
   SignalLow,
 } from "lucide-react";
-import {
-  format,
-  formatDistanceToNow,
-  isToday,
-  isTomorrow,
-  parseISO,
-} from "date-fns";
+import { format, isToday, isTomorrow } from "date-fns";
 import { cn } from "@/lib/utils";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const getCachedTasks = cache(async () => {
   const { data, error } = await getCachedUser();
@@ -65,7 +60,7 @@ const renderStatusIcon = (status: string | undefined | null) => {
       tooltipText = "Complete";
       colorClass = "text-green-500";
       break;
-    case "wont-do":
+    case "no-do":
       icon = <CircleSlash className={cn(size, colorClass)} />;
       tooltipText = "Won't Do";
       colorClass = "text-red-500";
@@ -133,7 +128,7 @@ const renderPriorityIcon = (priority: string | undefined | null) => {
 const getDayName = (date: Date): string => {
   if (isToday(date)) return "Today";
   if (isTomorrow(date)) return "Tomorrow";
-  return format(date, "EEEE");
+  return format(date, "MMM d");
 };
 
 export default async function TasksPage() {
@@ -168,7 +163,7 @@ export default async function TasksPage() {
   return (
     <div className="flex h-screen flex-col">
       <header className="bg-sidebar sticky top-0 z-10 flex w-full items-center justify-between border-b p-2">
-        <h3 className="font-medium">Tasks</h3>
+        <h3 className="font-mono font-medium">Tasks</h3>
         <NewTaskDialog />
       </header>
 
@@ -191,33 +186,18 @@ export default async function TasksPage() {
                       className="hover:bg-accent/50 flex items-center justify-between gap-4 px-4 py-3 transition-colors duration-100"
                     >
                       <div className="flex min-w-0 items-center gap-3">
+                        <Checkbox />
                         {renderStatusIcon(task.status)}
                         {renderPriorityIcon(task.priority)}
                         <span
-                          className="flex-shrink truncate text-sm font-medium"
+                          className="truncate text-sm font-medium"
                           title={task.title}
                         >
                           {task.title}
                         </span>
-                        <span className="text-muted-foreground flex-shrink-0 truncate text-xs">
+                        <span className="text-muted-foreground truncate text-xs">
                           {task.description}
                         </span>
-                      </div>
-
-                      <div className="flex flex-shrink-0 items-center gap-4">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <span className="text-muted-foreground text-xs">
-                              {formatDistanceToNow(new Date(task.updated_at), {
-                                addSuffix: true,
-                              })}
-                            </span>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            Last Updated:{" "}
-                            {format(new Date(task.updated_at), "PPP p")}
-                          </TooltipContent>
-                        </Tooltip>
                       </div>
                     </li>
                   ))}
@@ -237,6 +217,8 @@ export default async function TasksPage() {
                       className="hover:bg-accent/50 flex items-center justify-between gap-4 px-4 py-3 transition-colors duration-100"
                     >
                       <div className="flex min-w-0 items-center gap-3">
+                        <Checkbox />
+
                         {renderStatusIcon(task.status)}
                         {renderPriorityIcon(task.priority)}
                         <span
@@ -255,27 +237,18 @@ export default async function TasksPage() {
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <span className="text-muted-foreground text-xs">
-                                {parseISO(new Date(task.due_date))}
+                                {format(
+                                  new Date(task.due_date),
+                                  "MMM d, h:mm a",
+                                )}{" "}
                               </span>
                             </TooltipTrigger>
                             <TooltipContent>
-                              Due Date: {format(new Date(task.due_date), "PPP")}
+                              Due Date:{" "}
+                              {format(new Date(task.due_date), "MMM d, h:mm a")}
                             </TooltipContent>
                           </Tooltip>
                         )}
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <span className="text-muted-foreground text-xs">
-                              {formatDistanceToNow(new Date(task.updated_at), {
-                                addSuffix: true,
-                              })}
-                            </span>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            Last Updated:{" "}
-                            {format(new Date(task.updated_at), "PPP p")}
-                          </TooltipContent>
-                        </Tooltip>
                       </div>
                     </li>
                   ))}

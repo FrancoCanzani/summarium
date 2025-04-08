@@ -19,9 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.className} font-[family-name:var(--font-geist-mono)] antialiased`}
-      >
+      <body className={`${inter.className} antialiased`}>
         <Providers>
           {children}
           <Toaster />
