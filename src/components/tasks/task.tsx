@@ -19,15 +19,33 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Dispatch, SetStateAction } from "react";
 
-export default function Task({ task }: { task: TaskType }) {
+export default function Task({
+  task,
+  selected,
+  setSelected,
+}: {
+  task: TaskType;
+  selected: string[];
+  setSelected: Dispatch<SetStateAction<string[]>>;
+}) {
   return (
     <li
       key={task.id}
       className="hover:bg-accent/50 flex items-center justify-between gap-4 px-4 py-3 transition-colors duration-100"
     >
       <div className="flex min-w-0 items-center gap-3">
-        <Checkbox />
+        <Checkbox
+          checked={selected.includes(task.id)}
+          onCheckedChange={(checked) => {
+            if (checked) {
+              setSelected([...selected, task.id]);
+            } else {
+              setSelected(selected.filter((id) => id !== task.id));
+            }
+          }}
+        />
         {renderStatusIcon(task.status)}
         {renderPriorityIcon(task.priority)}
         <span className="shrink-0 text-sm font-medium" title={task.title}>

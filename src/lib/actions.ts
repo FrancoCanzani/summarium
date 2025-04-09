@@ -201,6 +201,8 @@ export async function createTask(formData: FormData) {
 
   const validData = result.data;
 
+  console.log(validData);
+
   const { data, error: authError } = await getCachedUser();
 
   if (authError || !data || !data.user) {

@@ -26,6 +26,6 @@ export const taskSchema = z.object({
       const parsed = chrono.parseDate(val);
       return parsed ? parsed : null;
     }),
-  status: z.string().optional(),
-  priority: z.string().optional(),
+  status: z.string().transform((val) => (val == "" ? "backlog" : val)),
+  priority: z.string().transform((val) => (val === "" ? "no-priority" : val)),
 });

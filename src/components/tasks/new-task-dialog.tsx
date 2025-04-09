@@ -56,6 +56,7 @@ export default function NewTaskDialog() {
       const result = await createTask(formData);
 
       if (!result.success) {
+        console.log(result.errors);
         if (result.errors) {
           const errorMessages = Object.entries(result.errors)
             .map(([field, messages]) => {
@@ -86,7 +87,7 @@ export default function NewTaskDialog() {
   return (
     <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" className="font-normal">
           New
         </Button>
       </DialogTrigger>
