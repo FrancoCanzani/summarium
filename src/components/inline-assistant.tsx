@@ -81,7 +81,7 @@ export default function InlineAssistantView({ editor }: { editor: Editor }) {
                   setCompletion("");
                   editor.commands.removeAllInlineAssistants();
                 }}
-                disabled={isLoading || !input}
+                disabled={isLoading}
                 variant={"ghost"}
                 size={"icon"}
               >

@@ -37,15 +37,15 @@ export async function AppSidebar() {
   });
 
   return (
-    <Sidebar className="flex h-screen flex-col">
+    <Sidebar className="flex h-screen flex-col text-sm">
       <SidebarHeader className="gap-0">
-        <h2 className="text-zed flex items-center p-2 text-xl font-medium">
+        <h2 className="text-zed flex items-center p-2 text-lg font-medium">
           Summarium
         </h2>
 
         <Link
           href={`/notes/${await generateNextNoteId()}`}
-          className="hover:bg-accent rounded-sm p-2 font-medium"
+          className="hover:bg-accent rounded-sm p-2"
         >
           New Note
         </Link>
@@ -59,26 +59,17 @@ export async function AppSidebar() {
       <SidebarFooter className="gap-0">
         <Link
           href={`/journal?day=${today}`}
-          className="hover:bg-accent rounded-sm p-2 font-medium"
+          className="hover:bg-accent rounded-sm p-2"
         >
           Journal
         </Link>
-        <Link
-          href={"/tasks"}
-          className="hover:bg-accent rounded-sm p-2 font-medium"
-        >
+        <Link href={"/tasks"} className="hover:bg-accent rounded-sm p-2">
           Tasks
         </Link>
-        <Link
-          href={"/docs"}
-          className="hover:bg-accent rounded-sm p-2 font-medium"
-        >
+        <Link href={"/docs"} className="hover:bg-accent rounded-sm p-2">
           Docs
         </Link>
-        <Link
-          href={"/settings"}
-          className="hover:bg-accent rounded-sm p-2 font-medium"
-        >
+        <Link href={"/settings"} className="hover:bg-accent rounded-sm p-2">
           Settings
         </Link>
       </SidebarFooter>

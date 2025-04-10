@@ -1,7 +1,7 @@
 "use client";
 
 import { extensions } from "@/lib/extensions/extensions";
-import { Note } from "@/lib/types";
+import type { Note } from "@/lib/types";
 import { EditorContent, useEditor } from "@tiptap/react";
 import localForage from "localforage";
 import { useState, memo, useMemo } from "react";
@@ -98,33 +98,35 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
   return (
     <ToolbarProvider editor={editor}>
       <div className="flex min-h-full w-full">
-        <div className="relative mx-auto flex min-h-svh flex-1 flex-col">
+        <div className="relative mx-auto flex min-h-svh w-full flex-1 flex-col">
           <EditorHeader
             editor={editor}
             showTranscriber={showTranscriber}
             setShowTranscriber={setShowTranscriber}
           />
-
-          <div className="relative mx-auto flex w-full max-w-4xl flex-1 flex-col space-y-4 p-3">
-            <input
-              className="border-none text-xl font-medium outline-none"
-              placeholder="Title"
-              value={title}
-              onChange={(e) => handleTitleChange(e.target.value)}
-            />
+          <div className="relative flex w-full flex-1 flex-col items-center justify-center space-y-4 p-3">
+            <div className="w-full max-w-2xl">
+              <input
+                className="w-full border-none text-xl outline-none md:text-2xl"
+                placeholder="Title"
+                value={title}
+                onChange={(e) => handleTitleChange(e.target.value)}
+              />
+            </div>
             {/* prevents bubble menu layout shift */}
-            <div>
+            <div className="w-full max-w-2xl pb-24">
               <EditorBubbleMenu />
               <MemoizedEditorContent
                 editor={editor}
-                className="prose prose-p:my-0 prose-sm my-0 mb-14 h-full min-w-full flex-1 text-start text-black"
+                className="prose prose-p:my-0 prose-sm my-0 h-full flex-1 text-black"
               />
-            </div>
-            <div className="absolute bottom-16 left-1/2 -translate-x-1/2 transform">
-              <AudioTranscriber
-                editor={editor}
-                showTranscriber={showTranscriber}
-              />
+
+              <div className="sticky bottom-4 z-10 mt-4 flex justify-center">
+                <AudioTranscriber
+                  editor={editor}
+                  showTranscriber={showTranscriber}
+                />
+              </div>
             </div>
           </div>
         </div>
