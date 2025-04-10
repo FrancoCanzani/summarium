@@ -19,8 +19,8 @@ export default function SidebarNotes({ notes }: { notes: Note[] }) {
             prefetch={true}
             key={item.id}
             className={cn(
-              "hover:bg-zed-light flex w-full flex-col items-start justify-between gap-1.5 overflow-hidden rounded-sm px-2 py-1.5 text-xs",
-              id === item.id ? "bg-zed-light font-medium" : "bg-sidebar",
+              "hover:text-zed flex w-full flex-col items-start justify-between gap-1.5 overflow-hidden rounded-sm px-2 py-1.5 text-xs",
+              id === item.id && "text-zed",
             )}
           >
             <span className="w-full truncate text-start">

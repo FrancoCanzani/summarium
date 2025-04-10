@@ -104,7 +104,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
             showTranscriber={showTranscriber}
             setShowTranscriber={setShowTranscriber}
           />
-          <div className="relative flex w-full flex-1 flex-col items-center justify-center space-y-4 p-3">
+          <div className="relative flex w-full flex-1 flex-col items-center justify-start space-y-4 p-3">
             <div className="w-full max-w-2xl">
               <input
                 className="w-full border-none text-xl outline-none md:text-2xl"

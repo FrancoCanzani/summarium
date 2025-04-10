@@ -19,37 +19,37 @@ export default function EditorBubbleMenu() {
 
   const stylingToolbarItems = [
     {
-      icon: <Bold className="size-4" />,
+      icon: <Bold className="size-3.5" />,
       title: "Bold",
       action: () => editor.chain().focus().toggleBold().run(),
       isActive: () => editor.isActive("bold"),
     },
     {
-      icon: <Italic className="size-4" />,
+      icon: <Italic className="size-3.5" />,
       title: "Italic",
       action: () => editor.chain().focus().toggleItalic().run(),
       isActive: () => editor.isActive("italic"),
     },
     {
-      icon: <Underline className="size-4" />,
+      icon: <Underline className="size-3.5" />,
       title: "Underline",
       action: () => editor.chain().focus().toggleUnderline().run(),
       isActive: () => editor.isActive("underline"),
     },
     {
-      icon: <Strikethrough className="size-4" />,
+      icon: <Strikethrough className="size-3.5" />,
       title: "Strike",
       action: () => editor.chain().focus().toggleStrike().run(),
       isActive: () => editor.isActive("strike"),
     },
     {
-      icon: <Highlighter className="size-4" />,
+      icon: <Highlighter className="size-3.5" />,
       title: "Highlighter",
       action: () => editor.chain().focus().toggleHighlight().run(),
       isActive: () => editor.isActive("highlight"),
     },
     {
-      icon: <RemoveFormatting className="size-4" />,
+      icon: <RemoveFormatting className="size-3.5" />,
       title: "Formatting",
       action: () =>
         editor

@@ -33,7 +33,7 @@ export default function Task({
   return (
     <li
       key={task.id}
-      className="hover:bg-accent/50 flex items-center justify-between gap-4 px-4 py-3 transition-colors duration-100"
+      className="hover:bg-accent/50 flex items-center justify-between gap-4 px-4 py-3 transition-colors duration-300"
     >
       <div className="flex min-w-0 items-center gap-3">
         <Checkbox
