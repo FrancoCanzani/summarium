@@ -10,8 +10,9 @@ import {
   SignalHigh,
   SignalMedium,
   SignalLow,
+  Hourglass,
 } from "lucide-react";
-import { format } from "date-fns";
+import { format, isPast } from "date-fns";
 import { cn } from "@/lib/utils";
 import {
   Tooltip,
@@ -30,10 +31,17 @@ export default function Task({
   selected: string[];
   setSelected: Dispatch<SetStateAction<string[]>>;
 }) {
+  const isTaskOverdue = task.due_date && isPast(new Date(task.due_date));
+
   return (
     <li
       key={task.id}
-      className="hover:bg-accent/50 flex items-center justify-between gap-4 px-4 py-3 transition-colors duration-300"
+      className={cn(
+        "hover:bg-accent/50 flex items-center justify-between gap-4 px-4 py-3 transition-colors duration-300",
+        {
+          "opacity-40": task.status === "complete" || task.status === "wont-do",
+        },
+      )}
     >
       <div className="flex min-w-0 items-center gap-3">
         <Checkbox
@@ -48,7 +56,13 @@ export default function Task({
         />
         {renderStatusIcon(task.status)}
         {renderPriorityIcon(task.priority)}
-        <span className="shrink-0 text-sm font-medium" title={task.title}>
+        <span
+          className={cn("shrink-0 text-sm font-medium", {
+            "line-through":
+              task.status === "complete" || task.status === "wont-do",
+          })}
+          title={task.title}
+        >
           {task.title}
         </span>
         <span className="text-muted-foreground shrink truncate text-xs">
@@ -56,12 +70,26 @@ export default function Task({
         </span>
       </div>
 
-      <div className="flex flex-shrink-0 items-center gap-4">
+      <div className="flex flex-shrink-0 items-center gap-2">
+        {isTaskOverdue && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Hourglass className="size-3.5 text-orange-500" />
+            </TooltipTrigger>
+            <TooltipContent>Overdue</TooltipContent>
+          </Tooltip>
+        )}
+
         {task.due_date && (
           <Tooltip>
             <TooltipTrigger asChild>
-              <span className="text-muted-foreground text-xs">
-                {format(new Date(task.due_date), "MMM d, h:mm a")}{" "}
+              <span
+                className={cn(
+                  "text-muted-foreground text-xs",
+                  isTaskOverdue && "text-orange-600",
+                )}
+              >
+                {format(new Date(task.due_date), "MMM d, h:mm a")}
               </span>
             </TooltipTrigger>
             <TooltipContent>
@@ -74,8 +102,8 @@ export default function Task({
   );
 }
 
-const renderStatusIcon = (status: string | undefined | null) => {
-  const size = "size-4";
+export const renderStatusIcon = (status: string | undefined | null) => {
+  const size = "size-3.5";
   let icon: React.ReactNode;
   let tooltipText: string;
   let colorClass = "text-muted-foreground";
@@ -101,7 +129,8 @@ const renderStatusIcon = (status: string | undefined | null) => {
       tooltipText = "Complete";
       colorClass = "text-green-500";
       break;
-    case "no-do":
+    case "wont-do":
+    case "wont-do":
       icon = <CircleSlash className={cn(size, colorClass)} />;
       tooltipText = "Won't Do";
       colorClass = "text-red-500";
@@ -122,8 +151,8 @@ const renderStatusIcon = (status: string | undefined | null) => {
   );
 };
 
-const renderPriorityIcon = (priority: string | undefined | null) => {
-  const size = "size-4";
+export const renderPriorityIcon = (priority: string | undefined | null) => {
+  const size = "size-3.5";
   let icon: React.ReactNode;
   let tooltipText: string;
   let colorClass = "text-muted-foreground";

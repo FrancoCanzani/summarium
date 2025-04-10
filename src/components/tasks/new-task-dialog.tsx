@@ -15,6 +15,11 @@ import {
   SignalMedium,
   SignalHigh,
   TriangleAlert,
+  Circle,
+  CircleDashed,
+  CircleDotDashed,
+  CheckCircle2,
+  CircleSlash,
 } from "lucide-react";
 import {
   Select,
@@ -128,33 +133,33 @@ export default function NewTaskDialog() {
                 </SelectTrigger>
                 <SelectContent className="rounded-sm">
                   <SelectItem value="backlog">
-                    <div className="flex items-center">
-                      <span className="mr-2 text-orange-500">●</span>
-                      Backlog
+                    <div className="flex w-full items-center justify-start space-x-2 text-xs">
+                      <CircleDashed className="size-3.5" />
+                      <span>Backlog</span>
                     </div>
                   </SelectItem>
                   <SelectItem value="todo">
-                    <div className="flex items-center">
-                      <span className="mr-2 text-blue-500">●</span>
-                      Todo
+                    <div className="flex w-full items-center justify-start space-x-2 text-xs">
+                      <Circle className="size-3.5" />
+                      <span>Todo</span>
                     </div>
                   </SelectItem>
                   <SelectItem value="in-progress">
-                    <div className="flex items-center">
-                      <span className="mr-2 text-yellow-500">●</span>
-                      In Progress
+                    <div className="flex w-full items-center justify-start space-x-2 text-xs">
+                      <CircleDotDashed className="size-3.5" />
+                      <span>In Progress</span>
                     </div>
                   </SelectItem>
                   <SelectItem value="complete">
-                    <div className="flex items-center">
-                      <span className="mr-2 text-green-500">●</span>
-                      Complete
+                    <div className="flex w-full items-center justify-start space-x-2 text-xs">
+                      <CheckCircle2 className="size-3.5" />
+                      <span>Complete</span>
                     </div>
                   </SelectItem>
                   <SelectItem value="wont-do">
-                    <div className="flex items-center">
-                      <span className="mr-2 text-red-500">●</span>
-                      Won&apos;t do
+                    <div className="flex w-full items-center justify-start space-x-2 text-xs">
+                      <CircleSlash className="size-3.5" />
+                      <span>Won&apos;t do</span>
                     </div>
                   </SelectItem>
                 </SelectContent>
@@ -168,32 +173,32 @@ export default function NewTaskDialog() {
                 </SelectTrigger>
                 <SelectContent className="rounded-sm">
                   <SelectItem value="no-priority">
-                    <div className="flex w-full items-center justify-start space-x-2">
-                      <X className="size-4" />
+                    <div className="flex w-full items-center justify-start space-x-2 text-xs">
+                      <X className="size-3.5" />
                       <span>No Priority</span>
                     </div>
                   </SelectItem>
                   <SelectItem value="urgent">
-                    <div className="flex w-full items-center justify-start space-x-2">
-                      <TriangleAlert className="size-4" />
+                    <div className="flex w-full items-center justify-start space-x-2 text-xs">
+                      <TriangleAlert className="size-3.5" />
                       <span>Urgent</span>
                     </div>
                   </SelectItem>
                   <SelectItem value="high">
-                    <div className="flex w-full items-center justify-start space-x-2">
-                      <SignalHigh className="size-4" />
+                    <div className="flex w-full items-center justify-start space-x-2 text-xs">
+                      <SignalHigh className="size-3.5" />
                       <span>High</span>
                     </div>
                   </SelectItem>
                   <SelectItem value="medium">
-                    <div className="flex w-full items-center justify-start space-x-2">
-                      <SignalMedium className="size-4" />
+                    <div className="flex w-full items-center justify-start space-x-2 text-xs">
+                      <SignalMedium className="size-3.5" />
                       <span>Medium</span>
                     </div>
                   </SelectItem>
                   <SelectItem value="low">
-                    <div className="flex w-full items-center justify-start space-x-2">
-                      <SignalLow className="size-4" />
+                    <div className="flex w-full items-center justify-start space-x-2 text-xs">
+                      <SignalLow className="size-3.5" />
                       <span>Low</span>
                     </div>
                   </SelectItem>

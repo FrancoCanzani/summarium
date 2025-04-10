@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "./supabase/server";
-import { Journal, Note } from "./types";
+import { Journal, Note, Task } from "./types";
 import { revalidatePath } from "next/cache";
 import { revalidateTag } from "next/cache";
 import { verifySessionAndGetUserId } from "./api/notes";
@@ -11,6 +11,7 @@ import { redirect } from "next/navigation";
 
 import OpenAI from "openai";
 
+// --- Journal Actions ---
 export async function deleteJournal(id: string): Promise<{ id: string }> {
   const userId = await verifySessionAndGetUserId();
   const supabase = await createClient();
@@ -92,6 +93,7 @@ export async function saveJournal(
   }
 }
 
+// --- Audio/Note Actions ---
 export async function transcribeAudioFile(formData: FormData) {
   const openai = new OpenAI();
 
@@ -182,6 +184,8 @@ export async function saveNote(
   }
 }
 
+// --- Task Actions ---
+
 export async function createTask(formData: FormData) {
   const supabase = await createClient();
 
@@ -200,8 +204,6 @@ export async function createTask(formData: FormData) {
   }
 
   const validData = result.data;
-
-  console.log(validData);
 
   const { data, error: authError } = await getCachedUser();
 
@@ -225,4 +227,74 @@ export async function createTask(formData: FormData) {
   revalidatePath("/tasks");
 
   return { success: true, data: validData };
+}
+
+// todo: this is too abstract and hard to know what it does
+export async function updateTask(
+  taskId: string,
+  updates: Partial<Task>,
+): Promise<{ success: boolean; error?: string }> {
+  const userId = await verifySessionAndGetUserId();
+  const supabase = await createClient();
+
+  const allowedUpdates: Partial<Task> = {};
+  if (updates.status !== undefined) allowedUpdates.status = updates.status;
+  if (updates.priority !== undefined)
+    allowedUpdates.priority = updates.priority;
+  if (updates.due_date !== undefined)
+    allowedUpdates.due_date = updates.due_date;
+
+  allowedUpdates.updated_at = new Date().toISOString();
+
+  if (Object.keys(allowedUpdates).length === 1 && allowedUpdates.updated_at) {
+    console.warn(
+      `UpdateTask called for task ${taskId} with no valid fields to update.`,
+    );
+    return { success: true };
+  }
+
+  const { error } = await supabase
+    .from("tasks")
+    .update(allowedUpdates)
+    .eq("id", taskId)
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error(
+      `Error updating task ${taskId} for user ${userId}:`,
+      error.message,
+    );
+    return { success: false, error: error.message };
+  }
+
+  revalidatePath("/tasks");
+  revalidateTag(`task-${taskId}`);
+
+  return { success: true };
+}
+
+export async function deleteTask(
+  taskId: string,
+): Promise<{ success: boolean; error?: string }> {
+  const userId = await verifySessionAndGetUserId();
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("tasks")
+    .delete()
+    .eq("id", taskId)
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error(
+      `Error deleting task ${taskId} for user ${userId}:`,
+      error.message,
+    );
+    return { success: false, error: error.message };
+  }
+
+  revalidatePath("/tasks");
+  revalidateTag(`task-${taskId}`);
+
+  return { success: true };
 }

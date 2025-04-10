@@ -8,6 +8,7 @@ import {
   defaultShouldDehydrateQuery,
 } from "@tanstack/react-query";
 import { ParamValue } from "next/dist/server/request/params";
+import { addDays, addWeeks, addMonths, addYears } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -135,4 +136,56 @@ export const updateScrollView = (container: HTMLElement, item: HTMLElement) => {
   } else if (bottom > containerHeight + container.scrollTop) {
     container.scrollTop += bottom - containerHeight - container.scrollTop + 5;
   }
+};
+
+export function calculatePostponedDate(
+  currentDate: Date | null | undefined,
+  duration: string,
+): Date | null {
+  const baseDate = currentDate ? new Date(currentDate) : new Date();
+
+  switch (duration) {
+    case "1 day":
+      return addDays(baseDate, 1);
+    case "1 week":
+      return addWeeks(baseDate, 1);
+    case "1 month":
+      return addMonths(baseDate, 1);
+    case "1 year":
+      return addYears(baseDate, 1);
+    default:
+      return baseDate;
+  }
+}
+
+const statusLabels: { [key: string]: string } = {
+  backlog: "Backlog",
+  todo: "Todo",
+  "in-progress": "In Progress",
+  complete: "Complete",
+  "wont-do": "Won't Do",
+};
+
+export const getStatusLabel = (
+  statusValue: string | null | undefined,
+): string => {
+  return statusValue
+    ? statusLabels[statusValue.toLowerCase()] || statusValue
+    : "";
+};
+
+const priorityLabels: { [key: string]: string } = {
+  "no-priority": "No Priority",
+  urgent: "Urgent",
+  high: "High",
+  medium: "Medium",
+  low: "Low",
+};
+
+export const getPriorityLabel = (
+  priorityValue: string | null | undefined,
+): string => {
+  return priorityValue
+    ? priorityLabels[priorityValue.toLowerCase()] || priorityValue
+    : "";
 };
