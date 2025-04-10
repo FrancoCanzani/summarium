@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import { Note } from "@/lib/types";
 import { useParams } from "next/navigation";
+import { ChevronLeft } from "lucide-react";
 
 export default function SidebarNotes({ notes }: { notes: Note[] }) {
   const { id } = useParams();
@@ -23,9 +24,12 @@ export default function SidebarNotes({ notes }: { notes: Note[] }) {
               id === item.id && "text-zed",
             )}
           >
-            <span className="w-full truncate text-start">
-              {item.title || "Untitled"}
-            </span>
+            <div className="flex w-full items-center justify-between gap-1">
+              <span className="w-full truncate text-start">
+                {item.title || "Untitled"}
+              </span>
+              {id === item.id && <ChevronLeft className="size-3" />}
+            </div>
             {item.updated_at && (
               <span className="w-full text-end text-[10px] text-gray-400">
                 {formatDistanceToNow(new Date(item.updated_at), {

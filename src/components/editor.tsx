@@ -114,14 +114,14 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
               />
             </div>
             {/* prevents bubble menu layout shift */}
-            <div className="w-full max-w-2xl pb-24">
+            <div className="h-full w-full max-w-2xl pb-24">
               <EditorBubbleMenu />
               <MemoizedEditorContent
                 editor={editor}
                 className="prose prose-p:my-0 prose-sm my-0 h-full flex-1 text-black"
               />
 
-              <div className="sticky bottom-4 z-10 mt-4 flex justify-center">
+              <div className="sticky bottom-4 z-10 flex justify-center">
                 <AudioTranscriber
                   editor={editor}
                   showTranscriber={showTranscriber}
