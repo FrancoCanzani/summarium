@@ -34,7 +34,6 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { buttonVariants } from "@/components/ui/button";
 import { toast } from "sonner";
 import { updateTask, deleteTask } from "@/lib/actions";
 import {
