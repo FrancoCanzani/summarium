@@ -56,7 +56,7 @@ export default function TasksHeader({
   const [isPending, startTransition] = useTransition();
   const [status, setStatus] = useQueryState("status");
   const [priority, setPriority] = useQueryState("priority");
-  const [view, setView] = useQueryState("view", { defaultValue: "all" });
+  const [view, setView] = useQueryState("view", { defaultValue: "active" });
 
   const handleBulkAction = (
     taskIds: string[],

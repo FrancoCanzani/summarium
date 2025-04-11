@@ -18,6 +18,7 @@ export const journalDateSchema = z
 export const taskSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   description: z.string().optional(),
+  sanitized_description: z.string().optional(),
   date: z
     .string()
     .optional()

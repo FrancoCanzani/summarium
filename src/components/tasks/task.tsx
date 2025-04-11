@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dispatch, SetStateAction } from "react";
+import Link from "next/link";
 
 export default function Task({
   task,
@@ -34,7 +35,8 @@ export default function Task({
   const isTaskOverdue = task.due_date && isPast(new Date(task.due_date));
 
   return (
-    <li
+    <Link
+      href={`/tasks/${task.id}`}
       key={task.id}
       className={cn(
         "hover:bg-accent/50 flex items-center justify-between gap-4 rounded-sm px-3 py-2 transition-colors duration-300",
@@ -66,7 +68,7 @@ export default function Task({
           {task.title}
         </span>
         <span className="text-muted-foreground shrink truncate text-xs">
-          {task.description}
+          {task.sanitized_description}
         </span>
       </div>
 
@@ -105,7 +107,7 @@ export default function Task({
           </Tooltip>
         )}
       </div>
-    </li>
+    </Link>
   );
 }
 

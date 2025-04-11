@@ -238,6 +238,12 @@ export async function updateTask(
   const supabase = await createClient();
 
   const allowedUpdates: Partial<Task> = {};
+
+  if (updates.title !== undefined) allowedUpdates.title = updates.title;
+  if (updates.description !== undefined)
+    allowedUpdates.description = updates.description;
+  if (updates.sanitized_description !== undefined)
+    allowedUpdates.sanitized_description = updates.sanitized_description;
   if (updates.status !== undefined) allowedUpdates.status = updates.status;
   if (updates.priority !== undefined)
     allowedUpdates.priority = updates.priority;
