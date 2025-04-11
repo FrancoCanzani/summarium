@@ -134,11 +134,12 @@ export default function EditorVersionControl({ editor }: { editor: Editor }) {
       <SheetTrigger asChild>
         <ButtonWithTooltip
           tooltipText="Version control"
-          variant="ghost"
-          size="icon"
-          className="size-6"
+          variant="outline"
+          size="sm"
+          className="font-normal"
         >
-          <Clock className="size-4" />
+          <Clock className="size-3.5" />
+          <span>History</span>
         </ButtonWithTooltip>
       </SheetTrigger>
       <SheetContent

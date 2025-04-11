@@ -6,7 +6,6 @@ import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
 import { ConfirmActionDialog } from "./confirm-action-dialog";
 import EditorVersionControl from "./editor-version-control";
-import { InlineAssistantToolbar } from "./toolbars/inline-assistant";
 import { SearchAndReplaceToolbar } from "./toolbars/search-and-replace";
 import { TranscribeToolbar } from "./toolbars/transcribe";
 import ButtonWithTooltip from "./ui/button-with-tooltip";
@@ -52,7 +51,6 @@ export default function EditorHeader({
           </ConfirmActionDialog>
           <EditorVersionControl editor={editor} />
           <SearchAndReplaceToolbar />
-          <InlineAssistantToolbar />
           <TranscribeToolbar
             onClick={() => {
               setShowTranscriber(!showTranscriber);

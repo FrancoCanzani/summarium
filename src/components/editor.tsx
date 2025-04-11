@@ -97,7 +97,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
 
   return (
     <ToolbarProvider editor={editor}>
-      <div className="flex min-h-full w-full">
+      <div className="scrollbar-gutter-stable flex min-h-full w-full">
         <div className="relative mx-auto flex min-h-svh w-full flex-1 flex-col">
           <EditorHeader
             editor={editor}

@@ -145,7 +145,7 @@ export default function TasksHeader({
     label: string,
   ) => (
     <DropdownMenuItem onClick={onClick} disabled={isPending}>
-      <span className="mr-2">{icon}</span>
+      <span className="">{icon}</span>
       <span>{label}</span>
     </DropdownMenuItem>
   );

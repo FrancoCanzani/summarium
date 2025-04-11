@@ -65,15 +65,15 @@ export function SearchAndReplaceToolbar() {
         <TooltipTrigger asChild>
           <PopoverTrigger disabled={!editor} asChild>
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
               onClick={() => {
                 setOpen(!open);
               }}
-              className={cn("size-6")}
+              className={cn("font-normal")}
             >
-              <Search className="h-4 w-4" />
-              <span className="sr-only">Search & Replace</span>
+              <Search className="size-3.5" />
+              <span className="">Search</span>
             </Button>
           </PopoverTrigger>
         </TooltipTrigger>
