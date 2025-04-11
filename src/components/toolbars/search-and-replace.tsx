@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, Search, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Search, X, Replace } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -66,13 +66,13 @@ export function SearchAndReplaceToolbar() {
           <PopoverTrigger disabled={!editor} asChild>
             <Button
               variant="outline"
-              size="sm"
+              size="xs"
               onClick={() => {
                 setOpen(!open);
               }}
               className={cn("font-normal")}
             >
-              <Search className="size-3.5" />
+              <Search className="size-3" />
               <span className="">Search</span>
             </Button>
           </PopoverTrigger>
@@ -90,48 +90,45 @@ export function SearchAndReplaceToolbar() {
         onEscapeKeyDown={() => {
           setOpen(false);
         }}
-        className="bg-background relative flex w-[400px] px-3 py-2.5"
+        className="bg-background relative flex w-[400px] px-2 py-1.5"
       >
         {!replacing ? (
           <div className={cn("relative flex w-full items-center gap-1.5")}>
             <Input
               value={searchText}
-              className="mr-1.5 h-8 flex-1 px-1.5 text-sm"
+              className="mr-1.5 h-7 flex-1 px-1.5 text-sm"
               onChange={(e) => {
                 setSearchText(e.target.value);
               }}
               placeholder="Search..."
             />
-            <span className="text-sm">
+            <span className="text-xs">
               {results?.length === 0 ? selectedResult : selectedResult + 1}/
               {results?.length}
             </span>
-            <Button
-              onClick={selectPrevious}
-              size="icon"
-              variant="ghost"
-              className="size-7"
-            >
-              <ArrowLeft className="size-4" />
+            <Button onClick={selectPrevious} size="xs" variant="ghost">
+              <ArrowLeft className="size-3" />
             </Button>
+            <Button onClick={selectNext} size="xs" variant="ghost">
+              <ArrowRight className="size-3" />
+            </Button>
+            <Separator orientation="vertical" className="mx-0.5 h-5" />
             <Button
-              onClick={selectNext}
-              size="icon"
-              className="size-7"
+              onClick={() => setReplacing(!replacing)}
+              size="xs"
               variant="ghost"
             >
-              <ArrowRight className="h-4 w-4" />
+              <Replace className="size-3" />
             </Button>
-            <Separator orientation="vertical" className="mx-0.5 h-7" />
+            <Separator orientation="vertical" className="mx-0.5 h-5" />
             <Button
               onClick={() => {
                 setOpen(false);
               }}
-              size="icon"
-              className="size-7"
+              size="xs"
               variant="ghost"
             >
-              <X className="h-4 w-4" />
+              <X className="size-3" />
             </Button>
           </div>
         ) : (
@@ -140,18 +137,17 @@ export function SearchAndReplaceToolbar() {
               onClick={() => {
                 setOpen(false);
               }}
-              className="absolute right-1 top-1.5 h-4 w-4 cursor-pointer"
+              className="absolute right-1 top-1.5 size-3"
             />
             <div className="flex w-full items-center gap-3">
               <Button
-                size="icon"
-                className="size-7 rounded-full"
+                size="xs"
                 variant="ghost"
                 onClick={() => {
                   setReplacing(false);
                 }}
               >
-                <ArrowLeft className="h-4 w-4" />
+                <ArrowLeft className="size-3" />
               </Button>
               <h2 className="text-sm font-medium">Search and replace</h2>
             </div>
@@ -166,18 +162,16 @@ export function SearchAndReplaceToolbar() {
                       setSearchText(e.target.value);
                     }}
                     placeholder="Search..."
-                    className="h-8 px-1.5"
+                    className="h-7 rounded-sm px-1.5"
                   />
                   {results?.length === 0 ? selectedResult : selectedResult + 1}/
                   {results?.length}
                 </div>
               </div>
               <div className="mb-2">
-                <Label className="text-gray-11 mb-1 text-xs">
-                  Replace with
-                </Label>
+                <Label className="mb-1 text-xs">Replace with</Label>
                 <Input
-                  className="h-8 px-1.5"
+                  className="h-7 rounded-sm px-1.5"
                   value={replaceText}
                   onChange={(e) => {
                     setReplaceText(e.target.value);
@@ -204,38 +198,19 @@ export function SearchAndReplaceToolbar() {
 
             <div className="actions mt-6 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Button
-                  onClick={selectPrevious}
-                  size="icon"
-                  className="h-7 w-7"
-                  variant="secondary"
-                >
-                  <ArrowLeft className="h-4 w-4" />
+                <Button onClick={selectPrevious} size="xs" variant="secondary">
+                  <ArrowLeft className="size-3" />
                 </Button>
-                <Button
-                  onClick={selectNext}
-                  size="icon"
-                  className="h-7 w-7"
-                  variant="secondary"
-                >
-                  <ArrowRight className="h-4 w-4" />
+                <Button onClick={selectNext} size="xs" variant="secondary">
+                  <ArrowRight className="size-3" />
                 </Button>
               </div>
 
               <div className="main-actions flex items-center gap-2">
-                <Button
-                  size="sm"
-                  className="h-7 px-3 text-xs"
-                  variant="secondary"
-                  onClick={replaceAll}
-                >
+                <Button size="xs" variant="secondary" onClick={replaceAll}>
                   Replace All
                 </Button>
-                <Button
-                  onClick={replace}
-                  size="sm"
-                  className="h-7 px-3 text-xs"
-                >
+                <Button onClick={replace} size="xs">
                   Replace
                 </Button>
               </div>

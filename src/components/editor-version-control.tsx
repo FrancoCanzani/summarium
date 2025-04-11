@@ -135,10 +135,10 @@ export default function EditorVersionControl({ editor }: { editor: Editor }) {
         <ButtonWithTooltip
           tooltipText="Version control"
           variant="outline"
-          size="sm"
+          size="xs"
           className="font-normal"
         >
-          <Clock className="size-3.5" />
+          <Clock className="size-3" />
           <span>History</span>
         </ButtonWithTooltip>
       </SheetTrigger>

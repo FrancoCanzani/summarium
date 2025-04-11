@@ -21,19 +21,19 @@ export function TranscribeToolbar({
       <TooltipTrigger asChild>
         <Button
           variant="outline"
-          size="sm"
+          size="xs"
           className={cn("font-normal", showTranscriber && "bg-accent")}
           onClick={(e) => {
             onClick?.(e);
           }}
         >
-          <Speech className="size-3.5" />
+          <Speech className="size-3" />
           <span>Transcribe</span>
         </Button>
       </TooltipTrigger>
       <TooltipContent>
         <span>Transcribe</span>
-        <span className="text-gray-11 ml-1 text-xs">(cmd + t)</span>
+        <span className="ml-1 text-xs">(cmd + t)</span>
       </TooltipContent>
     </Tooltip>
   );
