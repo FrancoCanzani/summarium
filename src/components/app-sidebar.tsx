@@ -42,7 +42,9 @@ export async function AppSidebar() {
         <h2 className="text-zed flex items-center p-2 text-lg font-medium">
           Summarium
         </h2>
-
+        <Link href={`/home`} className="hover:bg-accent rounded-sm p-1.5">
+          Home
+        </Link>
         <Link
           href={`/notes/${await generateNextNoteId()}`}
           className="hover:bg-accent rounded-sm p-1.5"
