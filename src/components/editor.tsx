@@ -97,15 +97,15 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
 
   return (
     <ToolbarProvider editor={editor}>
-      <div className="scrollbar-gutter-stable flex min-h-full w-full">
-        <div className="relative mx-auto flex min-h-svh w-full flex-1 flex-col">
+      <div className="flex min-h-full w-full">
+        <div className="scrollbar-gutter-stable relative mx-auto flex min-h-svh w-full flex-1 flex-col">
           <EditorHeader
             editor={editor}
             showTranscriber={showTranscriber}
             setShowTranscriber={setShowTranscriber}
           />
           <div className="relative flex w-full flex-1 flex-col items-center justify-start space-y-4 p-3">
-            <div className="w-full max-w-2xl">
+            <div className="mx-auto w-full max-w-xl">
               <input
                 className="w-full border-none text-xl outline-none md:text-2xl"
                 placeholder="Title"
@@ -114,7 +114,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
               />
             </div>
             {/* prevents bubble menu layout shift */}
-            <div className="h-full w-full max-w-2xl pb-24">
+            <div className="mx-auto h-full w-full max-w-xl pb-24">
               <EditorBubbleMenu />
               <MemoizedEditorContent
                 editor={editor}

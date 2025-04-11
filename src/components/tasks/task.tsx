@@ -37,7 +37,7 @@ export default function Task({
     <li
       key={task.id}
       className={cn(
-        "hover:bg-accent/50 flex items-center justify-between gap-4 px-4 py-3 transition-colors duration-300",
+        "hover:bg-accent/50 flex items-center justify-between gap-4 px-3 py-2 transition-colors duration-300",
         {
           "opacity-40": task.status === "complete" || task.status === "wont-do",
         },
@@ -71,14 +71,18 @@ export default function Task({
       </div>
 
       <div className="flex flex-shrink-0 items-center gap-2">
-        {isTaskOverdue && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Hourglass className="size-3.5 text-orange-500" />
-            </TooltipTrigger>
-            <TooltipContent>Overdue</TooltipContent>
-          </Tooltip>
-        )}
+        <div className="flex flex-shrink-0 items-center gap-2">
+          {isTaskOverdue &&
+            task.status !== "complete" &&
+            task.status !== "wont-do" && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Hourglass className="size-3.5 text-orange-500" />
+                </TooltipTrigger>
+                <TooltipContent>Overdue</TooltipContent>
+              </Tooltip>
+            )}
+        </div>
 
         {task.due_date && (
           <Tooltip>
@@ -86,7 +90,10 @@ export default function Task({
               <span
                 className={cn(
                   "text-muted-foreground text-xs",
-                  isTaskOverdue && "text-orange-600",
+                  isTaskOverdue &&
+                    task.status !== "complete" &&
+                    task.status !== "wont-do" &&
+                    "text-orange-600",
                 )}
               >
                 {format(new Date(task.due_date), "MMM d, h:mm a")}

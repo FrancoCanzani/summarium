@@ -122,7 +122,7 @@ function JournalDatePicker({ selectedDay }: { selectedDay: string }) {
         <Button
           variant={"ghost"}
           size={"sm"}
-          className="text-zed text-xl font-medium"
+          className="text-zed hover:text-zed text-xl font-medium"
         >
           {format(parseDate(selectedDay), "MMMM d, yyyy")}
         </Button>
