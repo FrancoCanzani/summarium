@@ -144,7 +144,7 @@ export default function EditorVersionControl({ editor }: { editor: Editor }) {
       </SheetTrigger>
       <SheetContent
         className={cn(
-          "flex flex-col rounded-sm text-sm",
+          "flex flex-col rounded-l-sm text-sm",
           isMobile ? "h-[90%] w-full" : "h-full w-96",
         )}
         side={isMobile ? "bottom" : "right"}

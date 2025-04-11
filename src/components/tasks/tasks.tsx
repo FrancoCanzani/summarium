@@ -6,12 +6,11 @@ import Task from "./task";
 import { format, isToday, isTomorrow } from "date-fns";
 import { useQueryState } from "nuqs";
 import TasksHeader from "./tasks-header";
-import { Separator } from "../ui/separator";
 
 export default function Tasks({ tasks }: { tasks: TaskType[] }) {
   const [status] = useQueryState("status");
   const [priority] = useQueryState("priority");
-  const [view] = useQueryState("view", { defaultValue: "all" });
+  const [view] = useQueryState("view", { defaultValue: "active" });
 
   const [selected, setSelected] = useState<string[]>([]);
 
@@ -79,10 +78,8 @@ export default function Tasks({ tasks }: { tasks: TaskType[] }) {
           <div className="pl-2">
             {unscheduledTasks.length > 0 && (
               <div className="group">
-                <div className="flex items-center space-x-2">
-                  <h4 className="py-2 text-xs font-medium">Unscheduled</h4>
-                  <Separator />
-                </div>
+                <h4 className="py-2 text-xs font-medium">Unscheduled</h4>
+
                 <ul className="divide-border group-hover:border-l-zed border-l-zed-light divide-y divide-dashed border-l-2 transition-colors duration-200">
                   {unscheduledTasks.map((task: TaskType) => (
                     <Task
@@ -98,10 +95,8 @@ export default function Tasks({ tasks }: { tasks: TaskType[] }) {
 
             {sortedGroups.map(([dayName, dayTasks]) => (
               <div key={dayName} className="group">
-                <div className="flex items-center space-x-2">
-                  <h4 className="py-2 text-xs font-medium">{dayName}</h4>
-                  <Separator />
-                </div>
+                <h4 className="py-2 text-xs font-medium">{dayName}</h4>
+
                 <ul className="divide-border group-hover:border-l-zed border-l-zed-light divide-y divide-dashed border-l-2 transition-colors duration-200">
                   {dayTasks.map((task: TaskType) => (
                     <Task

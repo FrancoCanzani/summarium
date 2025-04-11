@@ -20,7 +20,7 @@ export default function SidebarNotes({ notes }: { notes: Note[] }) {
             prefetch={true}
             key={item.id}
             className={cn(
-              "hover:text-zed flex w-full flex-col items-start justify-between gap-1.5 overflow-hidden rounded-sm px-2 py-1.5 text-xs",
+              "hover:text-zed flex w-full flex-col items-start justify-between gap-1 overflow-hidden rounded-sm px-2 py-1.5 text-xs",
               id === item.id && "text-zed",
             )}
           >
