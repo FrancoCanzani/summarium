@@ -37,7 +37,7 @@ export default function Task({
     <li
       key={task.id}
       className={cn(
-        "hover:bg-accent/50 flex items-center justify-between gap-4 px-3 py-2 transition-colors duration-300",
+        "hover:bg-accent/50 flex items-center justify-between gap-4 rounded-sm px-3 py-2 transition-colors duration-300",
         {
           "opacity-40": task.status === "complete" || task.status === "wont-do",
         },
