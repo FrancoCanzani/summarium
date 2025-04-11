@@ -34,6 +34,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { buttonVariants } from "@/components/ui/button";
 import { toast } from "sonner";
 import { updateTask, deleteTask } from "@/lib/actions";
 import {
@@ -288,7 +289,10 @@ export default function TasksHeader({
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem onClick={handleDeleteSelected}>
+                <DropdownMenuItem
+                  onClick={handleDeleteSelected}
+                  className="bg-red-100 hover:bg-red-200"
+                >
                   <Trash className="size-3.5 text-black" />
                   <span>Delete</span>
                 </DropdownMenuItem>
@@ -318,7 +322,7 @@ export default function TasksHeader({
           onClick={() => setView("all")}
           disabled={isPending}
         >
-          <Layers className="size-3.5" />
+          <Layers className="size-3" />
           All Tasks
         </Button>
         <Button
@@ -331,7 +335,7 @@ export default function TasksHeader({
           onClick={() => setView("active")}
           disabled={isPending}
         >
-          <Circle className="size-3.5" />
+          <Circle className="size-3" />
           Active
         </Button>
 

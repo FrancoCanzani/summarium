@@ -59,15 +59,12 @@ export const LinkToolbar = React.forwardRef<HTMLButtonElement>((props, ref) => {
             <PopoverTrigger asChild>
               <Button
                 variant="ghost"
-                size="icon"
-                className={cn(
-                  "size-7 rounded-sm p-1",
-                  editor.isActive("link") && "bg-accent",
-                )}
+                size="xs"
+                className={cn("", editor.isActive("link") && "bg-accent")}
                 ref={ref}
                 {...props}
               >
-                <LinkIcon className="h-4 w-4" />
+                <LinkIcon className="size-3" />
                 <span className="sr-only">Link</span>
               </Button>
             </PopoverTrigger>
@@ -103,13 +100,8 @@ export const LinkToolbar = React.forwardRef<HTMLButtonElement>((props, ref) => {
       {editor.isActive("link") && (
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="size-6"
-              onClick={removeLink}
-            >
-              <UnlinkIcon className="h-4 w-4" />
+            <Button variant="ghost" size="xs" onClick={removeLink}>
+              <UnlinkIcon className="size-3" />
               <span className="sr-only">Remove Link</span>
             </Button>
           </TooltipTrigger>

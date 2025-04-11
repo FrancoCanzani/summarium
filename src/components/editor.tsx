@@ -118,10 +118,10 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
               <EditorBubbleMenu />
               <MemoizedEditorContent
                 editor={editor}
-                className="prose prose-p:my-0 prose-sm my-0 h-full flex-1 text-black"
+                className="prose prose-sm my-0 h-full flex-1 text-black"
               />
 
-              <div className="sticky bottom-4 z-10 flex justify-center">
+              <div className="sticky bottom-12 z-10 flex justify-center md:bottom-4">
                 <AudioTranscriber
                   editor={editor}
                   showTranscriber={showTranscriber}

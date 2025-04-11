@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
-import { Inter } from "next/font/google";
+import { Noto_Sans } from "next/font/google";
 import Providers from "@/components/providers";
 
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const noto = Noto_Sans({ subsets: ["cyrillic"] });
 
 export const metadata: Metadata = {
   title: "Summarium",
@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${noto.className} antialiased`}>
         <Providers>
           {children}
           <Toaster />

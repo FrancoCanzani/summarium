@@ -121,8 +121,8 @@ function JournalDatePicker({ selectedDay }: { selectedDay: string }) {
       <PopoverTrigger asChild>
         <Button
           variant={"ghost"}
-          size={"lg"}
-          className="p-3 text-xl font-medium sm:text-2xl lg:text-3xl"
+          size={"sm"}
+          className="text-zed text-xl font-medium"
         >
           {format(parseDate(selectedDay), "MMMM d, yyyy")}
         </Button>
