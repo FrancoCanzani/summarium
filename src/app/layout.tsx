@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
-import { Toaster } from "@/components/ui/sonner";
-import { Noto_Sans } from "next/font/google";
 import Providers from "@/components/providers";
+import { Toaster } from "@/components/ui/sonner";
+import type { Metadata } from "next";
+import { Noto_Sans } from "next/font/google";
 
 import "./globals.css";
 

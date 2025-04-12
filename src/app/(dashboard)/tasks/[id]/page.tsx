@@ -1,5 +1,6 @@
 import TaskDetail from "@/components/tasks/task-detail";
 import TaskDetailActivities from "@/components/tasks/task-detail-activities";
+import { Separator } from "@/components/ui/separator";
 import { getCachedUser } from "@/lib/api/auth";
 import { getTask } from "@/lib/api/tasks";
 import { validateUUID } from "@/lib/utils";
@@ -30,8 +31,9 @@ export default async function TaskPage({
   if (!task || task.user_id !== data.user.id) notFound();
 
   return (
-    <div className="flex h-full items-start justify-center">
+    <div className="flex h-full flex-col items-start justify-between lg:flex-row lg:justify-center">
       <TaskDetail task={task} />
+      <Separator className="my-4 lg:hidden" />
       <TaskDetailActivities taskId={id} userId={data.user.id} />
     </div>
   );

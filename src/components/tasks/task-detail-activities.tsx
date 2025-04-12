@@ -48,10 +48,10 @@ export default async function TaskDetailActivities({
   }
 
   return (
-    <div className="bg-sidebar hidden h-full w-1/4 flex-col justify-between border-l p-4 lg:flex">
+    <div className="lg:bg-sidebar w-full flex-col p-2 lg:flex lg:h-full lg:w-1/4 lg:justify-between lg:border-l">
       <Label className="mb-4 text-sm font-medium">Activity</Label>
 
-      <div className="thin-scrollbar flex h-full flex-col overflow-y-auto">
+      <div className="thin-scrollbar flex flex-col overflow-y-auto lg:h-full">
         <div className="flex-1 pr-2">
           {activities && activities.length > 0 ? (
             <div className="space-y-6">
@@ -76,7 +76,7 @@ export default async function TaskDetailActivities({
               ))}
             </div>
           ) : (
-            <div className="text-muted-foreground py-2 text-sm">
+            <div className="text-muted-foreground py-2 text-xs">
               No activity yet
             </div>
           )}
@@ -87,7 +87,7 @@ export default async function TaskDetailActivities({
           <Textarea
             name="comment"
             placeholder="Add a short follow up..."
-            className="border-muted h-[90px] rounded-sm text-xs placeholder:text-xs"
+            className="border-muted bg-background h-[90px] rounded-sm text-xs placeholder:text-xs"
             maxLength={1000}
           />
           <div className="flex justify-end">

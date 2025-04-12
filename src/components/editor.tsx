@@ -1,17 +1,17 @@
 "use client";
 
+import { saveNote } from "@/lib/actions";
 import { extensions } from "@/lib/extensions/extensions";
 import type { Note } from "@/lib/types";
 import { EditorContent, useEditor } from "@tiptap/react";
 import localForage from "localforage";
-import { useState, memo, useMemo } from "react";
+import { memo, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 import AudioTranscriber from "./audio-transcriber";
+import EditorBubbleMenu from "./editor-bubble-menu";
 import EditorHeader from "./editor-header";
 import { ToolbarProvider } from "./toolbars/toolbar-provider";
-import { saveNote } from "@/lib/actions";
-import EditorBubbleMenu from "./editor-bubble-menu";
 
 const MemoizedEditorContent = memo(EditorContent);
 
@@ -105,7 +105,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
             setShowTranscriber={setShowTranscriber}
           />
           <div className="relative flex w-full flex-1 flex-col items-center justify-start space-y-4 p-3">
-            <div className="mx-auto w-full max-w-xl">
+            <div className="mx-auto w-full max-w-[65ch]">
               <input
                 className="w-full border-none text-xl outline-none md:text-2xl"
                 placeholder="Title"
@@ -114,7 +114,7 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
               />
             </div>
             {/* prevents bubble menu layout shift */}
-            <div className="mx-auto h-full w-full max-w-xl pb-24">
+            <div className="mx-auto h-full w-full pb-24 md:w-[65ch]">
               <EditorBubbleMenu />
               <MemoizedEditorContent
                 editor={editor}

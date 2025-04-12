@@ -24,7 +24,7 @@ export default function TaskDetailActivity({
           <span>{timeFormatted}</span>
 
           <button
-            className="text-black hover:underline"
+            className="text-black hover:underline group-hover:block lg:hidden"
             onClick={() => {
               startTransition(() => {
                 deleteTaskActivity(activity.id);

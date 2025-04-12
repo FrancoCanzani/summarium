@@ -16,7 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { updateTask } from "@/lib/actions";
 import { extensions } from "@/lib/extensions/extensions";
 import { Task as TaskType } from "@/lib/types";
@@ -28,7 +27,6 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 import { Label } from "../ui/label";
-import { Separator } from "../ui/separator";
 import TimeCalendar from "../ui/time-calendar";
 
 const taskStatusOptions = [
@@ -134,7 +132,7 @@ export default function TaskDetail({ task }: { task: TaskType }) {
 
   return (
     <ToolbarProvider editor={editor}>
-      <div className="mx-auto flex h-full w-full flex-col overflow-y-auto p-4 lg:w-3/4">
+      <div className="lg:max-w-3/4 mx-auto flex w-full flex-col p-2 lg:h-full lg:overflow-y-auto">
         <header className="pb-8">
           <div className="flex flex-col items-start justify-center gap-4 text-sm lg:flex-row lg:justify-between">
             <input
@@ -220,33 +218,14 @@ export default function TaskDetail({ task }: { task: TaskType }) {
           </div>
         </header>
 
-        <section className="flex-1">
+        <section className="lg:w-4xl mx-auto w-full">
           <Label className="mb-4">Description</Label>
           <div className="h-full w-full flex-1">
             <EditorBubbleMenu />
             <EditorContent
               editor={editor}
-              className="prose prose-p:my-0 prose-sm my-0 min-w-full flex-1 text-start focus:outline-none"
+              className="prose prose-p:my-0 prose-sm my-0 min-w-full flex-1 text-start text-black focus:outline-none"
             />
-          </div>
-        </section>
-
-        <Separator className="my-4 lg:hidden" />
-
-        <section className="pb-14 lg:hidden">
-          <Label className="mb-4">Activity</Label>
-          <div className="space-y-4">
-            <form className="space-y-2">
-              <Textarea
-                placeholder="Add a comment..."
-                className="min-h-[80px] rounded-sm text-xs"
-              />
-              <div className="flex justify-end">
-                <Button type="submit" size="xs">
-                  Submit
-                </Button>
-              </div>
-            </form>
           </div>
         </section>
       </div>
