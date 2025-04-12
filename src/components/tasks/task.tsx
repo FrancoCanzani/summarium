@@ -67,9 +67,6 @@ export default function Task({
         >
           {task.title}
         </span>
-        <span className="text-muted-foreground overflow-hidden truncate text-xs">
-          {task.sanitized_description}
-        </span>
       </div>
 
       <div className="flex flex-shrink-0 items-center gap-2">

@@ -1,5 +1,5 @@
-import { z } from "zod";
 import * as chrono from "chrono-node";
+import { z } from "zod";
 
 export const AuthSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address." }),
@@ -29,4 +29,12 @@ export const taskSchema = z.object({
     }),
   status: z.string().transform((val) => (val == "" ? "backlog" : val)),
   priority: z.string().transform((val) => (val === "" ? "no-priority" : val)),
+});
+
+export const activitySchema = z.object({
+  task_id: z.string().uuid({ message: "Invalid Task ID format." }),
+  comment: z
+    .string()
+    .min(1, { message: "Comment cannot be empty." })
+    .max(1000, { message: "Comment cannot exceed 1000 characters." }),
 });

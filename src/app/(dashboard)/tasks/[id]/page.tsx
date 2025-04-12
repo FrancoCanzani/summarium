@@ -1,9 +1,9 @@
 import TaskDetail from "@/components/tasks/task-detail";
+import TaskDetailActivities from "@/components/tasks/task-detail-activities";
 import { getCachedUser } from "@/lib/api/auth";
 import { getTask } from "@/lib/api/tasks";
 import { validateUUID } from "@/lib/utils";
 import { notFound, redirect } from "next/navigation";
-import { Suspense } from "react";
 
 export default async function TaskPage({
   params,
@@ -30,8 +30,9 @@ export default async function TaskPage({
   if (!task || task.user_id !== data.user.id) notFound();
 
   return (
-    <Suspense>
+    <div className="flex h-full items-start justify-center">
       <TaskDetail task={task} />
-    </Suspense>
+      <TaskDetailActivities taskId={id} userId={data.user.id} />
+    </div>
   );
 }

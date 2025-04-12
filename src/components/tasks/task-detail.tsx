@@ -134,124 +134,106 @@ export default function TaskDetail({ task }: { task: TaskType }) {
 
   return (
     <ToolbarProvider editor={editor}>
-      <div className="flex h-full items-start justify-center">
-        <div className="mx-auto flex h-full w-full flex-col overflow-y-auto p-4 lg:w-3/4">
-          <header className="pb-8">
-            <div className="flex flex-col items-start justify-center gap-4 text-sm lg:flex-row lg:justify-between">
-              <input
-                className="w-full flex-1 border-none text-xl outline-none md:text-2xl lg:w-full"
-                placeholder="Title"
-                value={title}
-                onChange={onTitleChange}
-              />
+      <div className="mx-auto flex h-full w-full flex-col overflow-y-auto p-4 lg:w-3/4">
+        <header className="pb-8">
+          <div className="flex flex-col items-start justify-center gap-4 text-sm lg:flex-row lg:justify-between">
+            <input
+              className="w-full flex-1 border-none text-xl outline-none md:text-2xl lg:w-full"
+              placeholder="Title"
+              value={title}
+              onChange={onTitleChange}
+            />
 
-              <div className="flex items-center justify-start gap-2 lg:justify-end">
-                <Select value={status} onValueChange={onStatusChange}>
-                  <SelectTrigger className="h-8">
-                    <div className="flex items-center gap-2">
-                      <SelectValue placeholder="Status" />
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent className="rounded-sm">
-                    {taskStatusOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        <div className="flex w-full items-center justify-start space-x-2 text-xs">
-                          {renderStatusIcon(option.value)}
-                          <span>{option.label}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+            <div className="flex items-center justify-start gap-2 lg:justify-end">
+              <Select value={status} onValueChange={onStatusChange}>
+                <SelectTrigger className="h-8">
+                  <div className="flex items-center gap-2">
+                    <SelectValue placeholder="Status" />
+                  </div>
+                </SelectTrigger>
+                <SelectContent className="rounded-sm">
+                  {taskStatusOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      <div className="flex w-full items-center justify-start space-x-2 text-xs">
+                        {renderStatusIcon(option.value)}
+                        <span>{option.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
-                <Select value={priority} onValueChange={onPriorityChange}>
-                  <SelectTrigger className="h-8">
-                    <div className="flex items-center gap-2">
-                      <SelectValue placeholder="Priority" />
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent className="rounded-sm">
-                    {taskPriorityOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        <div className="flex w-full items-center justify-start space-x-2 text-xs">
-                          {renderPriorityIcon(option.value)}
-                          <span>{option.label}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              <Select value={priority} onValueChange={onPriorityChange}>
+                <SelectTrigger className="h-8">
+                  <div className="flex items-center gap-2">
+                    <SelectValue placeholder="Priority" />
+                  </div>
+                </SelectTrigger>
+                <SelectContent className="rounded-sm">
+                  {taskPriorityOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      <div className="flex w-full items-center justify-start space-x-2 text-xs">
+                        {renderPriorityIcon(option.value)}
+                        <span>{option.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant={"outline"}
-                      size={"sm"}
-                      className={cn(
-                        "h-8 justify-start gap-2 text-left text-xs font-normal md:w-auto",
-                        !dueDate && "text-muted-foreground",
-                      )}
-                    >
-                      <CalendarIcon className="size-3" />
-                      {dueDate ? (
-                        format(dueDate, "MMM d, yyyy h:mm a")
-                      ) : (
-                        <span>Due date</span>
-                      )}
-                      {dueDate && (
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="hover:bg-muted ml-auto size-5"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onDueDateChange(undefined);
-                          }}
-                        >
-                          <X className="size-3" />
-                        </Button>
-                      )}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <TimeCalendar value={dueDate} onChange={onDueDateChange} />
-                  </PopoverContent>
-                </Popover>
-              </div>
-            </div>
-          </header>
-
-          <section className="flex-1">
-            <Label className="mb-4">Description</Label>
-            <div className="h-full w-full flex-1">
-              <EditorBubbleMenu />
-              <EditorContent
-                editor={editor}
-                className="prose prose-p:my-0 prose-sm my-0 h-full min-w-full flex-1 overflow-scroll text-start focus:outline-none"
-              />
-            </div>
-          </section>
-
-          <Separator className="my-4 lg:hidden" />
-
-          <section className="mb-14 pb-14 lg:hidden">
-            <Label className="mb-4">Activity</Label>
-            <div className="space-y-4">
-              <form className="space-y-2">
-                <Textarea
-                  placeholder="Add a comment..."
-                  className="min-h-[80px] rounded-sm text-xs"
-                />
-                <div className="flex justify-end">
-                  <Button type="submit" size="xs">
-                    Submit
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    size={"sm"}
+                    className={cn(
+                      "h-8 justify-start gap-2 text-left text-xs font-normal md:w-auto",
+                      !dueDate && "text-muted-foreground",
+                    )}
+                  >
+                    <CalendarIcon className="size-3" />
+                    {dueDate ? (
+                      format(dueDate, "MMM d, yyyy h:mm a")
+                    ) : (
+                      <span>Due date</span>
+                    )}
+                    {dueDate && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="hover:bg-muted ml-auto size-5"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDueDateChange(undefined);
+                        }}
+                      >
+                        <X className="size-3" />
+                      </Button>
+                    )}
                   </Button>
-                </div>
-              </form>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <TimeCalendar value={dueDate} onChange={onDueDateChange} />
+                </PopoverContent>
+              </Popover>
             </div>
-          </section>
-        </div>
-        <div className="bg-sidebar hidden h-full w-1/4 flex-col justify-between p-4 lg:flex">
+          </div>
+        </header>
+
+        <section className="flex-1">
+          <Label className="mb-4">Description</Label>
+          <div className="h-full w-full flex-1">
+            <EditorBubbleMenu />
+            <EditorContent
+              editor={editor}
+              className="prose prose-p:my-0 prose-sm my-0 min-w-full flex-1 text-start focus:outline-none"
+            />
+          </div>
+        </section>
+
+        <Separator className="my-4 lg:hidden" />
+
+        <section className="pb-14 lg:hidden">
           <Label className="mb-4">Activity</Label>
           <div className="space-y-4">
             <form className="space-y-2">
@@ -266,7 +248,7 @@ export default function TaskDetail({ task }: { task: TaskType }) {
               </div>
             </form>
           </div>
-        </div>
+        </section>
       </div>
     </ToolbarProvider>
   );

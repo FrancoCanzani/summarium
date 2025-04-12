@@ -1,5 +1,5 @@
-import { Task } from "../types";
 import { createClient } from "../supabase/server";
+import { Activity, Task } from "../types";
 
 import "server-only";
 
@@ -37,4 +37,26 @@ export const getTask = async (id: string): Promise<Task | null> => {
   }
 
   return data as Task;
+};
+
+export const getTaskActivities = async (
+  taskId: string,
+  userId: string,
+): Promise<Activity[] | null> => {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("activities")
+    .select()
+    .eq("task_id", taskId)
+    .eq("user_id", userId);
+
+  if (error) {
+    if (error.code === "PGRST116") {
+      return null;
+    }
+    throw new Error(error.message);
+  }
+
+  return data as Activity[];
 };

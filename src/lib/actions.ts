@@ -1,15 +1,13 @@
 "use server";
 
+import { revalidatePath, revalidateTag } from "next/cache";
+import { redirect } from "next/navigation";
+import OpenAI from "openai";
+import { getCachedUser } from "./api/auth";
+import { verifySessionAndGetUserId } from "./api/notes";
+import { activitySchema, taskSchema } from "./schemas";
 import { createClient } from "./supabase/server";
 import { Journal, Note, Task } from "./types";
-import { revalidatePath } from "next/cache";
-import { revalidateTag } from "next/cache";
-import { verifySessionAndGetUserId } from "./api/notes";
-import { taskSchema } from "./schemas";
-import { getCachedUser } from "./api/auth";
-import { redirect } from "next/navigation";
-
-import OpenAI from "openai";
 
 // --- Journal Actions ---
 export async function deleteJournal(id: string): Promise<{ id: string }> {
@@ -301,6 +299,86 @@ export async function deleteTask(
 
   revalidatePath("/tasks");
   revalidateTag(`task-${taskId}`);
+
+  return { success: true };
+}
+
+// -- Activity actions --
+
+export async function createTaskActivity(formData: FormData): Promise<{
+  success: boolean;
+  error?: string;
+}> {
+  const userId = await verifySessionAndGetUserId();
+  const supabase = await createClient();
+
+  const rawData = {
+    task_id: formData.get("task_id"),
+    comment: formData.get("comment"),
+  };
+
+  console.log(rawData);
+
+  const validationResult = activitySchema.safeParse(rawData);
+
+  if (!validationResult.success) {
+    return {
+      success: false,
+      error: "Validation failed.",
+    };
+  }
+
+  const { task_id, comment } = validationResult.data;
+
+  const { error } = await supabase
+    .from("activities")
+    .insert({
+      user_id: userId,
+      task_id: task_id,
+      comment: comment,
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error(
+      `Error creating activity for task ${task_id} by user ${userId}:`,
+      error,
+    );
+    return { success: false, error: error.message };
+  }
+
+  revalidatePath(`/tasks/${task_id}`);
+  revalidateTag(`task-activity-${task_id}`);
+
+  return { success: true };
+}
+
+export async function deleteTaskActivity(
+  id: string,
+): Promise<{ success: boolean; error?: string }> {
+  const userId = await verifySessionAndGetUserId();
+  const supabase = await createClient();
+
+  const { error, count } = await supabase
+    .from("activities")
+    .delete({ count: "exact" })
+    .eq("id", id)
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error(`Error deleting activity ${id} by user ${userId}:`, error);
+    return { success: false, error: error.message };
+  }
+
+  if (count === 0) {
+    console.warn(
+      `Attempted to delete activity ${id} by user ${userId}, but no matching record found or user mismatch.`,
+    );
+  }
+
+  revalidatePath(`/tasks/${id}`);
+  revalidateTag(`task-activity-${id}`);
 
   return { success: true };
 }
