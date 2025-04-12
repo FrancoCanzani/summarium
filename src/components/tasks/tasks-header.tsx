@@ -1,24 +1,4 @@
-import { Dispatch, SetStateAction, useTransition } from "react";
 import NewTaskDialog from "@/components/tasks/new-task-dialog";
-import { useQueryState } from "nuqs";
-import {
-  X,
-  SignalLow,
-  SignalMedium,
-  SignalHigh,
-  TriangleAlert,
-  ListFilter,
-  Layers,
-  Circle,
-  CircleDashed,
-  CircleDotDashed,
-  CheckCircle2,
-  CircleSlash,
-  Ellipsis,
-  Trash,
-  CalendarClock,
-  Loader2,
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -34,15 +14,35 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { toast } from "sonner";
-import { updateTask, deleteTask } from "@/lib/actions";
-import {
-  cn,
-  calculatePostponedDate,
-  getStatusLabel,
-  getPriorityLabel,
-} from "@/lib/utils";
+import { deleteTask, updateTask } from "@/lib/actions";
 import { Task } from "@/lib/types";
+import {
+  calculatePostponedDate,
+  cn,
+  getPriorityLabel,
+  getStatusLabel,
+} from "@/lib/utils";
+import {
+  CalendarClock,
+  CheckCircle2,
+  Circle,
+  CircleDashed,
+  CircleDotDashed,
+  CircleSlash,
+  Ellipsis,
+  Layers,
+  ListFilter,
+  Loader2,
+  SignalHigh,
+  SignalLow,
+  SignalMedium,
+  Trash,
+  TriangleAlert,
+  X,
+} from "lucide-react";
+import { useQueryState } from "nuqs";
+import { Dispatch, SetStateAction, useTransition } from "react";
+import { toast } from "sonner";
 
 export default function TasksHeader({
   selected,
@@ -151,7 +151,7 @@ export default function TasksHeader({
   );
 
   return (
-    <header className="bg-sidebar sticky top-0 z-10 flex w-full items-center justify-between border-b px-4 py-2">
+    <header className="bg-sidebar sticky top-0 z-10 flex w-full items-center justify-between border-b p-2">
       <h3 className="font-medium">Your Tasks</h3>
       <div className="flex items-center justify-end space-x-1">
         {selected.length > 0 && (

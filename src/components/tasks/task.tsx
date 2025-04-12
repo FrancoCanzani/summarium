@@ -1,27 +1,27 @@
-import { Task as TaskType } from "@/lib/types";
-import {
-  Circle,
-  CircleDashed,
-  CircleDotDashed,
-  CheckCircle2,
-  CircleSlash,
-  MoreHorizontal,
-  AlertTriangle,
-  SignalHigh,
-  SignalMedium,
-  SignalLow,
-  Hourglass,
-} from "lucide-react";
-import { format, isPast } from "date-fns";
-import { cn } from "@/lib/utils";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Dispatch, SetStateAction } from "react";
+import { Task as TaskType } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import { format, isPast } from "date-fns";
+import {
+  AlertTriangle,
+  CheckCircle2,
+  Circle,
+  CircleDashed,
+  CircleDotDashed,
+  CircleSlash,
+  Hourglass,
+  MoreHorizontal,
+  SignalHigh,
+  SignalLow,
+  SignalMedium,
+} from "lucide-react";
 import Link from "next/link";
+import { Dispatch, SetStateAction } from "react";
 
 export default function Task({
   task,
@@ -67,7 +67,7 @@ export default function Task({
         >
           {task.title}
         </span>
-        <span className="text-muted-foreground shrink truncate text-xs">
+        <span className="text-muted-foreground overflow-hidden truncate text-xs">
           {task.sanitized_description}
         </span>
       </div>

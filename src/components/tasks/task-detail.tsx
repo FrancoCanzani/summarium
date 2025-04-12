@@ -1,9 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { Task as TaskType } from "@/lib/types";
+import EditorBubbleMenu from "@/components/editor-bubble-menu";
+import { renderPriorityIcon, renderStatusIcon } from "@/components/tasks/task";
+import { ToolbarProvider } from "@/components/toolbars/toolbar-provider";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -11,17 +16,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { EditorContent, useEditor } from "@tiptap/react";
-import { extensions } from "@/lib/extensions/extensions";
-import { ToolbarProvider } from "@/components/toolbars/toolbar-provider";
-import EditorBubbleMenu from "@/components/editor-bubble-menu";
-import { useDebouncedCallback } from "use-debounce";
+import { Textarea } from "@/components/ui/textarea";
 import { updateTask } from "@/lib/actions";
+import { extensions } from "@/lib/extensions/extensions";
+import { Task as TaskType } from "@/lib/types";
+import { cn } from "@/lib/utils"; // Import cn
+import { EditorContent, useEditor } from "@tiptap/react";
+import { format, parseISO } from "date-fns"; // Import format
+import { CalendarIcon, X } from "lucide-react"; // Import CalendarIcon and X
+import { useState } from "react";
 import { toast } from "sonner";
-import { renderStatusIcon, renderPriorityIcon } from "@/components/tasks/task";
-import { parseISO } from "date-fns";
+import { useDebouncedCallback } from "use-debounce";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
+import TimeCalendar from "../ui/time-calendar";
 
 const taskStatusOptions = [
   { value: "backlog", label: "Backlog" },
@@ -43,8 +51,9 @@ export default function TaskDetail({ task }: { task: TaskType }) {
   const [title, setTitle] = useState(task.title || "");
   const [status, setStatus] = useState(task.status || "backlog");
   const [priority, setPriority] = useState(task.priority || "no-priority");
-  const [dueDate, setDueDate] = useState<Date | null>(
-    task.due_date ? parseISO(task.due_date.toString()) : null,
+
+  const [dueDate, setDueDate] = useState<Date | null | undefined>(
+    task.due_date ? parseISO(task.due_date.toString()) : undefined,
   );
   const [description, setDescription] = useState(
     task.sanitized_description || "",
@@ -64,7 +73,15 @@ export default function TaskDetail({ task }: { task: TaskType }) {
 
   const handleSave = async (updates: Partial<TaskType>) => {
     try {
-      const result = await updateTask(task.id, updates);
+      // Ensure due_date is either Date or null for the update
+      const payload: Partial<TaskType> = {
+        ...updates,
+        ...(updates.due_date !== undefined && {
+          due_date: updates.due_date instanceof Date ? updates.due_date : null,
+        }),
+      };
+
+      const result = await updateTask(task.id, payload);
       if (!result.success) {
         toast.error(result.error || "Failed to update task");
       } else {
@@ -85,8 +102,10 @@ export default function TaskDetail({ task }: { task: TaskType }) {
 
   const handleDebouncedDescriptionChange = useDebouncedCallback(
     (newDescription: string) => {
-      handleSave({ description: newDescription });
-      handleSave({ sanitized_description: editor?.getText() });
+      handleSave({
+        description: newDescription,
+        sanitized_description: editor?.getText(),
+      });
     },
     1000,
   );
@@ -107,25 +126,25 @@ export default function TaskDetail({ task }: { task: TaskType }) {
   };
 
   const onDueDateChange = (date: Date | undefined) => {
-    const newDate = date || null;
-    setDueDate(newDate);
-    handleSave({ due_date: newDate });
+    setDueDate(date);
+    handleSave({ due_date: date });
   };
 
   if (!editor) return null;
 
   return (
     <ToolbarProvider editor={editor}>
-      <div className="container mx-auto flex h-full max-w-3xl flex-col p-4 pb-14 md:pb-4">
+      <div className="mx-auto flex h-full w-full flex-col p-4 pb-24 md:pb-4">
         <header className="pb-8">
-          <div className="flex flex-wrap items-center justify-between gap-4 text-sm">
+          <div className="flex flex-col items-start justify-center gap-4 text-sm lg:flex-row lg:justify-between">
             <input
-              className="flex-1 border-none text-xl outline-none md:text-2xl"
+              className="w-full flex-1 border-none text-xl outline-none md:text-2xl lg:w-full"
               placeholder="Title"
               value={title}
               onChange={onTitleChange}
             />
-            <div className="flex items-center justify-end gap-2">
+
+            <div className="flex items-center justify-start gap-2 lg:justify-end">
               <Select value={status} onValueChange={onStatusChange}>
                 <SelectTrigger className="h-8">
                   <div className="flex items-center gap-2">
@@ -146,7 +165,9 @@ export default function TaskDetail({ task }: { task: TaskType }) {
 
               <Select value={priority} onValueChange={onPriorityChange}>
                 <SelectTrigger className="h-8">
-                  <SelectValue placeholder="Priority" />
+                  <div className="flex items-center gap-2">
+                    <SelectValue placeholder="Priority" />
+                  </div>
                 </SelectTrigger>
                 <SelectContent className="rounded-sm">
                   {taskPriorityOptions.map((option) => (
@@ -159,6 +180,42 @@ export default function TaskDetail({ task }: { task: TaskType }) {
                   ))}
                 </SelectContent>
               </Select>
+
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    size={"sm"}
+                    className={cn(
+                      "h-8 justify-start gap-2 text-left text-xs font-normal md:w-auto",
+                      !dueDate && "text-muted-foreground",
+                    )}
+                  >
+                    <CalendarIcon className="size-3" />
+                    {dueDate ? (
+                      format(dueDate, "MMM d, yyyy h:mm a")
+                    ) : (
+                      <span>Due date</span>
+                    )}
+                    {dueDate && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="hover:bg-muted ml-auto size-5"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDueDateChange(undefined);
+                        }}
+                      >
+                        <X className="size-3" />
+                      </Button>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <TimeCalendar value={dueDate} onChange={onDueDateChange} />
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
         </header>
@@ -169,14 +226,14 @@ export default function TaskDetail({ task }: { task: TaskType }) {
             <EditorBubbleMenu />
             <EditorContent
               editor={editor}
-              className="prose prose-sm my-0 h-full min-w-full flex-1 text-start focus:outline-none"
+              className="prose prose-p:my-0 prose-sm my-0 h-full min-w-full flex-1 text-start focus:outline-none"
             />
           </div>
         </section>
 
         <Separator className="my-4" />
 
-        <section>
+        <section className="mb-14 pb-14">
           <Label className="mb-4">Activity</Label>
           <div className="space-y-4">
             <form className="space-y-2">
