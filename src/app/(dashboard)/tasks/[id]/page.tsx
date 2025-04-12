@@ -1,9 +1,9 @@
-import { validateUUID } from "@/lib/utils";
-import { getTask } from "@/lib/api/tasks";
+import TaskDetail from "@/components/tasks/task-detail";
 import { getCachedUser } from "@/lib/api/auth";
+import { getTask } from "@/lib/api/tasks";
+import { validateUUID } from "@/lib/utils";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
-import TaskDetail from "@/components/tasks/task-detail";
 
 export default async function TaskPage({
   params,
@@ -30,7 +30,7 @@ export default async function TaskPage({
   if (!task || task.user_id !== data.user.id) notFound();
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense>
       <TaskDetail task={task} />
     </Suspense>
   );
