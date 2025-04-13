@@ -26,11 +26,8 @@ export const activitySchema = z.object({
 export const SingleTaskSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   description: z.string().optional(),
-  // Allow AI to specify due date as string, we'll parse it
   date: z.string().optional(),
-  // Allow AI to specify status, default handled later
   status: z.string().optional(),
-  // Allow AI to specify priority, default handled later
   priority: z.string().optional(),
 });
 

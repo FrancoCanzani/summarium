@@ -1,14 +1,14 @@
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-import { redirect } from "next/navigation";
-import { journalDateSchema, uuidV4Schema } from "./schemas";
 import {
+  defaultShouldDehydrateQuery,
   isServer,
   QueryClient,
-  defaultShouldDehydrateQuery,
 } from "@tanstack/react-query";
+import { clsx, type ClassValue } from "clsx";
+import { addDays, addMonths, addWeeks, addYears, getHours } from "date-fns";
 import { ParamValue } from "next/dist/server/request/params";
-import { addDays, addWeeks, addMonths, addYears } from "date-fns";
+import { redirect } from "next/navigation";
+import { twMerge } from "tailwind-merge";
+import { journalDateSchema, uuidV4Schema } from "./schemas";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -188,4 +188,15 @@ export const getPriorityLabel = (
   return priorityValue
     ? priorityLabels[priorityValue.toLowerCase()] || priorityValue
     : "";
+};
+
+export const getGreeting = (): string => {
+  const hour = getHours(new Date());
+  if (hour < 12) {
+    return "Good morning";
+  } else if (hour < 18) {
+    return "Good afternoon";
+  } else {
+    return "Good evening";
+  }
 };

@@ -4,18 +4,17 @@ import {
   SidebarFooter,
   SidebarHeader,
 } from "@/components/ui/sidebar";
-import Link from "next/link";
-import { getNotes } from "@/lib/api/notes";
-import SidebarNotes from "./sidebar-notes";
-import { generateNextNoteId } from "@/lib/api/notes";
-import SearchModal from "./search-modal";
-import { cache } from "react";
 import { getCachedUser } from "@/lib/api/auth";
-import { redirect } from "next/navigation";
-import { QueryClient } from "@tanstack/react-query";
+import { generateNextNoteId, getNotes } from "@/lib/api/notes";
 import { fetchJournal } from "@/lib/fetchers";
+import { QueryClient } from "@tanstack/react-query";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { cache } from "react";
+import SearchModal from "./search-modal";
+import SidebarNotes from "./sidebar-notes";
 
-const cachedNotes = cache(async () => {
+export const cachedNotes = cache(async () => {
   const { data, error } = await getCachedUser();
 
   if (error || !data || !data.user) {

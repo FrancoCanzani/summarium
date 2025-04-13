@@ -1,20 +1,21 @@
-import Link from "next/link";
-import { cache } from "react";
+import { Greeting } from "@/components/greeting";
+import NotesSheet from "@/components/notes-sheet";
+import { renderPriorityIcon, renderStatusIcon } from "@/components/tasks/task";
 import { getCachedUser } from "@/lib/api/auth";
 import { getNotes } from "@/lib/api/notes";
 import { getTasks } from "@/lib/api/tasks";
-import { redirect } from "next/navigation";
+import { cn } from "@/lib/utils";
 import {
   format,
   formatDistanceToNow,
   isPast,
   isToday,
   parseISO,
-  getHours,
 } from "date-fns";
-import { NotepadText, SquareCheckBig, MoveUpRight } from "lucide-react";
-import { renderPriorityIcon, renderStatusIcon } from "@/components/tasks/task";
-import { cn } from "@/lib/utils";
+import { MoveUpRight, NotepadText, SquareCheckBig } from "lucide-react";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { cache } from "react";
 
 const getHomePageData = cache(async () => {
   const { data: userData, error: userError } = await getCachedUser();
@@ -37,20 +38,8 @@ const getHomePageData = cache(async () => {
   }
 });
 
-const getGreeting = (): string => {
-  const hour = getHours(new Date());
-  if (hour < 12) {
-    return "Good morning";
-  } else if (hour < 18) {
-    return "Good afternoon";
-  } else {
-    return "Good evening";
-  }
-};
-
 export default async function HomePage() {
   const { notes, tasks } = await getHomePageData();
-  const greeting = getGreeting();
 
   const lastFourNotes = notes.slice(0, 6);
   const today = new Date();
@@ -67,20 +56,18 @@ export default async function HomePage() {
   return (
     <div className="container mx-auto max-w-6xl px-4 py-8 pb-24">
       <header className="mb-10">
-        <h1 className="mb-1.5 text-2xl font-medium">{greeting}!</h1>
-        <p className="text-muted-foreground">
-          Here&apos;s a quick overview for today,{" "}
-          {format(today, "MMMM d, yyyy")}.
-        </p>
+        <Greeting />
       </header>
 
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         <section className="lg:col-span-2">
           <div className="mb-4 flex items-center justify-between rounded-sm">
             <h2 className="text-xl font-medium">Recent Notes</h2>
-            <Link href="/notes" className="text-zed text-sm hover:underline">
-              View All Notes
-            </Link>
+            <NotesSheet notes={notes}>
+              <button className="text-zed block text-sm hover:underline md:hidden">
+                View All Notes
+              </button>
+            </NotesSheet>
           </div>
           {lastFourNotes.length === 0 ? (
             <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-6 text-center">

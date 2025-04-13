@@ -1,15 +1,13 @@
 import { fetchJournal } from "@/lib/fetchers";
 import { QueryClient } from "@tanstack/react-query";
-import {
-  Home,
-  Notebook,
-  NotepadText,
-  Settings,
-  SquareCheckBig,
-} from "lucide-react";
+import { Home, Notebook, Settings, SquareCheckBig } from "lucide-react";
 import Link from "next/link";
+import { cachedNotes } from "./app-sidebar";
+import NotesSheet from "./notes-sheet";
 
 export default async function MobileMenu() {
+  const notes = await cachedNotes();
+
   const queryClient = new QueryClient();
 
   const today = new Date().toISOString().split("T")[0];
@@ -33,13 +31,7 @@ export default async function MobileMenu() {
       >
         <SquareCheckBig className="size-4.5" />
       </Link>
-      <Link
-        prefetch={true}
-        className="hover:bg-muted group flex h-10 flex-1 items-center justify-center rounded-sm px-3 py-1.5"
-        href="/notes"
-      >
-        <NotepadText className="size-4.5" />
-      </Link>
+      <NotesSheet notes={notes} />
       <Link
         prefetch={true}
         className="hover:bg-muted group flex h-10 flex-1 items-center justify-center rounded-sm px-3 py-1.5"
