@@ -53,6 +53,7 @@ export default function TaskDetail({ task }: { task: TaskType }) {
   const [dueDate, setDueDate] = useState<Date | undefined>(
     task.due_date ? parseISO(task.due_date.toString()) : undefined,
   );
+
   const [description, setDescription] = useState(
     task.sanitized_description || "",
   );
@@ -71,15 +72,12 @@ export default function TaskDetail({ task }: { task: TaskType }) {
 
   const handleSave = async (updates: Partial<TaskType>) => {
     try {
-      // Ensure due_date is either Date or null for the update
-      const payload: Partial<TaskType> = {
+      const updatesWithTimestamp = {
         ...updates,
-        ...(updates.due_date !== undefined && {
-          due_date: updates.due_date instanceof Date ? updates.due_date : null,
-        }),
+        updated_at: new Date().toISOString(),
       };
 
-      const result = await updateTask(task.id, payload);
+      const result = await updateTask(task.id, updatesWithTimestamp);
       if (!result.success) {
         toast.error(result.error || "Failed to update task");
       } else {
@@ -123,9 +121,20 @@ export default function TaskDetail({ task }: { task: TaskType }) {
     handleSave({ priority: newPriority });
   };
 
-  const onDueDateChange = (date: Date | undefined) => {
-    setDueDate(date);
-    handleSave({ due_date: date });
+  const onDueDateChange = (selectedDate: Date | undefined) => {
+    setDueDate(selectedDate);
+
+    const dateForSaving: string | null = selectedDate
+      ? selectedDate.toISOString()
+      : null;
+
+    const initialDateForSaving = task.due_date
+      ? new Date(task.due_date).toISOString()
+      : null;
+
+    if (dateForSaving !== initialDateForSaving) {
+      handleSave({ due_date: dateForSaving });
+    }
   };
 
   if (!editor) return null;
