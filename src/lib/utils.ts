@@ -139,7 +139,7 @@ export const updateScrollView = (container: HTMLElement, item: HTMLElement) => {
 };
 
 export function calculatePostponedDate(
-  currentDate: Date | null | undefined,
+  currentDate: string | null | undefined,
   duration: string,
 ): Date | null {
   const baseDate = currentDate ? new Date(currentDate) : new Date();

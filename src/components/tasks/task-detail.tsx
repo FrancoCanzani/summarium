@@ -1,14 +1,7 @@
 "use client";
 
-import EditorBubbleMenu from "@/components/editor-bubble-menu";
 import { renderPriorityIcon, renderStatusIcon } from "@/components/tasks/task";
 import { ToolbarProvider } from "@/components/toolbars/toolbar-provider";
-import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -19,15 +12,14 @@ import {
 import { updateTask } from "@/lib/actions";
 import { extensions } from "@/lib/extensions/extensions";
 import { Task as TaskType } from "@/lib/types";
-import { cn } from "@/lib/utils";
 import { EditorContent, useEditor } from "@tiptap/react";
-import { format, parseISO } from "date-fns";
-import { CalendarIcon, X } from "lucide-react";
+import { parseISO } from "date-fns";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
+import EditorBubbleMenu from "../notes/editor-bubble-menu";
+import { DateTimePicker } from "../ui/date-time-picker";
 import { Label } from "../ui/label";
-import TimeCalendar from "../ui/time-calendar";
 
 const taskStatusOptions = [
   { value: "backlog", label: "Backlog" },
@@ -169,7 +161,6 @@ export default function TaskDetail({ task }: { task: TaskType }) {
                   ))}
                 </SelectContent>
               </Select>
-
               <Select value={priority} onValueChange={onPriorityChange}>
                 <SelectTrigger className="h-8">
                   <div className="flex items-center gap-2">
@@ -187,47 +178,18 @@ export default function TaskDetail({ task }: { task: TaskType }) {
                   ))}
                 </SelectContent>
               </Select>
-
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    size={"sm"}
-                    className={cn(
-                      "h-8 justify-start gap-2 text-left text-xs font-normal md:w-auto",
-                      !dueDate && "text-muted-foreground",
-                    )}
-                  >
-                    <CalendarIcon className="size-3" />
-                    {dueDate ? (
-                      format(dueDate, "MMM d, yyyy h:mm a")
-                    ) : (
-                      <span>Due date</span>
-                    )}
-                    {dueDate && (
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="hover:bg-muted ml-auto size-5"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onDueDateChange(undefined);
-                        }}
-                      >
-                        <X className="size-3" />
-                      </Button>
-                    )}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <TimeCalendar value={dueDate} onChange={onDueDateChange} />
-                </PopoverContent>
-              </Popover>
+              <DateTimePicker
+                date={dueDate}
+                onDateChange={onDueDateChange}
+                placeholder="Set due date"
+                className="h-8 text-xs"
+                aria-label="Task Due Date"
+              />{" "}
             </div>
           </div>
         </header>
 
-        <section className="lg:w-4xl mx-auto w-full">
+        <section className="mx-auto w-full md:w-[65ch]">
           <Label className="mb-4">Description</Label>
           <div className="h-full w-full flex-1">
             <EditorBubbleMenu />

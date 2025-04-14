@@ -128,7 +128,7 @@ export default function TasksHeader({
     const action = (taskId: string) => {
       const task = tasks.find((t) => t.id === taskId);
       const newDueDate = calculatePostponedDate(task?.due_date, duration);
-      return updateTask(taskId, { due_date: newDueDate });
+      return updateTask(taskId, { due_date: newDueDate?.toISOString() });
     };
     handleBulkAction(
       selected,

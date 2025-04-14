@@ -8,10 +8,10 @@ import localForage from "localforage";
 import { memo, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
-import AudioTranscriber from "./audio-transcriber";
+import AudioTranscriber from "../audio-transcriber";
+import { ToolbarProvider } from "../toolbars/toolbar-provider";
 import EditorBubbleMenu from "./editor-bubble-menu";
 import EditorHeader from "./editor-header";
-import { ToolbarProvider } from "./toolbars/toolbar-provider";
 
 const MemoizedEditorContent = memo(EditorContent);
 
@@ -104,21 +104,19 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
             showTranscriber={showTranscriber}
             setShowTranscriber={setShowTranscriber}
           />
-          <div className="relative flex w-full flex-1 flex-col items-center justify-start space-y-4 p-3">
-            <div className="mx-auto w-full max-w-[65ch]">
-              <input
-                className="w-full border-none text-xl outline-none md:text-2xl"
-                placeholder="Title"
-                value={title}
-                onChange={(e) => handleTitleChange(e.target.value)}
-              />
-            </div>
+          <div className="relative mx-auto flex w-full flex-1 flex-col items-center justify-start space-y-4 p-3 md:w-[65ch]">
+            <input
+              className="w-full border-none text-xl outline-none md:text-2xl"
+              placeholder="Title"
+              value={title}
+              onChange={(e) => handleTitleChange(e.target.value)}
+            />
             {/* prevents bubble menu layout shift */}
             <div className="mx-auto h-full w-full pb-24 md:w-[65ch]">
               <EditorBubbleMenu />
               <MemoizedEditorContent
                 editor={editor}
-                className="prose prose-sm my-0 h-full flex-1 text-black"
+                className="prose prose-p:my-0 prose-sm my-0 min-w-full flex-1 text-start text-black focus:outline-none"
               />
 
               <div className="sticky bottom-12 z-10 flex justify-center md:bottom-4">

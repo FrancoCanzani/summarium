@@ -1,34 +1,34 @@
-import {
-  Bold,
-  Italic,
-  Underline,
-  List,
-  ListOrdered,
-  Link,
-  Code,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  MoreHorizontal,
-  Type,
-  Highlighter,
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useToolbar } from "./toolbars/toolbar-provider";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
+import { cn } from "@/lib/utils";
+import {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
+  Bold,
+  Code,
+  Highlighter,
+  Italic,
+  Link,
+  List,
+  ListOrdered,
+  MoreHorizontal,
+  Type,
+  Underline,
+} from "lucide-react";
+import { useToolbar } from "../toolbars/toolbar-provider";
 
 export default function FloatingToolbar() {
   const editor = useToolbar();
@@ -152,10 +152,8 @@ export default function FloatingToolbar() {
   ];
 
   return (
-    <div
-      className="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-10 bg-zed-light border rounded-md shadow-md"
-    >
-      <div className="flex flex-wrap items-center justify-center p-0.5 gap-0.5">
+    <div className="bg-zed-light fixed bottom-10 left-1/2 z-10 -translate-x-1/2 transform rounded-md border shadow-md">
+      <div className="flex flex-wrap items-center justify-center gap-0.5 p-0.5">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -210,10 +208,7 @@ export default function FloatingToolbar() {
             onClick={item.action}
             variant="ghost"
             size="sm"
-            className={cn(
-              "size-8",
-              item.isActive() && "bg-accent",
-            )}
+            className={cn("size-8", item.isActive() && "bg-accent")}
             title={item.title}
           >
             {item.icon}
@@ -227,8 +222,7 @@ export default function FloatingToolbar() {
               size="sm"
               className={cn(
                 "size-8",
-                editor.isActive("highlight") &&
-                  "bg-accent",
+                editor.isActive("highlight") && "bg-accent",
               )}
               title="Highlight"
             >
@@ -249,7 +243,7 @@ export default function FloatingToolbar() {
                         .run()
                     }
                     className={cn(
-                      "w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center",
+                      "flex h-8 w-8 items-center justify-center rounded-full border border-neutral-200",
                       editor.isActive("highlight", { color: item.color }) &&
                         "ring-2 ring-neutral-400",
                     )}
@@ -260,7 +254,7 @@ export default function FloatingToolbar() {
                   <button
                     key={index}
                     onClick={item.action}
-                    className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center"
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-neutral-200"
                     title={item.label}
                   >
                     <span className="text-xs">✕</span>

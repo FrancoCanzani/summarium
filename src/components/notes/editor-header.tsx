@@ -4,11 +4,11 @@ import { Trash } from "lucide-react";
 import { redirect, useParams } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
-import { ConfirmActionDialog } from "./confirm-action-dialog";
+import { ConfirmActionDialog } from "../confirm-action-dialog";
+import { SearchAndReplaceToolbar } from "../toolbars/search-and-replace";
+import { TranscribeToolbar } from "../toolbars/transcribe";
+import ButtonWithTooltip from "../ui/button-with-tooltip";
 import EditorVersionControl from "./editor-version-control";
-import { SearchAndReplaceToolbar } from "./toolbars/search-and-replace";
-import { TranscribeToolbar } from "./toolbars/transcribe";
-import ButtonWithTooltip from "./ui/button-with-tooltip";
 
 export default function EditorHeader({
   editor,

@@ -1,26 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { DateTimePicker } from "@/components/ui/date-time-picker";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  X,
-  SignalLow,
-  SignalMedium,
-  SignalHigh,
-  TriangleAlert,
-  Circle,
-  CircleDashed,
-  CircleDotDashed,
-  CheckCircle2,
-  CircleSlash,
-} from "lucide-react";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -28,20 +16,43 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { toast } from "sonner";
-import { SubmitButton } from "../ui/submit-button";
+import { SubmitButton } from "@/components/ui/submit-button";
+import { Textarea } from "@/components/ui/textarea";
 import { createTask } from "@/lib/actions";
 import { taskSchema } from "@/lib/schemas";
+import {
+  CheckCircle2,
+  Circle,
+  CircleDashed,
+  CircleDotDashed,
+  CircleSlash,
+  SignalHigh,
+  SignalLow,
+  SignalMedium,
+  TriangleAlert,
+  X,
+} from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function NewTaskDialog() {
   const [open, setOpen] = useState(false);
+  const [selectedDateTime, setSelectedDateTime] = useState<Date | undefined>(
+    undefined,
+  );
+
+  const handleOpenChange = (isOpen: boolean) => {
+    if (!isOpen) {
+      setSelectedDateTime(undefined);
+    }
+    setOpen(isOpen);
+  };
 
   async function handleFormAction(formData: FormData) {
     const data = {
       title: formData.get("title") as string,
       description: formData.get("description") as string,
-      date: formData.get("date") as string,
+      date: selectedDateTime,
       status: formData.get("status") as string,
       priority: formData.get("priority") as string,
     };
@@ -49,11 +60,18 @@ export default function NewTaskDialog() {
     const validationResult = taskSchema.safeParse(data);
 
     if (!validationResult.success) {
-      const errors = validationResult;
+      const formattedErrors = validationResult.error.errors
+        .map((err) => `${err.path.join(".")} (${err.code}): ${err.message}`)
+        .join("\n");
 
-      console.log(errors);
-      toast.error("Validation Failed");
-
+      console.error("Client Validation Failed:", validationResult.error.errors);
+      toast.error("Validation Failed", {
+        description: (
+          <pre className="mt-1 whitespace-pre-wrap text-xs">
+            {formattedErrors}
+          </pre>
+        ),
+      });
       return;
     }
 
@@ -61,36 +79,42 @@ export default function NewTaskDialog() {
       const result = await createTask(formData);
 
       if (!result.success) {
-        console.log(result.errors);
+        console.error("Server Action Error:", result.errors);
         if (result.errors) {
           const errorMessages = Object.entries(result.errors)
             .map(([field, messages]) => {
               const fieldName = field.charAt(0).toUpperCase() + field.slice(1);
-              return `${fieldName}: ${messages[0]}`;
+              return `${fieldName}: ${Array.isArray(messages) ? messages.join(", ") : messages}`;
             })
             .join("\n");
 
           toast.error("Server Validation Failed", {
-            description: errorMessages,
+            description: (
+              <pre className="mt-1 whitespace-pre-wrap text-xs">
+                {errorMessages}
+              </pre>
+            ),
           });
         } else {
           toast.error("Task creation failed", {
-            description: result.errors || "An unknown error occurred",
+            description: "An unknown server error occurred.",
           });
         }
         return;
       }
 
       toast.success("Task created successfully");
-    } catch {
-      toast.error("Something went wrong");
-    } finally {
-      setOpen(false);
+      handleOpenChange(false);
+    } catch (error) {
+      console.error("Submit Error:", error);
+      toast.error("Something went wrong", {
+        description: "An unexpected error occurred during submission.",
+      });
     }
   }
 
   return (
-    <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm" className="font-normal">
           New
@@ -105,111 +129,98 @@ export default function NewTaskDialog() {
           <div className="p-4">
             <Input
               className="w-full border-0 p-0 text-lg font-medium shadow-none placeholder:text-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
-              placeholder="Issue title"
+              placeholder="Task title"
               name="title"
               required
+              aria-label="Task title"
             />
 
             <Textarea
               className="my-5 w-full resize-none border-0 p-0 shadow-none placeholder:text-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
               placeholder="Add description..."
               name="description"
-            />
-
-            <Input
-              className="w-full border-0 p-0 shadow-none placeholder:text-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
-              placeholder="Next tuesday"
-              name="date"
+              aria-label="Task description"
             />
           </div>
 
-          <div className="flex items-center gap-2 border-t p-4">
-            <div className="flex items-center gap-2">
-              <Select name="status">
-                <SelectTrigger className="h-8 rounded-sm px-3 text-xs">
-                  <div className="flex items-center">
-                    <SelectValue placeholder="Status" />
-                  </div>
+          <div className="flex items-center justify-start border-t p-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <Select name="status" required>
+                <SelectTrigger className="h-8 min-w-[100px] rounded-sm px-3 text-xs">
+                  <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent className="rounded-sm">
-                  <SelectItem value="backlog">
-                    <div className="flex w-full items-center justify-start space-x-2 text-xs">
-                      <CircleDashed className="size-3.5" />
-                      <span>Backlog</span>
-                    </div>
+                  <SelectItem value="backlog" className="text-xs">
+                    <CircleDashed className="mr-2 inline-block size-3.5" />
+                    Backlog
                   </SelectItem>
-                  <SelectItem value="todo">
-                    <div className="flex w-full items-center justify-start space-x-2 text-xs">
-                      <Circle className="size-3.5" />
-                      <span>Todo</span>
-                    </div>
+                  <SelectItem value="todo" className="text-xs">
+                    <Circle className="mr-2 inline-block size-3.5" />
+                    Todo
                   </SelectItem>
-                  <SelectItem value="in-progress">
-                    <div className="flex w-full items-center justify-start space-x-2 text-xs">
-                      <CircleDotDashed className="size-3.5" />
-                      <span>In Progress</span>
-                    </div>
+                  <SelectItem value="in-progress" className="text-xs">
+                    <CircleDotDashed className="mr-2 inline-block size-3.5" />
+                    In Progress
                   </SelectItem>
-                  <SelectItem value="complete">
-                    <div className="flex w-full items-center justify-start space-x-2 text-xs">
-                      <CheckCircle2 className="size-3.5" />
-                      <span>Complete</span>
-                    </div>
+                  <SelectItem value="complete" className="text-xs">
+                    <CheckCircle2 className="mr-2 inline-block size-3.5" />
+                    Complete
                   </SelectItem>
-                  <SelectItem value="wont-do">
-                    <div className="flex w-full items-center justify-start space-x-2 text-xs">
-                      <CircleSlash className="size-3.5" />
-                      <span>Won&apos;t do</span>
-                    </div>
+                  <SelectItem value="wont-do" className="text-xs">
+                    <CircleSlash className="mr-2 inline-block size-3.5" />
+                    Won&apos;t do
                   </SelectItem>
                 </SelectContent>
               </Select>
 
-              <Select name="priority">
-                <SelectTrigger className="h-8 rounded-sm px-3 text-xs">
-                  <div className="flex items-center">
-                    <SelectValue placeholder="Priority" />
-                  </div>
+              <Select name="priority" required>
+                <SelectTrigger className="h-8 min-w-[110px] rounded-sm px-3 text-xs">
+                  <SelectValue placeholder="Priority" />
                 </SelectTrigger>
                 <SelectContent className="rounded-sm">
-                  <SelectItem value="no-priority">
-                    <div className="flex w-full items-center justify-start space-x-2 text-xs">
-                      <X className="size-3.5" />
-                      <span>No Priority</span>
-                    </div>
+                  <SelectItem value="no-priority" className="text-xs">
+                    <X className="mr-2 inline-block size-3.5" />
+                    No Priority
                   </SelectItem>
-                  <SelectItem value="urgent">
-                    <div className="flex w-full items-center justify-start space-x-2 text-xs">
-                      <TriangleAlert className="size-3.5" />
-                      <span>Urgent</span>
-                    </div>
+                  <SelectItem value="urgent" className="text-xs">
+                    <TriangleAlert className="mr-2 inline-block size-3.5" />
+                    Urgent
                   </SelectItem>
-                  <SelectItem value="high">
-                    <div className="flex w-full items-center justify-start space-x-2 text-xs">
-                      <SignalHigh className="size-3.5" />
-                      <span>High</span>
-                    </div>
+                  <SelectItem value="high" className="text-xs">
+                    <SignalHigh className="mr-2 inline-block size-3.5" />
+                    High
                   </SelectItem>
-                  <SelectItem value="medium">
-                    <div className="flex w-full items-center justify-start space-x-2 text-xs">
-                      <SignalMedium className="size-3.5" />
-                      <span>Medium</span>
-                    </div>
+                  <SelectItem value="medium" className="text-xs">
+                    <SignalMedium className="mr-2 inline-block size-3.5" />
+                    Medium
                   </SelectItem>
-                  <SelectItem value="low">
-                    <div className="flex w-full items-center justify-start space-x-2 text-xs">
-                      <SignalLow className="size-3.5" />
-                      <span>Low</span>
-                    </div>
+                  <SelectItem value="low" className="text-xs">
+                    <SignalLow className="mr-2 inline-block size-3.5" />
+                    Low
                   </SelectItem>
                 </SelectContent>
               </Select>
+
+              <DateTimePicker
+                date={selectedDateTime}
+                onDateChange={setSelectedDateTime}
+                placeholder="Due date (optional)"
+                className="h-8 text-xs"
+              />
+              {selectedDateTime && (
+                <input
+                  type="hidden"
+                  name="date"
+                  value={selectedDateTime.toISOString()}
+                />
+              )}
             </div>
 
             <div className="ml-auto">
               <SubmitButton
                 defaultText="Create task"
                 loadingText="Creating..."
+                className="h-8 text-xs"
               />
             </div>
           </div>

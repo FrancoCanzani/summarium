@@ -1,6 +1,7 @@
 import { RemoveFormatting } from "lucide-react";
 import React from "react";
 
+import { useToolbar } from "@/components/toolbars/toolbar-provider";
 import { Button, type ButtonProps } from "@/components/ui/button";
 import {
   Tooltip,
@@ -8,11 +9,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { useToolbar } from "@/components/toolbars/toolbar-provider";
 
 const ClearFormattingToolbar = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, onClick, children, ...props }, ref) => {
-    const { editor } = useToolbar();
+    const editor = useToolbar();
+
     return (
       <Tooltip>
         <TooltipTrigger asChild>

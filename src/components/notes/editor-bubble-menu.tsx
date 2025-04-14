@@ -1,16 +1,16 @@
+import { cn } from "@/lib/utils";
 import { BubbleMenu } from "@tiptap/react";
 import {
   Bold,
-  Italic,
-  Underline,
   Highlighter,
-  Strikethrough,
+  Italic,
   RemoveFormatting,
+  Strikethrough,
+  Underline,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useToolbar } from "./toolbars/toolbar-provider";
-import { LinkToolbar } from "./toolbars/link";
-import ButtonWithTooltip from "./ui/button-with-tooltip";
+import { LinkToolbar } from "../toolbars/link";
+import { useToolbar } from "../toolbars/toolbar-provider";
+import ButtonWithTooltip from "../ui/button-with-tooltip";
 
 export default function EditorBubbleMenu() {
   const editor = useToolbar();

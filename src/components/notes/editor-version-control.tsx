@@ -10,6 +10,7 @@ import {
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { Note } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { Editor } from "@tiptap/core";
 import { formatDistanceToNowStrict } from "date-fns";
 import { diffLines } from "diff";
 import localForage from "localforage";
@@ -17,10 +18,9 @@ import { ChevronLeft, ChevronRight, Clock } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useQueryState } from "nuqs";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Button } from "./ui/button";
-import ButtonWithTooltip from "./ui/button-with-tooltip";
-import { Separator } from "./ui/separator";
-import { Editor } from "@tiptap/core";
+import { Button } from "../ui/button";
+import ButtonWithTooltip from "../ui/button-with-tooltip";
+import { Separator } from "../ui/separator";
 
 localForage.config({
   name: "summarium_notes_db",

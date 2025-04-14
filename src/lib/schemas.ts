@@ -1,4 +1,3 @@
-import * as chrono from "chrono-node";
 import { z } from "zod";
 
 export const AuthSchema = z.object({
@@ -49,15 +48,7 @@ export const taskSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   description: z.string().optional(),
   sanitized_description: z.string().optional(),
-  date: z
-    .string()
-    .optional()
-    .nullable()
-    .transform((val) => {
-      if (!val) return null;
-      const parsed = chrono.parseDate(val);
-      return parsed ? parsed.toISOString() : null;
-    }),
+  date: z.string().optional().nullable(),
   status: TaskStatus.optional().transform(
     (val) => val?.toLowerCase() ?? "backlog",
   ),

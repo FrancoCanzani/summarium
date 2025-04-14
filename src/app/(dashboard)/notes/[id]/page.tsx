@@ -1,12 +1,12 @@
+import EditorSkeleton from "@/components/skeletons/editor-skeleton";
+import { getCachedUser } from "@/lib/api/auth";
+import { getNote } from "@/lib/api/notes";
 import { validateUUID } from "@/lib/utils";
 import dynamic from "next/dynamic";
-import EditorSkeleton from "@/components/skeletons/editor-skeleton";
-import { getNote } from "@/lib/api/notes";
-import { getCachedUser } from "@/lib/api/auth";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 
-const Editor = dynamic(() => import("@/components/editor"));
+const Editor = dynamic(() => import("@/components/notes/editor"));
 
 export default async function EditorPage({
   params,

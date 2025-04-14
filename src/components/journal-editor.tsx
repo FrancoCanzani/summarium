@@ -1,17 +1,17 @@
 "use client";
 
+import { saveJournal } from "@/lib/actions";
 import { extensions } from "@/lib/extensions/extensions";
+import { fetchJournal } from "@/lib/fetchers";
+import { Journal } from "@/lib/types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { EditorContent, useEditor } from "@tiptap/react";
-import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
+import EditorBubbleMenu from "./notes/editor-bubble-menu";
 import { ToolbarProvider } from "./toolbars/toolbar-provider";
-import EditorBubbleMenu from "./editor-bubble-menu";
-import { saveJournal } from "@/lib/actions";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchJournal } from "@/lib/fetchers";
-import { useSearchParams } from "next/navigation";
-import { Journal } from "@/lib/types";
 
 export default function JournalEditor() {
   const searchParams = useSearchParams();
