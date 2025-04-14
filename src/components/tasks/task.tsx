@@ -35,41 +35,45 @@ export default function Task({
   const isTaskOverdue = task.due_date && isPast(new Date(task.due_date));
 
   return (
-    <Link
-      href={`/tasks/${task.id}`}
+    <div
       key={task.id}
       className={cn(
-        "hover:bg-accent/50 flex items-center justify-between gap-4 rounded-sm px-3 py-2 transition-colors duration-300",
+        "hover:bg-accent/50 flex items-center gap-4 rounded-sm px-3 py-2 transition-colors duration-300",
         {
           "opacity-40": task.status === "complete" || task.status === "wont-do",
         },
       )}
     >
-      <div className="flex min-w-0 items-center gap-3">
-        <Checkbox
-          checked={selected.includes(task.id)}
-          onCheckedChange={(checked) => {
-            if (checked) {
-              setSelected([...selected, task.id]);
-            } else {
-              setSelected(selected.filter((id) => id !== task.id));
-            }
-          }}
-        />
-        {renderStatusIcon(task.status)}
-        {renderPriorityIcon(task.priority)}
-        <span
-          className={cn("shrink-0 text-sm font-medium", {
-            "line-through":
-              task.status === "complete" || task.status === "wont-do",
-          })}
-          title={task.title}
-        >
-          {task.title}
-        </span>
-      </div>
+      <Checkbox
+        checked={selected.includes(task.id)}
+        onCheckedChange={(checked) => {
+          if (checked) {
+            setSelected([...selected, task.id]);
+          } else {
+            setSelected(selected.filter((id) => id !== task.id));
+          }
+        }}
+        aria-label={`Select task ${task.title}`}
+      />
 
-      <div className="flex flex-shrink-0 items-center gap-2">
+      <Link
+        href={`/tasks/${task.id}`}
+        className="flex min-w-0 flex-grow items-center justify-between gap-4"
+      >
+        <div className="flex min-w-0 items-center gap-3">
+          {renderStatusIcon(task.status)}
+          {renderPriorityIcon(task.priority)}
+          <span
+            className={cn("shrink-0 truncate text-sm font-medium", {
+              "line-through":
+                task.status === "complete" || task.status === "wont-do",
+            })}
+            title={task.title}
+          >
+            {task.title}
+          </span>
+        </div>
+
         <div className="flex flex-shrink-0 items-center gap-2">
           {isTaskOverdue &&
             task.status !== "complete" &&
@@ -81,30 +85,30 @@ export default function Task({
                 <TooltipContent>Overdue</TooltipContent>
               </Tooltip>
             )}
-        </div>
 
-        {task.due_date && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <span
-                className={cn(
-                  "text-muted-foreground text-xs",
-                  isTaskOverdue &&
-                    task.status !== "complete" &&
-                    task.status !== "wont-do" &&
-                    "text-orange-600",
-                )}
-              >
-                {format(new Date(task.due_date), "MMM d, h:mm a")}
-              </span>
-            </TooltipTrigger>
-            <TooltipContent>
-              Due Date: {format(new Date(task.due_date), "MMM d, h:mm a")}
-            </TooltipContent>
-          </Tooltip>
-        )}
-      </div>
-    </Link>
+          {task.due_date && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span
+                  className={cn(
+                    "text-muted-foreground text-xs",
+                    isTaskOverdue &&
+                      task.status !== "complete" &&
+                      task.status !== "wont-do" &&
+                      "text-orange-600",
+                  )}
+                >
+                  {format(new Date(task.due_date), "MMM d, h:mm a")}
+                </span>
+              </TooltipTrigger>
+              <TooltipContent>
+                Due Date: {format(new Date(task.due_date), "MMM d, h:mm a")}
+              </TooltipContent>
+            </Tooltip>
+          )}
+        </div>
+      </Link>
+    </div>
   );
 }
 

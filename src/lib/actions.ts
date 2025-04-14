@@ -317,8 +317,6 @@ export async function createTaskActivity(formData: FormData): Promise<{
     comment: formData.get("comment"),
   };
 
-  console.log(rawData);
-
   const validationResult = activitySchema.safeParse(rawData);
 
   if (!validationResult.success) {

@@ -36,8 +36,6 @@ export default async function TaskDetailActivities({
   const activities = await getTaskActivities(taskId, userId);
   const groupedActivities = groupActivitiesByDateRange(activities!);
 
-  console.log(activities);
-
   async function handleFormAction(formData: FormData) {
     "use server";
     formData.append("task_id", taskId);
@@ -64,7 +62,7 @@ export default async function TaskDetailActivities({
 
                   <div className="relative ml-1">
                     {/* Timeline line */}
-                    <div className="bg-border/50 absolute bottom-0 left-1 top-0 w-px" />
+                    <div className="bg-border/50 absolute bottom-0 left-[3.5px] top-0 w-px" />
 
                     <ul className="space-y-1">
                       {items.map((item) => (
