@@ -65,7 +65,7 @@ export default function JournalDayNavigation() {
   };
 
   return (
-    <header className="bg-background sticky top-0 z-10 w-full px-3 py-4">
+    <header className="bg-background sticky top-0 z-10 w-full px-2 pt-4">
       <div className="mx-auto flex max-w-5xl flex-row items-center justify-between">
         <JournalDatePicker selectedDay={selectedDay} />
         <div className="flex items-center justify-center space-x-2">

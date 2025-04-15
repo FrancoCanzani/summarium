@@ -7,7 +7,7 @@ import { Journal } from "@/lib/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 import EditorBubbleMenu from "./notes/editor-bubble-menu";
@@ -63,16 +63,6 @@ export default function JournalEditor() {
     },
   });
 
-  useEffect(() => {
-    if (editor) {
-      if (journal?.content !== undefined) {
-        editor.commands.setContent(journal.content);
-      } else {
-        editor.commands.setContent("");
-      }
-    }
-  }, [journal, editor]);
-
   const handleSaveJournal = (journalData: Partial<Journal>) => {
     mutation.mutate({
       ...journalData,
@@ -93,12 +83,12 @@ export default function JournalEditor() {
 
   return (
     <ToolbarProvider editor={editor}>
-      <div className="relative flex h-full w-full flex-col">
+      <div className="relative mx-auto flex h-full w-[65ch] flex-col p-2">
         <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col space-y-4 px-3 py-10">
           <EditorBubbleMenu />
           <EditorContent
             editor={editor}
-            className="prose prose-p:my-0 prose-sm my-0 mb-14 h-full min-w-full flex-1 text-start text-black"
+            className="prose prose-p:my-0 prose-sm my-0 h-full min-w-full flex-1 text-start text-black focus:outline-none"
           />
         </div>
       </div>

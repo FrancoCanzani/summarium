@@ -26,7 +26,7 @@ export default async function JournalPage({
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="flex h-full flex-col">
         <JournalDayNavigation />
-        <div className="flex-1 overflow-auto">
+        <div className="flex-1">
           <JournalEditor />
         </div>
       </div>
