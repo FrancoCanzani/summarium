@@ -112,14 +112,14 @@ export default function Editor({ initialNote }: { initialNote: Note }) {
               onChange={(e) => handleTitleChange(e.target.value)}
             />
             {/* prevents bubble menu layout shift */}
-            <div className="mx-auto h-full w-full pb-24 md:w-[65ch]">
+            <div className="mx-auto h-full w-full md:w-[65ch]">
               <EditorBubbleMenu />
               <MemoizedEditorContent
                 editor={editor}
-                className="prose prose-p:my-0 prose-sm my-0 min-w-full flex-1 text-start text-black focus:outline-none"
+                className="prose prose-p:my-0 prose-sm my-0 h-full min-w-full flex-1 text-start text-black focus:outline-none"
               />
 
-              <div className="sticky bottom-12 z-10 flex justify-center md:bottom-4">
+              <div className="sticky bottom-10 z-10 flex justify-center md:bottom-6">
                 <AudioTranscriber
                   editor={editor}
                   showTranscriber={showTranscriber}

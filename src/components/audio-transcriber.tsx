@@ -1,8 +1,9 @@
-import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Mic, Square, Circle, RotateCw } from "lucide-react";
-import { Editor } from "@tiptap/core";
 import { cn } from "@/lib/utils";
+import { Editor } from "@tiptap/core";
+import { motion } from "framer-motion";
+import { Circle, Mic, RotateCw, Square } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import AudioWave from "./audio-wave";
 
@@ -161,19 +162,22 @@ export default function AudioTranscriber({
   }
 
   return (
-    <div
+    <motion.div
       className={cn(
-        "bg-background shadow-2xs z-50 rounded-3xl border px-1 py-0.5 transition-opacity duration-300 ease-in-out",
+        "bg-background shadow-2xs z-50 rounded-sm border px-1 py-0.5 transition-opacity duration-300 ease-in-out",
         showTranscriber ? "opacity-100" : "opacity-0",
       )}
       aria-hidden={!showTranscriber}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 10 }}
     >
       <div className="flex items-center justify-between space-x-2 p-1">
         <div className="flex items-center justify-start space-x-2">
           <Button
             variant="outline"
             size="xs"
-            className="size-8 rounded-full"
+            className="size-8 rounded-sm"
             onClick={startRecording}
             disabled={isTranscribing || isRecording}
           >
@@ -190,7 +194,7 @@ export default function AudioTranscriber({
           <Button
             variant="outline"
             size="xs"
-            className="size-8 rounded-full"
+            className="size-8 rounded-sm"
             onClick={isRecording ? stopRecording : cancelTranscription}
             disabled={
               (isRecording && isTranscribing) ||
@@ -212,6 +216,6 @@ export default function AudioTranscriber({
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

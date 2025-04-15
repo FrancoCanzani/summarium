@@ -1,11 +1,11 @@
 import JournalDayNavigation from "@/components/journal-day-navigation";
 import JournalEditor from "@/components/journal-editor";
+import { fetchJournal } from "@/lib/fetchers";
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { fetchJournal } from "@/lib/fetchers";
 
 export default async function JournalPage({
   searchParams,
@@ -24,7 +24,7 @@ export default async function JournalPage({
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="flex h-screen flex-col">
+      <div className="flex h-full flex-col">
         <JournalDayNavigation />
         <div className="flex-1 overflow-auto">
           <JournalEditor />

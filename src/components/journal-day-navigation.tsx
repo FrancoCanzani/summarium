@@ -6,15 +6,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { addDays, format, parse } from "date-fns";
-import { Button } from "./ui/button";
-import { CalendarSync, ChevronLeft, ChevronRight } from "lucide-react";
-import ButtonWithTooltip from "./ui/button-with-tooltip";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { validateDateParam } from "@/lib/utils";
 import { fetchJournal } from "@/lib/fetchers";
+import { validateDateParam } from "@/lib/utils";
 import { QueryClient } from "@tanstack/react-query";
+import { addDays, format, parse } from "date-fns";
+import { CalendarSync, ChevronLeft, ChevronRight } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Button } from "./ui/button";
+import ButtonWithTooltip from "./ui/button-with-tooltip";
 
 export default function JournalDayNavigation() {
   const queryClient = new QueryClient();
@@ -119,11 +118,7 @@ function JournalDatePicker({ selectedDay }: { selectedDay: string }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button
-          variant={"ghost"}
-          size={"sm"}
-          className="text-zed hover:text-zed text-xl font-medium"
-        >
+        <Button variant={"ghost"} size={"sm"} className="text-xl font-medium">
           {format(parseDate(selectedDay), "MMMM d, yyyy")}
         </Button>
       </PopoverTrigger>

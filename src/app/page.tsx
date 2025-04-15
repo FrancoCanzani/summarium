@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useAuth } from "@/lib/hooks/use-auth";
+import Link from "next/link";
 
 export default function LandingPage() {
   const { user, loading } = useAuth();
@@ -24,7 +24,7 @@ export default function LandingPage() {
         </Link>
         {!loading && user && (
           <Link
-            href="/notes"
+            href="/home"
             className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-sm px-4 py-2 text-sm font-medium transition"
           >
             Go to app

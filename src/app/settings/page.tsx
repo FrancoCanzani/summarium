@@ -1,12 +1,12 @@
 "use client";
 
-import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
-import { Separator } from "@/components/ui/separator";
-import { useAuth } from "@/lib/hooks/use-auth";
 import { ConfirmActionDialog } from "@/components/confirm-action-dialog";
-import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
+import { useAuth } from "@/lib/hooks/use-auth";
+import { createClient } from "@/lib/supabase/client";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function SettingsPage() {
@@ -31,7 +31,7 @@ export default function SettingsPage() {
             Sign Out
           </button>
           <Link
-            href={"/notes"}
+            href={"/home"}
             className="hover:underline hover:underline-offset-4"
           >
             Notes

@@ -7,10 +7,10 @@ export default async function NotesLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-background flex w-full min-w-0">
+    <div className="flex h-screen w-full min-w-0 overflow-hidden">
       <AppSidebar />
-      <main className="h-screen flex-1 flex-col justify-between">
-        {children}
+      <main className="flex flex-1 flex-col overflow-hidden">
+        <div className="flex-1 overflow-y-auto pb-10 md:pb-0">{children}</div>
         <MobileMenu />
       </main>
     </div>

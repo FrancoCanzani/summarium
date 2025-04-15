@@ -18,7 +18,7 @@ export default async function MobileMenu() {
   });
 
   return (
-    <nav className="bg-background shadow-2xs fixed bottom-0 left-0 right-0 z-50 grid w-full grid-cols-5 items-center gap-1.5 border md:hidden">
+    <nav className="bg-background shadow-2xs fixed bottom-0 left-0 right-0 z-50 grid h-10 w-full grid-cols-5 items-center gap-1.5 border md:hidden">
       <Link
         className="hover:bg-muted group flex h-10 flex-1 items-center justify-center rounded-sm px-3 py-1.5"
         href="/home"

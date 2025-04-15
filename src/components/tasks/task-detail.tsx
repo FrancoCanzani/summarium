@@ -133,7 +133,7 @@ export default function TaskDetail({ task }: { task: TaskType }) {
 
   return (
     <ToolbarProvider editor={editor}>
-      <div className="lg:max-w-3/4 mx-auto flex w-full flex-1 flex-col p-2 lg:h-full lg:overflow-y-auto">
+      <div className="lg:max-w-3/4 mx-auto flex w-full flex-1 flex-col p-2 lg:overflow-y-auto">
         <header className="pb-8">
           <div className="flex flex-col items-start justify-center gap-4 text-sm lg:flex-row lg:justify-between">
             <input
@@ -191,7 +191,7 @@ export default function TaskDetail({ task }: { task: TaskType }) {
 
         <section className="mx-auto w-full md:w-[65ch]">
           <Label className="mb-4">Description</Label>
-          <div className="h-full w-full flex-1">
+          <div className="w-full flex-1">
             <EditorBubbleMenu />
             <EditorContent
               editor={editor}

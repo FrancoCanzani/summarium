@@ -37,7 +37,7 @@ export default function EditorHeader({
                 error: "Failed to delete note. Please try again.",
               });
 
-              redirect("/notes");
+              redirect("/home");
             }}
           >
             <ButtonWithTooltip
