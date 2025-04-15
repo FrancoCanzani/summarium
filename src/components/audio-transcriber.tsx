@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { Editor } from "@tiptap/core";
 import { motion } from "framer-motion";
 import { Circle, Mic, RotateCw, Square } from "lucide-react";
@@ -163,21 +162,18 @@ export default function AudioTranscriber({
 
   return (
     <motion.div
-      className={cn(
-        "bg-background shadow-2xs z-50 rounded-sm border px-1 py-0.5 transition-opacity duration-300 ease-in-out",
-        showTranscriber ? "opacity-100" : "opacity-0",
-      )}
+      className={"bg-background shadow-2xs z-50 rounded-sm border px-1 py-0.5"}
       aria-hidden={!showTranscriber}
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 10 }}
+      exit={{ opacity: 0, y: 30 }}
     >
       <div className="flex items-center justify-between space-x-2 p-1">
         <div className="flex items-center justify-start space-x-2">
           <Button
             variant="outline"
             size="xs"
-            className="size-8 rounded-sm"
+            className="size-7 rounded-sm"
             onClick={startRecording}
             disabled={isTranscribing || isRecording}
           >
@@ -188,27 +184,27 @@ export default function AudioTranscriber({
                 stroke="red"
               />
             ) : (
-              <Mic className="size-4" />
+              <Mic className="size-3.5" />
             )}
           </Button>
           <Button
             variant="outline"
             size="xs"
-            className="size-8 rounded-sm"
+            className="size-7 rounded-sm"
             onClick={isRecording ? stopRecording : cancelTranscription}
             disabled={
               (isRecording && isTranscribing) ||
               (!isRecording && !isTranscribing)
             }
           >
-            <Square className="size-4" />
+            <Square className="size-3.5" />
           </Button>
         </div>
 
         <AudioWave stream={stream} isRecording />
 
         <div className="flex items-center justify-end space-x-2">
-          <span className="animate-in text-sm font-medium">
+          <span className="animate-in text-xs font-medium">
             {formatTime(recordingTime)}
           </span>
           {isTranscribing && (

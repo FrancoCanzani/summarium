@@ -46,7 +46,7 @@ export default async function TaskDetailActivities({
   }
 
   return (
-    <div className="lg:bg-sidebar w-full flex-col p-2 lg:flex lg:h-full lg:w-1/4 lg:justify-between lg:border-l">
+    <div className="lg:bg-sidebar w-full flex-col p-2 pb-12 lg:flex lg:h-full lg:w-1/4 lg:justify-between lg:border-l lg:p-2">
       <Label className="mb-4 text-sm font-medium">Activity</Label>
 
       <div className="thin-scrollbar flex flex-col overflow-y-auto lg:h-full">
