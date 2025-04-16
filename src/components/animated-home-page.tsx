@@ -6,7 +6,7 @@ import { Note, Task } from "@/lib/types";
 import { cn, getGreeting } from "@/lib/utils";
 import { format, formatDistanceToNow, isToday, parseISO } from "date-fns";
 import { motion } from "framer-motion";
-import { MoveUpRight, NotepadText, SquareCheckBig } from "lucide-react";
+import { MoveUpRight } from "lucide-react";
 import Link from "next/link";
 
 interface AnimatedHomeContentProps {
@@ -30,7 +30,7 @@ export default function AnimatedHomeContent({
     <div
       // a gradient depending the time of the day
       className={cn("mx-auto w-full p-4", {
-        "bg-gradient-to-tr from-white via-white to-yellow-50/80":
+        "bg-gradient-to-tr from-white via-white to-yellow-50/60":
           greeting.includes("morning"),
         "bg-gradient-to-tr from-white via-white to-orange-50":
           greeting.includes("afternoon"),
@@ -62,9 +62,8 @@ export default function AnimatedHomeContent({
         </motion.div>
       </div>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
+      <div className="flex flex-col gap-8">
         <motion.section
-          className="lg:col-span-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
@@ -79,7 +78,6 @@ export default function AnimatedHomeContent({
           </div>
           {notes.length === 0 ? (
             <div className="rounded-sm border border-dashed border-gray-300 bg-gray-50 p-6 text-center">
-              <NotepadText className="mx-auto mb-2 h-8 w-8 text-gray-400" />
               <p className="text-gray-500">No recent notes.</p>
               <Link
                 href="/notes/new"
@@ -89,7 +87,7 @@ export default function AnimatedHomeContent({
               </Link>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="flex flex-col gap-2">
               {notes.map((note, index) => (
                 <motion.div
                   key={note.id}
@@ -105,7 +103,7 @@ export default function AnimatedHomeContent({
                     href={`/notes/${note.id}`}
                     className="group block h-full"
                   >
-                    <div className="hover:ring-border/50 hover:border-ring focus-visible:outline-hidden focus-visible:ring-border/50 focus-visible:border-ring bg-sidebar/10 hover:shadow-2xs flex h-full w-full flex-col items-start gap-3 rounded-sm border p-3 transition-shadow duration-200 hover:ring-[2px] focus-visible:ring-[2px]">
+                    <div className="hover:ring-border/50 hover:border-ring focus-visible:ring-border/50 focus-visible:border-ring bg-sidebar/10 hover:shadow-2xs flex h-full w-full flex-col items-start gap-2 rounded border p-2 text-sm transition-shadow duration-200 hover:ring-[2px] focus-visible:ring-[2px]">
                       <div className="flex w-full items-center justify-between">
                         <h3 className="truncate font-medium">
                           {note.title || "Untitled"}
@@ -128,7 +126,7 @@ export default function AnimatedHomeContent({
         </motion.section>
 
         <motion.section
-          className="space-y-8 lg:col-span-4"
+          className="space-y-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
@@ -137,7 +135,7 @@ export default function AnimatedHomeContent({
             <h2 className="mb-2 font-medium">Today&apos;s Focus</h2>
             <Link
               href={`/journal?day=${todayString}`}
-              className="hover:ring-border/50 hover:border-ring focus-visible:outline-hidden focus-visible:ring-border/50 focus-visible:border-ring bg-sidebar/10 hover:shadow-2xs group flex w-full items-center justify-between gap-4 rounded-sm border p-3 transition-shadow duration-200 hover:ring-[2px] focus-visible:ring-[2px]"
+              className="hover:ring-border/50 hover:border-ring focus-visible:ring-border/50 focus-visible:border-ring bg-sidebar/10 hover:shadow-2xs group flex w-full items-center justify-between gap-2 rounded border p-2 text-sm transition-shadow duration-200 hover:ring-[2px] focus-visible:ring-[2px]"
             >
               <div>
                 <h3 className="font-medium">Today&apos;s Journal</h3>
@@ -157,8 +155,7 @@ export default function AnimatedHomeContent({
               </Link>
             </div>
             {todayTasks.length === 0 ? (
-              <div className="rounded-sm border border-dashed border-gray-300 bg-gray-50 p-6 text-center shadow-sm">
-                <SquareCheckBig className="mx-auto mb-2 h-8 w-8 text-gray-400" />
+              <div className="shadow-2xs rounded border border-dashed border-gray-300 bg-gray-50 p-6 text-center">
                 <p className="text-muted-foreground">
                   No tasks due today or overdue.
                 </p>
@@ -170,7 +167,7 @@ export default function AnimatedHomeContent({
                 </Link>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="gap-2">
                 {todayTasks.map((task, index) => (
                   <motion.div
                     key={task.id}
@@ -184,7 +181,7 @@ export default function AnimatedHomeContent({
                   >
                     <Link
                       href={`/tasks/${task.id}`}
-                      className="hover:ring-border/50 hover:border-ring focus-visible:outline-hidden focus-visible:ring-border/50 focus-visible:border-ring bg-sidebar/10 hover:shadow-2xs group flex w-full items-center justify-between gap-2 rounded-sm border p-3 transition-shadow duration-200 hover:ring-[2px] focus-visible:ring-[2px]"
+                      className="hover:ring-border/50 hover:border-ring focus-visible:ring-border/50 focus-visible:border-ring bg-sidebar/10 hover:shadow-2xs group flex w-full items-center justify-between gap-2 rounded border p-2 text-sm transition-shadow duration-200 hover:ring-[2px] focus-visible:ring-[2px]"
                     >
                       <div className="flex min-w-0 items-center gap-3">
                         <div className="flex-shrink-0">
