@@ -52,7 +52,7 @@ export default function NewTaskDialog() {
     const data = {
       title: formData.get("title") as string,
       description: formData.get("description") as string,
-      date: selectedDateTime,
+      date: selectedDateTime?.toISOString(),
       status: formData.get("status") as string,
       priority: formData.get("priority") as string,
     };
@@ -145,7 +145,7 @@ export default function NewTaskDialog() {
 
           <div className="flex items-center justify-start border-t p-2">
             <div className="flex flex-wrap items-center gap-2">
-              <Select name="status" required>
+              <Select name="status">
                 <SelectTrigger className="h-8 min-w-[100px] rounded-sm px-3 text-xs">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
@@ -173,7 +173,7 @@ export default function NewTaskDialog() {
                 </SelectContent>
               </Select>
 
-              <Select name="priority" required>
+              <Select name="priority">
                 <SelectTrigger className="h-8 min-w-[110px] rounded-sm px-3 text-xs">
                   <SelectValue placeholder="Priority" />
                 </SelectTrigger>
